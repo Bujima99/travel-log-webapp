@@ -1,0 +1,17 @@
+body {
+  font-family sans-serif;
+  padding 20px;
+  text-align center;
+}
+input, button {
+  display block;
+  margin 10px auto;
+  padding 8px;
+  font-size 1rem;
+}
+button {
+  background-color #2196F3;
+  color white;
+  border none;
+  border-radius 4px;
+}
