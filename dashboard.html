@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Driver Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h1>Start New Journey</h1>
+  <form id="journeyForm">
+    <input type="text" id="vehicleNumber" placeholder="Vehicle Number" required>
+    <input type="text" id="vehicleName" placeholder="Vehicle Name" required>
+    <input type="text" id="startPoint" placeholder="Starting Point" required>
+    <input type="number" id="startKm" placeholder="Starting KM" required>
+    <input type="time" id="startTime" required>
+    <input type="number" id="passengerCount" placeholder="No. of Passengers" required>
+    <input type="text" id="passengerName" placeholder="One Passenger Name" required>
+    <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" pattern="[0-9]{10}" required>
+    <button type="submit">Start Journey</button>
+  </form>
+  
+  <script src="js/app.js"></script>
+</body>
+</html>
