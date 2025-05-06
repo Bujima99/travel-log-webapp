@@ -183,7 +183,7 @@ function startJourney() {
     status: "Pending"
   };
 
-  fetch("YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL", {
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
@@ -191,5 +191,72 @@ function startJourney() {
     }
   }).then(res => alert("Journey Started!"));
 }
+
+
+function getPendingTrips(driverId) {
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?driverId=" + driverId)
+    .then(res => res.json())
+    .then(data => {
+      const pendingTrips = data.filter(j => j.status === "Pending");
+      displayPendingTrips(pendingTrips);  // Function to update UI
+    })
+    .catch(error => console.error("Error fetching pending trips:", error));
+}
+
+function displayPendingTrips(pendingTrips) {
+  const pendingListTable = document.getElementById("pendingTripsTable");  // Assuming you have a table in HTML
+  pendingListTable.innerHTML = "";  // Clear existing rows
+  
+  pendingTrips.forEach(trip => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${trip.travelId}</td>
+      <td>${trip.date}</td>
+      <td>${trip.vehicleNumber}</td>
+      <td>${trip.startPoint}</td>
+      <td><button onclick="viewPendingTrip('${trip.travelId}')">View</button></td>
+    `;
+    pendingListTable.appendChild(row);
+  });
+}
+
+function viewPendingTrip(travelId) {
+  // Redirect to a form or display the form with the selected pending trip details.
+  console.log("Viewing pending trip: ", travelId);
+}
+
+function getCompletedTrips(driverId) {
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?driverId=" + driverId)
+    .then(res => res.json())
+    .then(data => {
+      const completedTrips = data.filter(j => j.status === "Completed");
+      displayCompletedTrips(completedTrips);  // Function to update UI
+    })
+    .catch(error => console.error("Error fetching completed trips:", error));
+}
+
+function displayCompletedTrips(completedTrips) {
+  const completedListTable = document.getElementById("completedTripsTable");  // Assuming you have a table in HTML
+  completedListTable.innerHTML = "";  // Clear existing rows
+  
+  completedTrips.forEach(trip => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${trip.travelId}</td>
+      <td>${trip.date}</td>
+      <td>${trip.vehicleNumber}</td>
+      <td>${trip.startPoint}</td>
+      <td>${trip.endPoint}</td>
+      <td><button onclick="viewCompletedTrip('${trip.travelId}')">View</button></td>
+    `;
+    completedListTable.appendChild(row);
+  });
+}
+
+function viewCompletedTrip(travelId) {
+  // Redirect to a form or display the form with the selected completed trip details.
+  console.log("Viewing completed trip: ", travelId);
+}
+
 
 
