@@ -39,6 +39,7 @@ function showPhoneLogin() {
     });
     recaptchaVerifier.render();
 }
+}
 
 // Google Sign-In
 function signInWithGoogle() {
