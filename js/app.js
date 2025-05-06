@@ -46,14 +46,12 @@ function showPhoneLogin() {
 function signInWithGoogle() {
   var provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider)
-    .then((result) => {
-      const user = result.user;
-      alert("Signed in as " + user.displayName);
-      window.location.href = "dashboard.html";
+    .then(result => {
+      var user = result.user;
+      onGoogleSignInSuccess(user);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
-      alert("Error during sign-in: " + error.message);
     });
 }
 
