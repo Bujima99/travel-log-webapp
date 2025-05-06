@@ -93,3 +93,69 @@ function completeRegistration() {
   alert("Registration completed. Redirecting to dashboard...");
   window.location.href = "dashboard.html";
 }
+
+
+function showSection(sectionId) {
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+}
+
+// Simulating driver name from login
+document.getElementById('driverName').textContent = "Hello, John Doe";
+
+// Save pending journey
+function saveAsPending() {
+  const journey = {
+    vehicleNumber: document.getElementById('vehicleNumber').value,
+    vehicleName: document.getElementById('vehicleName').value,
+    startPoint: document.getElementById('startPoint').value,
+    startKm: document.getElementById('startKm').value,
+    startTime: document.getElementById('startTime').value,
+  };
+  let pending = JSON.parse(localStorage.getItem('pendingJourneys') || '[]');
+  pending.push(journey);
+  localStorage.setItem('pendingJourneys', JSON.stringify(pending));
+  alert("Journey saved as pending.");
+  document.getElementById('journeyForm').reset();
+}
+
+// Load pending journeys
+function loadPendingJourneys() {
+  let pending = JSON.parse(localStorage.getItem('pendingJourneys') || '[]');
+  const tbody = document.getElementById('pendingTable').querySelector('tbody');
+  tbody.innerHTML = "";
+  pending.forEach((journey, index) => {
+    let row = tbody.insertRow();
+    row.innerHTML = `
+      <td>${journey.vehicleNumber}</td>
+      <td>${journey.startPoint}</td>
+      <td>${journey.startKm}</td>
+      <td>${journey.startTime}</td>
+      <td><button onclick="editJourney(${index})">Edit</button></td>
+    `;
+  });
+}
+
+function editJourney(index) {
+  let pending = JSON.parse(localStorage.getItem('pendingJourneys'));
+  const journey = pending[index];
+  showSection('addJourney');
+
+  document.getElementById('vehicleNumber').value = journey.vehicleNumber;
+  document.getElementById('vehicleName').value = journey.vehicleName;
+  document.getElementById('startPoint').value = journey.startPoint;
+  document.getElementById('startKm').value = journey.startKm;
+  document.getElementById('startTime').value = journey.startTime;
+
+  pending.splice(index, 1);
+  localStorage.setItem('pendingJourneys', JSON.stringify(pending));
+}
+
+// Logout
+function logout() {
+  window.location.href = "login.html";
+}
+
+// Initial Load
+loadPendingJourneys();
+
