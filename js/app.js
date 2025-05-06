@@ -19,10 +19,25 @@ function showGoogleLogin() {
   document.getElementById('googleLogin').classList.remove('hidden');
 }
 
+// Initialize recaptcha verifier
+let recaptchaVerifier;
+
 // Show Phone number form
 function showPhoneLogin() {
   document.getElementById('loginOptions').classList.add('hidden');
   document.getElementById('phoneLogin').classList.remove('hidden');
+  // Only initialize once
+  if (!recaptchaVerifier) {
+    recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      'size': 'normal',
+      'callback': (response) => {
+        console.log("Recaptcha verified");
+      },
+      'expired-callback': () => {
+        console.log("Recaptcha expired");
+      }
+    });
+    recaptchaVerifier.render();
 }
 
 // Google Sign-In
@@ -42,14 +57,17 @@ function signInWithGoogle() {
 
 // Send OTP
 function sendOTP() {
-  const phoneNumber = document.getElementById("phoneNumber").value;
-  firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+  const phoneNumber = document.getElementById('phoneNumber').value;
+  const appVerifier = recaptchaVerifier;
+
+  firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
     .then((confirmationResult) => {
+      // SMS sent
       window.confirmationResult = confirmationResult;
-      alert("OTP sent");
+      alert("OTP sent to " + phoneNumber);
     })
     .catch((error) => {
-      console.error(error);
+      console.error("Error during sign-in:", error);
       alert("Error sending OTP: " + error.message);
     });
 }
