@@ -1,75 +1,40 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  margin-top: 60px;
 }
 
 .container {
-  background: #fff;
-  padding: 30px 20px;
-  border-radius: 12px;
-  max-width: 380px;
-  text-align: center;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  animation: fadeIn 0.7s ease-in-out;
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-h2 {
-  margin-top: 0;
-  color: #333;
-}
-
-p {
-  color: #666;
-  margin: 10px 0 20px;
-}
-
-.login-options button {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  background: #764ba2;
-  color: #fff;
+button {
+  margin: 10px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  background: #4285f4;
+  color: white;
+  border-radius: 5px;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.login-options button:hover {
-  background: #5c3e85;
+button:hover {
+  background: #357ae8;
 }
 
 input {
   display: block;
-  width: 90%;
-  padding: 12px;
   margin: 10px auto;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-button {
-  cursor: pointer;
-}
-
-#recaptcha-container {
-  margin: 12px 0;
+  padding: 10px;
+  width: 90%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .hidden {
   display: none;
-}
-
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(-20px);}
-  to {opacity: 1; transform: translateY(0);}
 }
