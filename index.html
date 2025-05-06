@@ -2,131 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Travel Log | Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Google Identity API -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  
-  <!-- Firebase SDK -->
+  <title>Travel Log Login</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
-  
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h2>Welcome to Travel Log</h2>
+    <h1>Welcome to Travel Log</h1>
     <p>Select a login method</p>
 
-    <!-- Login Options -->
-    <div class="login-options">
-      <button id="google-sign-in">Login with Google</button>
-      <button id="phone-sign-in">Login with Phone Number</button>
+    <!-- Login Buttons -->
+    <div id="loginOptions">
+      <button onclick="showGoogleLogin()">Login with Google</button>
+      <button onclick="showPhoneLogin()">Login with Phone Number</button>
     </div>
 
     <!-- Google Sign-in -->
-    <div id="google-login-box" class="hidden">
-      <div id="g_id_onload"
-           data-client_id="689243536167-582gedbs8cit12prgoki3tir5q36g9cd.apps.googleusercontent.com"
-           data-context="signin"
-           data-auto_prompt="false"
-           data-callback="handleGoogleSignIn">
-      </div>
-      <div class="g_id_signin" data-type="standard"></div>
+    <div id="googleLogin" class="hidden">
+      <button onclick="signInWithGoogle()">Sign in with Google</button>
     </div>
 
     <!-- Phone Login -->
-    <div id="phone-login-box" class="hidden">
-      <input type="text" id="phone-number" placeholder="Enter phone number (+91...)" required>
+    <div id="phoneLogin" class="hidden">
+      <input type="text" id="phoneNumber" placeholder="Enter phone number (+91...)">
       <div id="recaptcha-container"></div>
       <button onclick="sendOTP()">Send OTP</button>
-
       <input type="text" id="otp" placeholder="Enter OTP">
       <button onclick="verifyOTP()">Verify OTP</button>
+    </div>
 
-      <div id="user-details" class="hidden">
-        <input type="text" id="first-name" placeholder="First Name" required>
-        <input type="text" id="last-name" placeholder="Last Name" required>
-        <input type="password" id="password" placeholder="New Password" required>
-        <input type="password" id="confirm-password" placeholder="Confirm Password" required>
-        <button onclick="completeRegistration()">Complete Registration</button>
-      </div>
+    <!-- Registration Form (after phone verification) -->
+    <div id="registrationForm" class="hidden">
+      <input type="text" id="firstName" placeholder="First Name">
+      <input type="text" id="lastName" placeholder="Last Name">
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="newPassword" placeholder="New Password">
+      <input type="password" id="confirmPassword" placeholder="Confirm Password">
+      <button onclick="completeRegistration()">Complete Registration</button>
     </div>
 
   </div>
 
-  <!-- JS Code -->
-  <script>
-    // Firebase config
-      const firebaseConfig = {
-    apiKey: "AIzaSyAhSLSI_QA-VhXmzGhu_SLDFEvASz9rCek",
-    authDomain: "travel-log-webapp-cfbcc.firebaseapp.com",
-    projectId: "travel-log-webapp-cfbcc",
-    storageBucket: "travel-log-webapp-cfbcc.firebasestorage.app",
-    messagingSenderId: "3684158120",
-    appId: "1:3684158120:web:8fbbaacfb9216b29b9509d",
-    measurementId: "G-N1LJJYEWQ2"
-  };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // Toggle forms
-    document.getElementById('google-sign-in').onclick = () => {
-      document.getElementById('google-login-box').classList.remove('hidden');
-      document.getElementById('phone-login-box').classList.add('hidden');
-    };
-
-    document.getElementById('phone-sign-in').onclick = () => {
-      document.getElementById('phone-login-box').classList.remove('hidden');
-      document.getElementById('google-login-box').classList.add('hidden');
-    };
-
-    // Google Sign-In Callback
-    function handleGoogleSignIn(response) {
-      const data = JSON.parse(atob(response.credential.split('.')[1]));
-      alert(`Signed in as ${data.name}`);
-      // Save to your storage / redirect to dashboard here
-    }
-
-    // Send OTP
-    function sendOTP() {
-      const phoneNumber = document.getElementById("phone-number").value;
-      const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
-      auth.signInWithPhoneNumber(phoneNumber, appVerifier)
-        .then((confirmationResult) => {
-          window.confirmationResult = confirmationResult;
-          alert("OTP sent!");
-        }).catch((error) => {
-          alert(error.message);
-        });
-    }
-
-    // Verify OTP
-    function verifyOTP() {
-      const otp = document.getElementById("otp").value;
-      window.confirmationResult.confirm(otp).then((result) => {
-        alert("Phone verified!");
-        document.getElementById('user-details').classList.remove('hidden');
-      }).catch((error) => {
-        alert(error.message);
-      });
-    }
-
-    // Complete Registration
-    function completeRegistration() {
-      const fname = document.getElementById('first-name').value;
-      const lname = document.getElementById('last-name').value;
-      const pass = document.getElementById('password').value;
-      const cpass = document.getElementById('confirm-password').value;
-      if (pass !== cpass) {
-        alert("Passwords don't match!");
-        return;
-      }
-      alert(`Welcome ${fname} ${lname}! Account setup complete.`);
-      // Store details in localStorage / database or redirect
-    }
-  </script>
-
+  <script src="app.js"></script>
 </body>
 </html>
