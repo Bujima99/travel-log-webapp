@@ -5,19 +5,59 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h1>Start New Journey</h1>
-  <form id="journeyForm">
-    <input type="text" id="vehicleNumber" placeholder="Vehicle Number" required>
-    <input type="text" id="vehicleName" placeholder="Vehicle Name" required>
-    <input type="text" id="startPoint" placeholder="Starting Point" required>
-    <input type="number" id="startKm" placeholder="Starting KM" required>
-    <input type="time" id="startTime" required>
-    <input type="number" id="passengerCount" placeholder="No. of Passengers" required>
-    <input type="text" id="passengerName" placeholder="One Passenger Name" required>
-    <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" pattern="[0-9]{10}" required>
-    <button type="submit">Start Journey</button>
-  </form>
-  
+  <div class="navbar">
+    <div class="user-info">
+      <div class="avatar"></div>
+      <span id="driverName">Hello, John Doe</span>
+    </div>
+    <div class="menu">
+      <button onclick="showSection('home')">Home</button>
+      <button onclick="showSection('addJourney')">Add Journey</button>
+      <button onclick="showSection('history')">History</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div id="home" class="section active">
+    <h2>Pending Journeys</h2>
+    <table id="pendingTable">
+      <thead>
+        <tr>
+          <th>Vehicle</th><th>Start Point</th><th>Start KM</th><th>Start Time</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="addJourney" class="section">
+    <h2>Start New Journey</h2>
+    <form id="journeyForm">
+      <input type="text" id="vehicleNumber" placeholder="Vehicle Number" required>
+      <input type="text" id="vehicleName" placeholder="Vehicle Name" required>
+      <input type="text" id="startPoint" placeholder="Starting Point" required>
+      <input type="number" id="startKm" placeholder="Starting KM" required>
+      <input type="time" id="startTime" required>
+      <input type="number" id="passengerCount" placeholder="No. of Passengers" required>
+      <input type="text" id="passengerName" placeholder="One Passenger Name" required>
+      <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" pattern="[0-9]{10}" required>
+      <button type="submit">Start Journey</button>
+      <button type="button" onclick="saveAsPending()">Save as Pending</button>
+    </form>
+  </div>
+
+  <div id="history" class="section">
+    <h2>Journey History</h2>
+    <table id="historyTable">
+      <thead>
+        <tr>
+          <th>Vehicle</th><th>Start KM</th><th>End KM</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
   <script src="js/app.js"></script>
 </body>
 </html>
