@@ -159,3 +159,37 @@ function logout() {
 // Initial Load
 loadPendingJourneys();
 
+function startJourney() {
+  const travelId = crypto.randomUUID();
+  const date = new Date().toLocaleDateString();
+
+  const data = {
+    travelId: travelId,
+    date: date,
+    driverName: localStorage.getItem("driverName"),
+    driverId: localStorage.getItem("driverId"),
+    driverPhone: localStorage.getItem("driverPhone"),
+    vehicleNumber: document.getElementById("vehicleNumber").value,
+    vehicleName: document.getElementById("vehicleName").value,
+    startPoint: document.getElementById("startPoint").value,
+    startKm: parseInt(document.getElementById("startKm").value),
+    startTime: document.getElementById("startTime").value,
+    passengerCount: parseInt(document.getElementById("passengerCount").value),
+    passengerName: document.getElementById("passengerName").value,
+    passengerPhone: document.getElementById("passengerPhone").value,
+    endPoint: "",
+    endTime: "",
+    endKm: "",
+    status: "Pending"
+  };
+
+  fetch("YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => alert("Journey Started!"));
+}
+
+
