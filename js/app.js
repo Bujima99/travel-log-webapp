@@ -90,10 +90,75 @@ function verifyOTP() {
 }
 
 // Complete Registration (for now just redirect)
-function completeRegistration() {
-  alert("Registration completed. Redirecting to dashboard...");
-  window.location.href = "dashboard.html";
+// Global variable to track logged in phone or Google user info
+let loggedInPhone = "";
+let loggedInGoogleName = "";
+
+// After Google Sign-In Success
+function onGoogleSignInSuccess(user) {
+  loggedInGoogleName = user.displayName;
+  document.getElementById("loginOptions").classList.add("hidden");
+  document.getElementById("googleLogin").classList.add("hidden");
+  document.getElementById("registrationForm").classList.remove("hidden");
 }
+
+// After Phone OTP Verification Success
+function onPhoneVerificationSuccess(phoneNumber) {
+  loggedInPhone = phoneNumber;
+  document.getElementById("loginOptions").classList.add("hidden");
+  document.getElementById("phoneLogin").classList.add("hidden");
+  document.getElementById("registrationForm").classList.remove("hidden");
+}
+
+// Complete Registration
+function completeRegistration() {
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const username = document.getElementById("username").value.trim();
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (!firstName || !lastName || !username || !newPassword || !confirmPassword) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  const driverId = "DRV-" + Date.now();
+
+  const data = {
+    type: "registerDriver",
+    driverId: driverId,
+    driverName: firstName + " " + lastName,
+    driverPhone: loggedInPhone || "Google User",
+    driverUsername: username,
+    driverPassword: newPassword
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(res => res.text())
+  .then(resp => {
+    alert("Registration complete!");
+    localStorage.setItem("driverId", driverId);
+    localStorage.setItem("driverName", firstName + " " + lastName);
+    window.location.href = "dashboard.html";
+  })
+  .catch(err => {
+    console.error("Error registering driver:", err);
+    alert("Registration failed.");
+  });
+}
+
 
 
 function showSection(sectionId) {
