@@ -48,14 +48,35 @@
 
   <div id="history" class="section">
     <h2>Journey History</h2>
-    <table id="historyTable">
-      <thead>
-        <tr>
-          <th>Vehicle</th><th>Start KM</th><th>End KM</th><th>Status</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+   <!-- Pending Trips Table (for Home Page) -->
+<table id="pendingTripsTable">
+  <thead>
+    <tr>
+      <th>Travel ID</th>
+      <th>Date</th>
+      <th>Vehicle Number</th>
+      <th>Starting Point</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- Completed Trips Table (for History Page) -->
+<table id="completedTripsTable">
+  <thead>
+    <tr>
+      <th>Travel ID</th>
+      <th>Date</th>
+      <th>Vehicle Number</th>
+      <th>Starting Point</th>
+      <th>Ending Point</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
   </div>
 
   <script src="js/app.js"></script>
