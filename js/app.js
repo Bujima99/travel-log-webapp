@@ -13,6 +13,7 @@
 firebase.initializeApp(firebaseConfig);
 
 
+
 // Show Google login button
 function showGoogleLogin() {
   document.getElementById('loginOptions').classList.add('hidden');
@@ -102,6 +103,16 @@ function showSection(sectionId) {
 
 // Simulating driver name from login
 document.getElementById('driverName').textContent = "Hello, John Doe";
+// Assuming driverId is stored in localStorage after login
+const driverId = localStorage.getItem("driverId");
+
+window.onload = function() {
+  if (driverId) {
+    getPendingTrips(driverId);  // Fetch pending trips on home page
+    getCompletedTrips(driverId);  // Fetch completed trips on history page
+  }
+};
+
 
 // Save pending journey
 function saveAsPending() {
