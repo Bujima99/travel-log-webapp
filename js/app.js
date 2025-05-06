@@ -153,7 +153,7 @@ function editJourney(index) {
 
 // Logout
 function logout() {
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 }
 
 // Initial Load
