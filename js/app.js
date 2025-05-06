@@ -1,33 +1,37 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const journeyForm = document.getElementById("journeyForm");
-  if (journeyForm) {
-    journeyForm.addEventListener("submit", (e) => {
-      e.preventDefault();
+// Show Google login button
+function showGoogleLogin() {
+  document.getElementById('loginOptions').classList.add('hidden');
+  document.getElementById('googleLogin').classList.remove('hidden');
+}
 
-      const formData = {
-        travelId: crypto.randomUUID(),
-        vehicleNumber: document.getElementById("vehicleNumber").value,
-        vehicleName: document.getElementById("vehicleName").value,
-        startPoint: document.getElementById("startPoint").value,
-        startKm: document.getElementById("startKm").value,
-        startTime: document.getElementById("startTime").value,
-        passengerCount: document.getElementById("passengerCount").value,
-        passengerName: document.getElementById("passengerName").value,
-        passengerPhone: document.getElementById("passengerPhone").value,
-        date: new Date().toLocaleDateString(),
-      };
+// Show Phone number form
+function showPhoneLogin() {
+  document.getElementById('loginOptions').classList.add('hidden');
+  document.getElementById('phoneLogin').classList.remove('hidden');
+}
 
-      fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(response => response.text())
-      .then(data => {
-        alert("Journey Started!");
-        journeyForm.reset();
-      })
-      .catch(error => console.error("Error!", error));
-    });
-  }
-});
+// Dummy Google sign-in handler
+function signInWithGoogle() {
+  alert("Google Sign-in flow will run here, then collect extra phone number if needed and go to dashboard.");
+  // firebase.auth().signInWithPopup(provider)...
+}
+
+// Dummy send OTP
+function sendOTP() {
+  alert("OTP sent to " + document.getElementById('phoneNumber').value);
+  // firebase.auth().signInWithPhoneNumber...
+}
+
+// Dummy verify OTP
+function verifyOTP() {
+  alert("OTP verified");
+  document.getElementById('phoneLogin').classList.add('hidden');
+  document.getElementById('registrationForm').classList.remove('hidden');
+}
+
+// Dummy complete registration
+function completeRegistration() {
+  alert("Registration completed. Redirecting to dashboard...");
+  // Save to Firebase/Firestore if needed
+  window.location.href = "dashboard.html";
+}
