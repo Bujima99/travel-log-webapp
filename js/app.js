@@ -25,28 +25,52 @@ function showPhoneLogin() {
   document.getElementById('phoneLogin').classList.remove('hidden');
 }
 
-// Dummy Google sign-in handler
+// Google Sign-In
 function signInWithGoogle() {
-  alert("Google Sign-in flow will run here, then collect extra phone number if needed and go to dashboard.");
-  // firebase.auth().signInWithPopup(provider)...
+  var provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+      const user = result.user;
+      alert("Signed in as " + user.displayName);
+      window.location.href = "dashboard.html";
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("Error during sign-in: " + error.message);
+    });
 }
 
-// Dummy send OTP
+// Send OTP
 function sendOTP() {
-  alert("OTP sent to " + document.getElementById('phoneNumber').value);
-  // firebase.auth().signInWithPhoneNumber...
+  const phoneNumber = document.getElementById("phoneNumber").value;
+  firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+    .then((confirmationResult) => {
+      window.confirmationResult = confirmationResult;
+      alert("OTP sent");
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("Error sending OTP: " + error.message);
+    });
 }
 
-// Dummy verify OTP
+// Verify OTP
 function verifyOTP() {
-  alert("OTP verified");
-  document.getElementById('phoneLogin').classList.add('hidden');
-  document.getElementById('registrationForm').classList.remove('hidden');
+  const otp = document.getElementById("otp").value;
+  window.confirmationResult.confirm(otp)
+    .then((result) => {
+      alert("Phone verified");
+      document.getElementById('phoneLogin').classList.add('hidden');
+      document.getElementById('registrationForm').classList.remove('hidden');
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("Invalid OTP: " + error.message);
+    });
 }
 
-// Dummy complete registration
+// Complete Registration (for now just redirect)
 function completeRegistration() {
   alert("Registration completed. Redirecting to dashboard...");
-  // Save to Firebase/Firestore if needed
   window.location.href = "dashboard.html";
 }
