@@ -1,3 +1,18 @@
+// Your Firebase config
+  var firebaseConfig = {
+    apiKey: "AIzaSyAhSLSI_QA-VhXmzGhu_SLDFEvASz9rCek",
+    authDomain: "travel-log-webapp-cfbcc.firebaseapp.com",
+    projectId: "travel-log-webapp-cfbcc",
+    storageBucket: "travel-log-webapp-cfbcc.firebasestorage.app",
+    messagingSenderId: "3684158120",
+    appId: "1:3684158120:web:8fbbaacfb9216b29b9509d",
+    measurementId: "G-N1LJJYEWQ2"
+  };
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+
 // Show Google login button
 function showGoogleLogin() {
   document.getElementById('loginOptions').classList.add('hidden');
