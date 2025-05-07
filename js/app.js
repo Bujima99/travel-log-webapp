@@ -24,7 +24,12 @@ function checkClassicLogin() {
 
   // Fetch driver data from Google Sheets web app endpoint
 fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers")
-  .then(response => response.json())
+ .then(response => response.text())
+  .then(text => {
+  console.log("Raw response text:", text);
+  const data = JSON.parse(text);
+  console.log(data);
+})
   .then(data => {
     const user = data.find(driver => driver.username === username && driver.password === password);
     if (user) {
