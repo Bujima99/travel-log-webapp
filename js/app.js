@@ -21,31 +21,37 @@ function checkClassicLogin() {
     return;
   }
 
-
-  // Fetch driver data from Google Sheets web app endpoint
-fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers", {
-  mode: 'no-cors'
-})
- .then(response => response.text())
+  fetch("https://script.google.com/...exec?action=drivers", {
+    mode: 'no-cors' // Temporary workaround
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('Network response was not ok');
+    return response.text();
+  })
   .then(text => {
-  console.log("Raw response text:", text);
-  const data = JSON.parse(text);
-  console.log(data);
-})
-  .then(data => {
-    const user = data.find(driver => driver.username === username && driver.password === password);
-    if (user) {
-      alert(`Welcome ${user.username}!`);
-      window.location.href = "./dashboard.html";
-    } else {
-      alert("Invalid username or password.");
+    try {
+      const data = JSON.parse(text);
+      const user = data.find(driver => 
+        driver.username === username && 
+        driver.password === password
+      );
+      
+      if (user) {
+        localStorage.setItem("driverId", user.driverId || "default-id");
+        localStorage.setItem("driverName", user.driverName || username);
+        window.location.href = "./dashboard.html";
+      } else {
+        alert("Invalid username or password.");
+      }
+    } catch (e) {
+      console.error("Parsing error:", e);
+      alert("Error processing login data.");
     }
   })
   .catch(error => {
-    console.error("Error fetching driver data:", error);
-    alert("Could not verify login. Please try again later.");
+    console.error("Error:", error);
+    alert("Login failed. Please try again.");
   });
-
 }
 
 
