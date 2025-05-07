@@ -12,28 +12,6 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// cloudflare-worker.js
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
-
-async function handleRequest(request) {
-  const url = 'https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec';
-  const response = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    }
-  });
-  
-  return new Response(response.body, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json'
-    }
-  });
-}
-
 function checkClassicLogin() {
   const username = document.getElementById("usernameInput").value.trim();
   const password = document.getElementById("passwordInput").value.trim();
@@ -43,33 +21,45 @@ function checkClassicLogin() {
     return;
   }
 
-  // Use JSONP proxy approach
+  // Create callback function on window object
+  window.handleDriversResponse = function(data) {
+    try {
+      const user = data.find(driver => 
+        driver.username === username && 
+        driver.password === password
+      );
+
+      if (user) {
+        localStorage.setItem("driverId", user.driverId || "default-id");
+        localStorage.setItem("driverName", user.driverName || username);
+        window.location.href = "./dashboard.html";
+      } else {
+        alert("Invalid username or password.");
+      }
+    } catch (e) {
+      console.error("Error processing response:", e);
+      alert("Login failed. Please try again.");
+    }
+    
+    // Clean up
+    delete window.handleDriversResponse;
+    document.getElementById('jsonpScript').remove();
+  };
+
+  // Create script tag
   const script = document.createElement('script');
-  script.src = `https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers&t=${Date.now()}&callback=handleDriversResponse`;
+  script.id = 'jsonpScript';
+  script.src = `https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers&callback=handleDriversResponse&t=${Date.now()}`;
+  
+  // Error handling
+  script.onerror = function() {
+    alert("Failed to load login data. Please try again.");
+    delete window.handleDriversResponse;
+    script.remove();
+  };
+
   document.head.appendChild(script);
 }
-
-// Add this global callback function
-function handleDriversResponse(data) {
-  try {
-    const user = data.find(driver => 
-      driver.username === document.getElementById("usernameInput").value.trim() && 
-      driver.password === document.getElementById("passwordInput").value.trim()
-    );
-
-    if (user) {
-      localStorage.setItem("driverId", user.driverId || "default-id");
-      localStorage.setItem("driverName", user.driverName || document.getElementById("usernameInput").value.trim());
-      window.location.href = "./dashboard.html";
-    } else {
-      alert("Invalid username or password.");
-    }
-  } catch (e) {
-    console.error("Error processing response:", e);
-    alert("Login failed. Please try again.");
-  }
-}
-
 
 // Show Google login button
 function showGoogleLogin() {
