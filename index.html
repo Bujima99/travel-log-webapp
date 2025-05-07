@@ -7,13 +7,21 @@
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>Welcome to Travel Log</h1>
-    <p>Select a login method</p>
+    <p>Please login to continue</p>
+
+    <!-- Classic Username/Password Login -->
+    <div id="classicLogin">
+      <input type="text" id="usernameInput" placeholder="Username">
+      <input type="password" id="passwordInput" placeholder="Password">
+      <button onclick="checkClassicLogin()">Login</button>
+    </div>
+
+    <p>OR</p>
 
     <!-- Login Buttons -->
     <div id="loginOptions">
@@ -44,7 +52,6 @@
       <input type="password" id="confirmPassword" placeholder="Confirm Password">
       <button onclick="completeRegistration()">Complete Registration</button>
     </div>
-
   </div>
 
   <script src="./js/app.js"></script>
