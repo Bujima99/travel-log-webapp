@@ -12,6 +12,34 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+function checkClassicLogin() {
+  const username = document.getElementById("usernameInput").value.trim();
+  const password = document.getElementById("passwordInput").value.trim();
+
+  if (!username || !password) {
+    alert("Please enter both username and password.");
+    return;
+  }
+
+  // Fetch driver data from your Google Sheets web app endpoint
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec")
+    .then(response => response.json())
+    .then(data => {
+      // Assuming your web app returns an array of driver objects
+      const user = data.find(driver => driver.username === username && driver.password === password);
+
+      if (user) {
+        alert(`Welcome ${user.username}!`);
+        window.location.href = "./dashboard.html";
+      } else {
+        alert("Invalid username or password.");
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching driver data:", error);
+      alert("Could not verify login. Please try again later.");
+    });
+}
 
 
 // Show Google login button
