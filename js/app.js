@@ -12,6 +12,28 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+// cloudflare-worker.js
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+  const url = 'https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec';
+  const response = await fetch(url, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
+  });
+  
+  return new Response(response.body, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
 function checkClassicLogin() {
   const username = document.getElementById("usernameInput").value.trim();
   const password = document.getElementById("passwordInput").value.trim();
@@ -21,55 +43,31 @@ function checkClassicLogin() {
     return;
   }
 
-  // Add timestamp to bypass cache
-  const url = `https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers&t=${Date.now()}`;
-  
-  fetch(url, {
-    redirect: "follow", // Important for Google Apps Script
-    headers: {
-      'Content-Type': 'text/plain;charset=utf-8',
-    }
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.text(); // First get as text
-  })
-  .then(text => {
-    try {
-      // Handle cases where response might be wrapped in quotes
-      const cleanText = text.startsWith('"') && text.endsWith('"') 
-        ? text.slice(1, -1) 
-        : text;
-      
-      const data = JSON.parse(cleanText);
-      
-      if (!Array.isArray(data)) {
-        throw new Error("Invalid data format received");
-      }
+  // Use JSONP proxy approach
+  const script = document.createElement('script');
+  script.src = `https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers&t=${Date.now()}&callback=handleDriversResponse`;
+  document.head.appendChild(script);
+}
 
-      const user = data.find(driver => 
-        driver.username === username && 
-        driver.password === password
-      );
+// Add this global callback function
+function handleDriversResponse(data) {
+  try {
+    const user = data.find(driver => 
+      driver.username === document.getElementById("usernameInput").value.trim() && 
+      driver.password === document.getElementById("passwordInput").value.trim()
+    );
 
-      if (user) {
-        localStorage.setItem("driverId", user.driverId || "default-id");
-        localStorage.setItem("driverName", user.driverName || username);
-        window.location.href = "./dashboard.html";
-      } else {
-        alert("Invalid username or password.");
-      }
-    } catch (e) {
-      console.error("Parsing error:", e, "Response text:", text);
-      alert("Error processing login data. Please check console for details.");
+    if (user) {
+      localStorage.setItem("driverId", user.driverId || "default-id");
+      localStorage.setItem("driverName", user.driverName || document.getElementById("usernameInput").value.trim());
+      window.location.href = "./dashboard.html";
+    } else {
+      alert("Invalid username or password.");
     }
-  })
-  .catch(error => {
-    console.error("Fetch error:", error);
-    alert(`Login failed: ${error.message}`);
-  });
+  } catch (e) {
+    console.error("Error processing response:", e);
+    alert("Login failed. Please try again.");
+  }
 }
 
 
