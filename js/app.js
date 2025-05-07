@@ -140,6 +140,7 @@ function completeRegistration() {
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: "POST",
     body: JSON.stringify(data),
+    mode: 'no-cors',
     headers: {
       "Content-Type": "application/json"
     }
