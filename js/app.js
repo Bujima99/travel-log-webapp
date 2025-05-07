@@ -21,21 +21,39 @@ function checkClassicLogin() {
     return;
   }
 
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers", {
-    mode: 'no-cors' // Temporary workaround
+  // Add timestamp to bypass cache
+  const url = `https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers&t=${Date.now()}`;
+  
+  fetch(url, {
+    redirect: "follow", // Important for Google Apps Script
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8',
+    }
   })
   .then(response => {
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.text();
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.text(); // First get as text
   })
   .then(text => {
     try {
-      const data = JSON.parse(text);
+      // Handle cases where response might be wrapped in quotes
+      const cleanText = text.startsWith('"') && text.endsWith('"') 
+        ? text.slice(1, -1) 
+        : text;
+      
+      const data = JSON.parse(cleanText);
+      
+      if (!Array.isArray(data)) {
+        throw new Error("Invalid data format received");
+      }
+
       const user = data.find(driver => 
         driver.username === username && 
         driver.password === password
       );
-      
+
       if (user) {
         localStorage.setItem("driverId", user.driverId || "default-id");
         localStorage.setItem("driverName", user.driverName || username);
@@ -44,13 +62,13 @@ function checkClassicLogin() {
         alert("Invalid username or password.");
       }
     } catch (e) {
-      console.error("Parsing error:", e);
-      alert("Error processing login data.");
+      console.error("Parsing error:", e, "Response text:", text);
+      alert("Error processing login data. Please check console for details.");
     }
   })
   .catch(error => {
-    console.error("Error:", error);
-    alert("Login failed. Please try again.");
+    console.error("Fetch error:", error);
+    alert(`Login failed: ${error.message}`);
   });
 }
 
