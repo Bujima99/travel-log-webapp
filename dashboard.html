@@ -179,6 +179,64 @@ function completeJourney(travelId) {
     alert("Error marking journey as complete. Please try again.");
   });
 }
+
+// Function to save journey as pending
+function saveAsPending() {
+  // Get form values
+  const vehicleNumber = document.getElementById('vehicleNumber').value;
+  const vehicleName = document.getElementById('vehicleName').value;
+  const startPoint = document.getElementById('startPoint').value;
+  const startKm = document.getElementById('startKm').value;
+  const startTime = document.getElementById('startTime').value;
+  const passengerCount = document.getElementById('passengerCount').value;
+  const passengerName = document.getElementById('passengerName').value;
+  const passengerPhone = document.getElementById('passengerPhone').value;
+
+  // Validate required fields
+  if (!vehicleNumber || !startPoint || !startKm || !startTime) {
+    alert('Please fill in all required fields');
+    return;
+  }
+
+  // Create journey data object
+  const journeyData = {
+    action: 'add-pending-journey',
+    vehicleNumber: vehicleNumber,
+    vehicleName: vehicleName,
+    startPoint: startPoint,
+    startKm: startKm,
+    startTime: startTime,
+    passengerCount: passengerCount,
+    passengerName: passengerName,
+    passengerPhone: passengerPhone
+  };
+
+  // Send data to Google Sheets web app
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(journeyData)
+  })
+  .then(response => response.text())
+  .then(result => {
+    console.log("Save as Pending result:", result);
+    alert("Journey saved as pending successfully!");
+    // Clear the form or redirect as needed
+    document.getElementById('journeyForm').reset();
+    // Optionally switch back to home section
+    showSection('home');
+    // Refresh the pending journeys list
+    location.reload();
+  })
+  .catch(error => {
+    console.error("Error saving pending journey:", error);
+    alert("Error saving journey as pending. Please try again.");
+  });
+}
+
+  
 </script>
 </body>
 </html>
