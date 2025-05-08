@@ -21,45 +21,32 @@ function checkClassicLogin() {
     return;
   }
 
-  // Create callback function on window object
-  window.handleDriversResponse = function(data) {
-    try {
-      const user = data.find(driver => 
-        driver.username === username && 
-        driver.password === password
-      );
 
-      if (user) {
-        localStorage.setItem("driverId", user.driverId || "default-id");
-        localStorage.setItem("driverName", user.driverName || username);
-        window.location.href = "./dashboard.html";
-      } else {
-        alert("Invalid username or password.");
-      }
-    } catch (e) {
-      console.error("Error processing response:", e);
-      alert("Login failed. Please try again.");
+  // Fetch driver data from Google Sheets web app endpoint
+fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers")
+ .then(response => response.text())
+  .then(text => {
+  console.log("Raw response text:", text);
+  const data = JSON.parse(text);
+  console.log(data);
+})
+  .then(data => {
+    const user = data.find(driver => driver.username === username && driver.password === password);
+    if (user) {
+      alert(`Welcome ${user.username}!`);
+      window.location.href = "./dashboard.html";
+    } else {
+      alert("Invalid username or password.");
     }
-    
-    // Clean up
-    delete window.handleDriversResponse;
-    document.getElementById('jsonpScript').remove();
-  };
+  })
+  .catch(error => {
+    console.error("Error fetching driver data:", error);
+    alert("Could not verify login. Please try again later.");
+  });
 
-  // Create script tag
-  const script = document.createElement('script');
-  script.id = 'jsonpScript';
-  script.src = `https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers&callback=handleDriversResponse&t=${Date.now()}`;
-  
-  // Error handling
-  script.onerror = function() {
-    alert("Failed to load login data. Please try again.");
-    delete window.handleDriversResponse;
-    script.remove();
-  };
-
-  document.head.appendChild(script);
 }
+
+
 
 // Show Google login button
 function showGoogleLogin() {
