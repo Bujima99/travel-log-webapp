@@ -123,12 +123,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Adjust these property names to match your actual column headers
         row.innerHTML = `
-          <td>${journey['Vehicle Number'] || ''}</td>
-          <td>${journey['Start Point'] || ''}</td>
-          <td>${journey['Start KM'] || ''}</td>
-          <td>${journey['Start Time'] || ''}</td>
+          <td>${journey['VehicleNumber'] || ''}</td>
+          <td>${journey['StartPoint'] || ''}</td>
+          <td>${journey['StartKM'] || ''}</td>
+          <td>${journey['StartTime'] || ''}</td>
           <td>
-            <button class="btn btn-primary complete-btn" data-id="${journey['Travel ID'] || ''}">
+            <button class="btn btn-primary complete-btn" data-id="${journey['TravelID'] || ''}">
               Complete
             </button>
           </td>
