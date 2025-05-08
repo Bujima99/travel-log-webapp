@@ -34,7 +34,9 @@
           <th>Vehicle</th><th>Start Point</th><th>Start KM</th><th>Start Time</th><th>Action</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="journeys-table-body">
+        <!-- Data will be inserted here by JavaScript -->
+    </tbody>
     </table>
   </div>
 
@@ -88,5 +90,91 @@
   </div>
 
   <script src="js/app.js"></script>
+  
+<script>
+// Function to fetch pending journeys
+async function fetchPendingJourneys() {
+    try {
+        // Replace with your deployed Apps Script web app URL
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec';
+        
+        const response = await fetch(`${scriptUrl}?action=pending-journeys`);
+        const data = await response.json();
+        
+        if (!data.success) {
+            throw new Error(data.error || 'Failed to fetch data');
+        }
+        
+        return data;
+    } catch (error) {
+        console.error('Error fetching pending journeys:', error);
+        return [];
+    }
+}
+
+// Function to populate the table
+function populateTable(journeys) {
+    const tableBody = document.getElementById('journeys-table-body');
+    tableBody.innerHTML = ''; // Clear existing rows
+    
+    journeys.forEach(journey => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+            <td>${journey['VehicleNumber'] || ''}</td>
+            <td>${journey['StartPoint'] || ''}</td>
+            <td>${journey['StartKM'] || ''}</td>
+            <td>${journey['StartTime'] || ''}</td>
+            <td>
+                <button class="btn btn-primary complete-btn" data-id="${journey['TravelID'] || ''}">
+                    Complete
+                </button>
+            </td>
+        `;
+        
+        tableBody.appendChild(row);
+    });
+    
+    // Add event listeners to complete buttons
+    document.querySelectorAll('.complete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const travelId = this.getAttribute('data-id');
+            completeJourney(travelId);
+        });
+    });
+}
+
+// Function to mark journey as complete
+async function completeJourney(travelId) {
+    try {
+        // You'll need to implement this in your Apps Script
+        const scriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+        const response = await fetch(scriptUrl, {
+            method: 'POST',
+            body: JSON.stringify({
+                type: "complete-journey",
+                travelId: travelId
+            })
+        });
+        
+        const result = await response.text();
+        console.log(result);
+        
+        // Refresh the table after completion
+        loadPendingJourneys();
+    } catch (error) {
+        console.error('Error completing journey:', error);
+    }
+}
+
+// Main function to load and display pending journeys
+async function loadPendingJourneys() {
+    const journeys = await fetchPendingJourneys();
+    populateTable(journeys);
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', loadPendingJourneys);
+</script>
 </body>
 </html>
