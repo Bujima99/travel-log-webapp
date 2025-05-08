@@ -35,9 +35,6 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
     const user = data.find(driver => driver.username === username && driver.password === password);
     if (user) {
       alert(`Welcome ${user.username}!`);
-       localStorage.setItem("driverId", user.DriverID);
-        localStorage.setItem("driverName", user.DriverName);
-      document.getElementById('driverName').textContent = user.DriverName;
       window.location.href = "./dashboard.html";
     } else {
       alert("Invalid username or password.");
