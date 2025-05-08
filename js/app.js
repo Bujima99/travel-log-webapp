@@ -24,13 +24,14 @@ function checkClassicLogin() {
 
   // Fetch driver data from Google Sheets web app endpoint
 fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers")
- .then(response => response.text())
-  .then(text => {
-  console.log("Raw response text:", text);
-  const data = JSON.parse(text);
-  console.log(data);
-})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json(); // Use .json() instead of .text()
+  })
   .then(data => {
+    console.log("Parsed data:", data);
     const user = data.find(driver => driver.username === username && driver.password === password);
     if (user) {
       alert(`Welcome ${user.username}!`);
@@ -40,10 +41,9 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
     }
   })
   .catch(error => {
-    console.error("Error fetching driver data:", error);
+    console.error("Error:", error);
     alert("Could not verify login. Please try again later.");
   });
-
 }
 
 
