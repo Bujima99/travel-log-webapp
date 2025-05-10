@@ -230,10 +230,11 @@ function saveAsPending() {
   // Send data to Google Sheets web app
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
+    body: JSON.stringify(journeyData),
+    mode: 'no-cors',
     headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(journeyData)
+      "Content-Type": "application/json"
+    }
   })
   .then(response => response.text())
   .then(result => {
