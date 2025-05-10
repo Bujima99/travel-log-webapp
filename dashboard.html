@@ -185,16 +185,159 @@ function completeJourney(travelId) {
       driverId:driverId
     })
   })
+ .then(response => response.json())
+  .then(journey => {
+    console.log("Journey details:", journey);
+    
+    // Create a modal/form to show and edit the details
+    const modalHTML = `
+      <div id="completeJourneyModal" class="modal" style="display:block;">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h2>Complete Journey</h2>
+          <form id="completeJourneyForm">
+            <input type="hidden" id="travelId" value="${travelId}">
+            
+            <div class="form-group">
+              <label>Vehicle Number:</label>
+              <input type="text" id="completeVehicleNumber" value="${journey.VehicleNumber || ''}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Vehicle Name:</label>
+              <input type="text" id="completeVehicleName" value="${journey.VehicleName || ''}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Start Point:</label>
+              <input type="text" id="completeStartPoint" value="${journey.StartPoint || ''}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Start KM:</label>
+              <input type="number" id="completeStartKm" value="${journey.StartKM || ''}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Start Time:</label>
+              <input type="time" id="completeStartTime" value="${journey.StartTime || ''}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Passenger Count:</label>
+              <input type="number" id="completePassengerCount" value="${journey.PassengerCount || ''}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Passenger Name:</label>
+              <input type="text" id="completePassengerName" value="${journey.PassengerName || ''}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Passenger Phone:</label>
+              <input type="tel" id="completePassengerPhone" value="${journey.PassengerPhone || ''}" pattern="[0-9]{10}" required>
+            </div>
+            
+            <!-- Additional fields for completion -->
+            <div class="form-group">
+              <label>End Point:</label>
+              <input type="text" id="completeEndPoint" required>
+            </div>
+            
+            <div class="form-group">
+              <label>End KM:</label>
+              <input type="number" id="completeEndKm" required>
+            </div>
+            
+            <div class="form-group">
+              <label>End Time:</label>
+              <input type="time" id="completeEndTime" required>
+            </div>
+            
+            <button type="button" onclick="submitCompletedJourney()">Complete Journey</button>
+          </form>
+        </div>
+      </div>
+    `;
+    
+    // Add the modal to the body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+  })
+  .catch(error => {
+    console.error("Error fetching journey details:", error);
+    alert("Error loading journey details. Please try again.");
+  });
+}
+
+// Function to close the modal
+function closeModal() {
+  const modal = document.getElementById('completeJourneyModal');
+  if (modal) {
+    modal.remove();
+  }
+}
+
+// Function to submit the completed journey
+function submitCompletedJourney() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  const driverId = driverData.id;
+  
+  // Get all form values
+  const travelId = document.getElementById('travelId').value;
+  const vehicleNumber = document.getElementById('completeVehicleNumber').value;
+  const vehicleName = document.getElementById('completeVehicleName').value;
+  const startPoint = document.getElementById('completeStartPoint').value;
+  const startKm = document.getElementById('completeStartKm').value;
+  const startTime = document.getElementById('completeStartTime').value;
+  const passengerCount = document.getElementById('completePassengerCount').value;
+  const passengerName = document.getElementById('completePassengerName').value;
+  const passengerPhone = document.getElementById('completePassengerPhone').value;
+  const endPoint = document.getElementById('completeEndPoint').value;
+  const endKm = document.getElementById('completeEndKm').value;
+  const endTime = document.getElementById('completeEndTime').value;
+
+  // Validate required fields
+  if (!endPoint || !endKm || !endTime) {
+    alert('Please fill in all completion details');
+    return;
+  }
+
+  // Create completion data object
+  const completionData = {
+    type: 'complete-journey',
+    travelId: travelId,
+    driverId: driverId,
+    vehicleNumber: vehicleNumber,
+    vehicleName: vehicleName,
+    startPoint: startPoint,
+    startKm: startKm,
+    startTime: startTime,
+    passengerCount: passengerCount,
+    passengerName: passengerName,
+    passengerPhone: passengerPhone,
+    endPoint: endPoint,
+    endKm: endKm,
+    endTime: endTime
+  };
+
+  // Send data to Google Sheets web app
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(completionData)
+  })
   .then(response => response.text())
   .then(result => {
     console.log("Journey completion result:", result);
-    alert("Journey marked as complete!");
-    // Refresh the table
+    alert("Journey completed successfully!");
+    closeModal();
     location.reload();
   })
   .catch(error => {
     console.error("Error completing journey:", error);
-    alert("Error marking journey as complete. Please try again.");
+    alert("Error completing journey. Please try again.");
   });
 }
 
