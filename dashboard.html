@@ -172,6 +172,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to mark a journey as complete
 function completeJourney(travelId) {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  const driverId= driverData.id;
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
     headers: {
@@ -179,7 +181,8 @@ function completeJourney(travelId) {
     },
     body: JSON.stringify({
       type: "complete-journey",
-      travelId: travelId
+      travelId: travelId,
+      driverId:driverId
     })
   })
   .then(response => response.text())
