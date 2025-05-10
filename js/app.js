@@ -35,6 +35,14 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
     const user = data.find(driver => driver.username === username && driver.password === password);
     if (user) {
       alert(`Welcome ${user.username}!`);
+      const driverData = {
+        name: user.username, // Replace with actual data
+        id: user.DriverID,  // Replace with actual data
+        phoneNumber: user.DriverPhone // Replace with actual data
+    };
+    
+    handleSuccessfulLogin(driverData);
+      
       window.location.href = "./dashboard.html";
     } else {
       alert("Invalid username or password.");
@@ -46,6 +54,18 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
   });
 }
 
+
+function handleSuccessfulLogin(driverData) {
+    // Store driver data in localStorage
+    localStorage.setItem('driverData', JSON.stringify({
+        name: driverData.name,
+        id: driverData.id,
+        phoneNumber: driverData.phoneNumber
+    }));
+    
+    // Redirect to dashboard
+    window.location.href = './dashboard.html';
+}
 
 
 // Show Google login button
