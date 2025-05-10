@@ -199,6 +199,10 @@ function completeJourney(travelId) {
 // Function to save journey as pending
 function saveAsPending() {
   // Get form values
+   const driverData = JSON.parse(localStorage.getItem('driverData'));
+  const driverName = driverData.name;
+  const driverId= driverData.id;
+  const driverPhone = driverData.phone;
   const vehicleNumber = document.getElementById('vehicleNumber').value;
   const vehicleName = document.getElementById('vehicleName').value;
   const startPoint = document.getElementById('startPoint').value;
@@ -217,6 +221,9 @@ function saveAsPending() {
   // Create journey data object
   const journeyData = {
     type: 'add-pending-journey',
+    driverName:driverName,
+    driverId:driverId,
+    driverPhone:driverPhone,
     vehicleNumber: vehicleNumber,
     vehicleName: vehicleName,
     startPoint: startPoint,
