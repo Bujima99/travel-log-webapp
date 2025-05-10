@@ -285,6 +285,7 @@ function editJourney(index) {
 
 // Logout
 function logout() {
+  localStorage.removeItem('driverData');
   window.location.href = "index.html";
 }
 
