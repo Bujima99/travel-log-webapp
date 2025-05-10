@@ -244,7 +244,8 @@ function saveAsPending() {
     }
   })
   .then(response => {
-  return response.json(); 
+  if (!response.ok) throw new Error("Network error");
+  return response.json(); // ✅ Parse JSON response
 })
   .then(result => {
     console.log("Save as Pending result:", result);
