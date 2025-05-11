@@ -71,7 +71,7 @@ function signupUser() {
     alert("Registration complete!");
     localStorage.setItem("driverId", driverId);
     localStorage.setItem("driverName", firstName + " " + lastName);
-    window.location.href = "dashboard.html";
+    window.location.href = "./index.html";
   })
   .catch(err => {
     console.error("Error registering driver:", err);
