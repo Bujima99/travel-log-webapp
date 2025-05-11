@@ -12,6 +12,73 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+// Show login section and hide signup
+function showLogin() {
+  document.getElementById('loginTab').classList.add('active');
+  document.getElementById('signupTab').classList.remove('active');
+  document.getElementById('loginSection').classList.remove('hidden');
+  document.getElementById('signupSection').classList.add('hidden');
+}
+
+// Show signup section and hide login
+function showSignup() {
+  document.getElementById('signupTab').classList.add('active');
+  document.getElementById('loginTab').classList.remove('active');
+  document.getElementById('signupSection').classList.remove('hidden');
+  document.getElementById('loginSection').classList.add('hidden');
+}
+
+// Sign Up User
+function signupUser() {
+  const firstName = document.getElementById("signupFirstName").value.trim();
+  const lastName = document.getElementById("signupLastName").value.trim();
+  const phone = document.getElementById("signupPhone").value.trim();
+  const username = document.getElementById("signupUsername").value.trim();
+  const newPassword = document.getElementById("signupPassword").value;
+  const confirmPassword = document.getElementById("signupConfirmPassword").value;
+
+  if (!firstName || !lastName || !phone || !username || !newPassword || !confirmPassword) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  const driverId = "DRV-" + Date.now();
+
+  const data = {
+    type: "registerDriver",
+    driverId: driverId,
+    driverName: firstName + " " + lastName,
+    driverPhone: phone,
+    driverUsername: username,
+    driverPassword: newPassword
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+    mode: 'no-cors',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(res => res.text())
+  .then(resp => {
+    alert("Registration complete!");
+    localStorage.setItem("driverId", driverId);
+    localStorage.setItem("driverName", firstName + " " + lastName);
+    window.location.href = "dashboard.html";
+  })
+  .catch(err => {
+    console.error("Error registering driver:", err);
+    alert("Registration failed.");
+  });
+}
+
 function checkClassicLogin() {
   const username = document.getElementById("usernameInput").value.trim();
   const password = document.getElementById("passwordInput").value.trim();
