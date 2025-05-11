@@ -21,6 +21,7 @@
     <div class="menu">
       <button onclick="showSection('home')">Home</button>
       <button onclick="showSection('addJourney')">Add Journey</button>
+      <button onclick="showSection('fuel')">Fuel</button>
       <button onclick="showSection('history')">History</button>
       <button onclick="logout()">Logout</button>
     </div>
@@ -54,6 +55,30 @@
       <button type="button" onclick="saveAsPending()">Save as Pending</button>
     </form>
   </div>
+
+
+  <!-- Add the Fuel section after the History section -->
+<div id="fuel" class="section">
+  <h2>Fuel Entry</h2>
+  <form id="fuelForm" enctype="multipart/form-data">
+    <input type="text" id="fuelVehicleNumber" placeholder="Vehicle Number" required>
+    <input type="text" id="fuelVehicleName" placeholder="Vehicle Name" required>
+    <input type="date" id="fuelDate" required>
+    <input type="text" id="fuelInvoiceNumber" placeholder="Invoice Number" required>
+    <select id="fuelType" required>
+      <option value="">Select Fuel Type</option>
+      <option value="Petrol">Petrol</option>
+      <option value="Diesel">Diesel</option>
+      <option value="CNG">CNG</option>
+      <option value="Electric">Electric</option>
+    </select>
+    <input type="number" id="fuelAmount" placeholder="Amount" step="0.01" required>
+    <input type="number" id="fuelLiters" placeholder="Liters" step="0.01" required>
+    <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
+    <input type="file" id="fuelBillImage" accept="image/*" required>
+    <button type="button" onclick="submitFuelEntry()">Submit Fuel Entry</button>
+  </form>
+</div>
 
  <div id="history" class="section">
   <h2>Journey History</h2>
@@ -476,7 +501,86 @@ function formatTime(timeString) {
   return timeString;
 }
 
+// Function to generate a unique Fuel ID
+function generateFuelId() {
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substr(2, 5);
+  return `FUEL-${timestamp}-${random}`.toUpperCase();
+}
 
+// Function to submit fuel entry
+function submitFuelEntry() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) {
+    alert('Driver data not found. Please login again.');
+    return;
+  }
+
+  // Get form values
+  const fuelId = generateFuelId();
+  const vehicleNumber = document.getElementById('fuelVehicleNumber').value;
+  const vehicleName = document.getElementById('fuelVehicleName').value;
+  const date = document.getElementById('fuelDate').value;
+  const invoiceNumber = document.getElementById('fuelInvoiceNumber').value;
+  const fuelType = document.getElementById('fuelType').value;
+  const amount = document.getElementById('fuelAmount').value;
+  const liters = document.getElementById('fuelLiters').value;
+  const currentKm = document.getElementById('fuelCurrentKm').value;
+  const billImage = document.getElementById('fuelBillImage').files[0];
+  
+  // Validate required fields
+  if (!vehicleNumber || !date || !invoiceNumber || !fuelType || !amount || !liters || !currentKm || !billImage) {
+    alert('Please fill in all required fields');
+    return;
+  }
+
+  // Create form data to include the file
+  const formData = new FormData();
+  formData.append('type', 'add-fuel-entry');
+  formData.append('fuelId', fuelId);
+  formData.append('driverId', driverData.id);
+  formData.append('driverName', driverData.name);
+  formData.append('vehicleNumber', vehicleNumber);
+  formData.append('vehicleName', vehicleName);
+  formData.append('date', date);
+  formData.append('invoiceNumber', invoiceNumber);
+  formData.append('fuelType', fuelType);
+  formData.append('amount', amount);
+  formData.append('liters', liters);
+  formData.append('currentKm', currentKm);
+  formData.append('billImage', billImage, `${fuelId}.jpg`);
+
+  // Show loading state
+  const submitBtn = document.querySelector('#fuelForm button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  // Send data to Google Sheets web app
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors'
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.text();
+  })
+  .then(result => {
+    console.log("Fuel entry result:", result);
+    alert("Fuel entry submitted successfully!");
+    document.getElementById('fuelForm').reset();
+  })
+  .catch(error => {
+    console.error("Error submitting fuel entry:", error);
+    alert("Error submitting fuel entry. Please try again.");
+  })
+  .finally(() => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Fuel Entry';
+  });
+}
 
   
 </script>
