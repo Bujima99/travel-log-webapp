@@ -53,7 +53,7 @@ function signupUser() {
     type: "registerDriver",
     driverId: driverId,
     driverName: firstName + " " + lastName,
-    driverPhone: phone || "Google User",
+    driverPhone: phone,
     driverUsername: username,
     driverPassword: newPassword
   };
