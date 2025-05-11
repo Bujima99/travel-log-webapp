@@ -1,26 +1,45 @@
-.auth-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+/* Ensure the initial state matches your requirements */
+#signupSection {
+  display: none;
 }
 
-.auth-form {
+#loginSection {
+  display: block;
+}
+
+/* Style for active/inactive tabs */
+.auth-toggle button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.auth-toggle button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Form styling to match your layout */
+#classicLogin, #signupForm {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin: 20px 0;
 }
 
-.auth-form input {
+#classicLogin input, 
+#signupForm input {
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
 }
 
-.auth-form button {
+#classicLogin button, 
+#signupForm button {
   padding: 12px;
   background-color: #007bff;
   color: white;
@@ -28,26 +47,10 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s;
 }
 
-.auth-form button:hover {
-  background-color: #0056b3;
-}
-
-.auth-toggle {
-  text-align: center;
-  margin-top: 15px;
-}
-
-.auth-toggle a {
-  color: #007bff;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.auth-toggle a:hover {
-  text-decoration: underline;
+.hidden {
+  display: none !important;
 }
 
 .navbar {
