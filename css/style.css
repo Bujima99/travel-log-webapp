@@ -1,18 +1,53 @@
-/* Existing CSS (preserved) */
-.auth-toggle {
-  display: flex;
-  margin-bottom: 20px;
+.auth-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-.auth-toggle button {
-  flex: 1;
-  padding: 10px;
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-form input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.auth-form button {
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
   border: none;
-  background-color: #f0f0f0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.auth-form button:hover {
+  background-color: #0056b3;
+}
+
+.auth-toggle {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.auth-toggle a {
+  color: #007bff;
+  text-decoration: none;
   cursor: pointer;
 }
-.auth-toggle button.active {
-  background-color: #4CAF50;
-  color: white;
+
+.auth-toggle a:hover {
+  text-decoration: underline;
 }
 
 .navbar {
