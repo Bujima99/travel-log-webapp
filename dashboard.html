@@ -188,7 +188,7 @@ function completeJourney(travelId) {
   })
  .then(response =>response.text())
   .then(journey => {
-    console.log("Journey details:", journey);
+    console.log("Journey details:", JSON.parse(journey));
     
     // Create a modal/form to show and edit the details
     const modalHTML = `
