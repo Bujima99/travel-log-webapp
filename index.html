@@ -10,47 +10,60 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 <body>
-  <div class="container">
+   <div class="container">
     <h1>Welcome to Travel Log</h1>
-    <p>Please login to continue</p>
-
-    <!-- Classic Username/Password Login -->
-    <div id="classicLogin">
-      <input type="text" id="usernameInput" placeholder="Username">
-      <input type="password" id="passwordInput" placeholder="Password">
-      <button onclick="checkClassicLogin()">Login</button>
+    
+    <!-- Login/Signup Toggle -->
+    <div class="auth-toggle">
+      <button id="loginTab" class="active" onclick="showLogin()">Login</button>
+      <button id="signupTab" onclick="showSignup()">Sign Up</button>
     </div>
 
-    <p>OR</p>
+    <!-- Login Form -->
+    <div id="loginSection">
+      <p>Please login to continue</p>
 
-    <!-- Login Buttons -->
-    <div id="loginOptions">
-      <button onclick="showGoogleLogin()">Login with Google</button>
-      <button onclick="showPhoneLogin()">Login with Phone Number</button>
+      <!-- Classic Username/Password Login -->
+      <div id="classicLogin">
+        <input type="text" id="usernameInput" placeholder="Username">
+        <input type="password" id="passwordInput" placeholder="Password">
+        <button onclick="checkClassicLogin()">Login</button>
+      </div>
+
+      <p>OR</p>
+
+      <!-- Login Buttons -->
+      <div id="loginOptions">
+        <button onclick="showGoogleLogin()">Login with Google</button>
+        <button onclick="showPhoneLogin()">Login with Phone Number</button>
+      </div>
+
+      <!-- Google Sign-in -->
+      <div id="googleLogin" class="hidden">
+        <button onclick="signInWithGoogle()">Sign in with Google</button>
+      </div>
+
+      <!-- Phone Login -->
+      <div id="phoneLogin" class="hidden">
+        <input type="text" id="phoneNumber" placeholder="Enter phone number (+91...)">
+        <div id="recaptcha-container"></div>
+        <button onclick="sendOTP()">Send OTP</button>
+        <input type="text" id="otp" placeholder="Enter OTP">
+        <button onclick="verifyOTP()">Verify OTP</button>
+      </div>
     </div>
 
-    <!-- Google Sign-in -->
-    <div id="googleLogin" class="hidden">
-      <button onclick="signInWithGoogle()">Sign in with Google</button>
-    </div>
-
-    <!-- Phone Login -->
-    <div id="phoneLogin" class="hidden">
-      <input type="text" id="phoneNumber" placeholder="Enter phone number (+91...)">
-      <div id="recaptcha-container"></div>
-      <button onclick="sendOTP()">Send OTP</button>
-      <input type="text" id="otp" placeholder="Enter OTP">
-      <button onclick="verifyOTP()">Verify OTP</button>
-    </div>
-
-    <!-- Registration Form (after phone verification) -->
-    <div id="registrationForm" class="hidden">
-      <input type="text" id="firstName" placeholder="First Name">
-      <input type="text" id="lastName" placeholder="Last Name">
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="newPassword" placeholder="New Password">
-      <input type="password" id="confirmPassword" placeholder="Confirm Password">
-      <button onclick="completeRegistration()">Complete Registration</button>
+    <!-- Signup Form -->
+    <div id="signupSection" class="hidden">
+      <div id="signupForm">
+        <input type="text" id="signupFirstName" placeholder="First Name">
+        <input type="text" id="signupLastName" placeholder="Last Name">
+        <input type="text" id="signupPhone" placeholder="Phone Number (+91...)">
+        <input type="text" id="signupUsername" placeholder="Username">
+        <input type="password" id="signupPassword" placeholder="Password">
+        <input type="password" id="signupConfirmPassword" placeholder="Confirm Password">
+        <button onclick="signupUser()">Sign Up</button>
+      </div>
     </div>
   </div>
 
