@@ -219,7 +219,7 @@ function completeJourney(travelId) {
             
             <div class="form-group">
               <label>Start Time:</label>
-              <input type="time" id="completeStartTime" value="${(journey.StartTime)..split('T')[1].split('.')[0] || ''}" required>
+              <input type="time" id="completeStartTime" value="${(journey.StartTime).split('T')[1].split('.')[0] || ''}" required>
             </div>
             
             <div class="form-group">
