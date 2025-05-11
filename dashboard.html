@@ -176,15 +176,15 @@ function completeJourney(travelId) {
   const driverId= driverData.id;
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify({
       type: "complete-journey",
       travelId: travelId,
       driverId:driverId
-    })
+    }),
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/json',
+    }
   })
  .then(response => {
     // First check if the response is OK
