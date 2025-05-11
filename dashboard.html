@@ -181,8 +181,13 @@ function completeJourney(travelId) {
       }
       return response.json();
     })
-  .then(journey => {
-    console.log("Parsed JSON journey:", journey);
+  .then(data => {
+      if (!data.success) {
+        throw new Error(data.message || "Journey not found");
+      }
+      
+      const journey = data.data;
+      console.log("Journey details:", journey);
     
     // Create a modal/form to show and edit the details
     const modalHTML = `
