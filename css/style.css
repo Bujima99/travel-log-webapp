@@ -5,6 +5,24 @@ body {
   background: #f4f7fc;
 }
 
+.auth-toggle {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.auth-toggle button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.auth-toggle button.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
