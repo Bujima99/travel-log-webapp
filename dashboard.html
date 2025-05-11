@@ -55,38 +55,31 @@
     </form>
   </div>
 
-  <div id="history" class="section">
-    <h2>Journey History</h2>
-   <!-- Pending Trips Table (for Home Page) -->
-<table id="pendingTripsTable">
-  <thead>
-    <tr>
-      <th>Travel ID</th>
-      <th>Date</th>
-      <th>Vehicle Number</th>
-      <th>Starting Point</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-<!-- Completed Trips Table (for History Page) -->
-<table id="completedTripsTable">
-  <thead>
-    <tr>
-      <th>Travel ID</th>
-      <th>Date</th>
-      <th>Vehicle Number</th>
-      <th>Starting Point</th>
-      <th>Ending Point</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-  </div>
+ <div id="history" class="section">
+  <h2>Journey History</h2>
+  <table id="completedTripsTable">
+    <thead>
+      <tr>
+        <th>Travel ID</th>
+        <th>Date</th>
+        <th>Vehicle Number</th>
+        <th>Vehicle Name</th>
+        <th>Start Point</th>
+        <th>End Point</th>
+        <th>Start KM</th>
+        <th>End KM</th>
+        <th>Distance</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Duration</th>
+        <th>Passenger Count</th>
+        <th>Passenger Name</th>
+        <th>Passenger Phone</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
   <script src="js/app.js"></script>
   
@@ -401,6 +394,107 @@ function saveAsPending() {
     console.error("Error saving pending journey:", error);
     alert("Error saving journey as pending. Please try again.");
   });
+}
+
+
+// Function to load completed journeys when History section is shown
+function loadCompletedJourneys() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) {
+    console.error('No driver data found');
+    return;
+  }
+
+  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=completed-journeys&driverId=${encodeURIComponent(driverData.id)}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Completed journeys data:", data);
+      const tableBody = document.querySelector('#completedTripsTable tbody');
+      tableBody.innerHTML = '';
+      
+      if (data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="15">No completed journeys found</td></tr>';
+        return;
+      }
+      
+      data.forEach(journey => {
+        const row = document.createElement('tr');
+        
+        // Calculate distance and duration if available
+        const distance = journey.EndKM && journey.StartKM ? journey.EndKM - journey.StartKM : '';
+        const duration = journey.EndTime && journey.StartTime ? calculateDuration(journey.StartTime, journey.EndTime) : '';
+        
+        row.innerHTML = `
+          <td>${journey.TravelID || ''}</td>
+          <td>${journey.Date || ''}</td>
+          <td>${journey.VehicleNumber || ''}</td>
+          <td>${journey.VehicleName || ''}</td>
+          <td>${journey.StartPoint || ''}</td>
+          <td>${journey.EndPoint || ''}</td>
+          <td>${journey.StartKM || ''}</td>
+          <td>${journey.EndKM || ''}</td>
+          <td>${distance}</td>
+          <td>${formatTime(journey.StartTime)}</td>
+          <td>${formatTime(journey.EndTime)}</td>
+          <td>${duration}</td>
+          <td>${journey.PassengerCount || ''}</td>
+          <td>${journey.PassengerName || ''}</td>
+          <td>${journey.PassengerPhone || ''}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    })
+    .catch(error => {
+      console.error("Error loading completed journeys:", error);
+      document.querySelector('#completedTripsTable tbody').innerHTML = `
+        <tr>
+          <td colspan="15">Error loading data. Please try again later.</td>
+        </tr>
+      `;
+    });
+}
+
+// Helper function to format time
+function formatTime(timeString) {
+  if (!timeString) return '';
+  
+  // If it's already in HH:MM format
+  if (timeString.includes(':')) return timeString;
+  
+  // If it's in ISO format (from spreadsheet)
+  if (timeString.includes('T')) {
+    const date = new Date(timeString);
+    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  }
+  
+  return timeString;
+}
+
+// Helper function to calculate duration between two times
+function calculateDuration(startTime, endTime) {
+  try {
+    const start = new Date(`2000-01-01T${formatTime(startTime)}:00`);
+    const end = new Date(`2000-01-01T${formatTime(endTime)}:00`);
+    
+    // Handle cases where end time is next day (e.g., overnight trips)
+    if (end < start) {
+      end.setDate(end.getDate() + 1);
+    }
+    
+    const diffMs = end - start;
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    
+    return `${diffHours}h ${diffMinutes}m`;
+  } catch (e) {
+    console.error("Error calculating duration:", e);
+    return '';
+  }
 }
 
   
