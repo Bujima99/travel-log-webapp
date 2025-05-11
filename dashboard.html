@@ -182,10 +182,14 @@ function completeJourney(travelId) {
     },
     redirect: 'follow'
   })
- .then(response =>response.text())
+  .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
   .then(journey => {
-    const json = JSON.parse(journey);
-    console.log("Parsed JSON:", json);
+    console.log("Parsed JSON journey:", journey);
     
     // Create a modal/form to show and edit the details
     const modalHTML = `
