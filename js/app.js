@@ -53,7 +53,7 @@ function signupUser() {
     type: "registerDriver",
     driverId: driverId,
     driverName: firstName + " " + lastName,
-    driverPhone: phone,
+    driverPhone: phone || "Google User",
     driverUsername: username,
     driverPassword: newPassword
   };
@@ -71,7 +71,7 @@ function signupUser() {
     alert("Registration complete!");
     localStorage.setItem("driverId", driverId);
     localStorage.setItem("driverName", firstName + " " + lastName);
-    window.location.href = "./dashboard.html";
+    window.location.href = "dashboard.html";
   })
   .catch(err => {
     console.error("Error registering driver:", err);
