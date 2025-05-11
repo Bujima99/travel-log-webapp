@@ -186,20 +186,7 @@ function completeJourney(travelId) {
       'Content-Type': 'application/json',
     }
   })
- .then(response => {
-    // First check if the response is OK
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    // Try to parse as JSON, fallback to text if fails
-    return response.text().then(text => {
-      try {
-        return JSON.parse(text);
-      } catch {
-        throw new Error('Invalid JSON response: ' + text);
-      }
-    });
-  })
+ .then(response =>response.text())
   .then(journey => {
     console.log("Journey details:", journey);
     
