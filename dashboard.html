@@ -405,7 +405,7 @@ function loadCompletedJourneys() {
     return;
   }
 
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=completed-journeys&driverId=${encodeURIComponent(driverData.id)}`)
+  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=complete-journey&driverId=${encodeURIComponent(driverData.id)}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
