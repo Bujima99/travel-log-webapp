@@ -215,8 +215,15 @@ function completeRegistration() {
 
 
 function showSection(sectionId) {
-  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+   document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
   document.getElementById(sectionId).classList.add('active');
+  
+  // Load appropriate data when section changes
+  if (sectionId === 'home') {
+    // This should already be handled by your DOMContentLoaded event
+  } else if (sectionId === 'history') {
+    loadCompletedJourneys();
+  }
 }
 
 
