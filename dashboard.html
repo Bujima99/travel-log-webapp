@@ -179,7 +179,7 @@ function completeJourney(travelId) {
         throw new Error('Network response was not ok');
       }
       return response.json();
-    })
+    )
   .then(data => {
       if (!data.success) {
         throw new Error(data.message || "Journey not found");
