@@ -459,17 +459,24 @@ function loadCompletedJourneys() {
     });
 }
 
-// Helper function to format time
 function formatTime(timeString) {
+  // Handle null/undefined/empty values
   if (!timeString) return '';
+  
+  // Convert to string if it isn't already
+  timeString = String(timeString);
   
   // If it's already in HH:MM format
   if (timeString.includes(':')) return timeString;
   
   // If it's in ISO format (from spreadsheet)
   if (timeString.includes('T')) {
-    const date = new Date(timeString);
-    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    try {
+      const date = new Date(timeString);
+      return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    } catch (e) {
+      return timeString; // Return original if date parsing fails
+    }
   }
   
   return timeString;
