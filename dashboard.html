@@ -68,10 +68,8 @@
         <th>End Point</th>
         <th>Start KM</th>
         <th>End KM</th>
-        <th>Distance</th>
         <th>Start Time</th>
         <th>End Time</th>
-        <th>Duration</th>
         <th>Passenger Count</th>
         <th>Passenger Name</th>
         <th>Passenger Phone</th>
@@ -425,10 +423,6 @@ function loadCompletedJourneys() {
       data.forEach(journey => {
         const row = document.createElement('tr');
         
-        // Calculate distance and duration if available
-        const distance = journey.EndKM && journey.StartKM ? journey.EndKM - journey.StartKM : '';
-        const duration = journey.EndTime && journey.StartTime ? calculateDuration(journey.StartTime, journey.EndTime) : '';
-        
         row.innerHTML = `
           <td>${journey.TravelID || ''}</td>
           <td>${journey.Date || ''}</td>
@@ -438,10 +432,8 @@ function loadCompletedJourneys() {
           <td>${journey.EndPoint || ''}</td>
           <td>${journey.StartKM || ''}</td>
           <td>${journey.EndKM || ''}</td>
-          <td>${distance}</td>
           <td>${formatTime(journey.StartTime)}</td>
           <td>${formatTime(journey.EndTime)}</td>
-          <td>${duration}</td>
           <td>${journey.NoPassengers || ''}</td>
           <td>${journey.PassengerName || ''}</td>
           <td>${journey.PassengerPhone || ''}</td>
@@ -482,27 +474,7 @@ function formatTime(timeString) {
   return timeString;
 }
 
-// Helper function to calculate duration between two times
-function calculateDuration(startTime, endTime) {
-  try {
-    const start = new Date(`2000-01-01T${formatTime(startTime)}:00`);
-    const end = new Date(`2000-01-01T${formatTime(endTime)}:00`);
-    
-    // Handle cases where end time is next day (e.g., overnight trips)
-    if (end < start) {
-      end.setDate(end.getDate() + 1);
-    }
-    
-    const diffMs = end - start;
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    
-    return `${diffHours}h ${diffMinutes}m`;
-  } catch (e) {
-    console.error("Error calculating duration:", e);
-    return '';
-  }
-}
+
 
   
 </script>
