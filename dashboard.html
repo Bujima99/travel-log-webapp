@@ -326,6 +326,7 @@ function submitCompletedJourney() {
     headers: {
       'Content-Type': 'application/json',
     },
+    mode: 'no-cors',
     body: JSON.stringify(completionData)
   })
   .then(response => response.text())
