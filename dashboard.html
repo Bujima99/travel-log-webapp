@@ -551,28 +551,31 @@ function submitFuelEntry() {
   // Send data to Google Apps Script
   fetch('https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec', {
     method: 'POST',
-    body: formData,
-    mode: 'no-cors'
+    body: formData
   })
   .then(response => {
-    console.log('Fuel entry submitted successfully');
-    alert('Fuel entry submitted successfully!');
-    document.getElementById('fuelForm').reset();
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      console.log('Fuel entry submitted successfully', data);
+      alert('Fuel entry submitted successfully!');
+      document.getElementById('fuelForm').reset();
+    } else {
+      throw new Error(data.message || 'Failed to submit fuel entry');
+    }
   })
   .catch(error => {
     console.error('Error submitting fuel entry:', error);
-    alert('Error submitting fuel entry. Please try again.');
+    alert('Error submitting fuel entry: ' + error.message);
   })
   .finally(() => {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit Fuel Entry';
   });
-}
-
-function generateFuelId() {
-  const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).substr(2, 5);
-  return `FUEL-${timestamp}-${random}`.toUpperCase();
 }
 
   
