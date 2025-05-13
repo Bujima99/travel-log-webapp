@@ -551,6 +551,7 @@ function submitFuelEntry() {
   // Send data to Google Apps Script
   fetch('https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec', {
     method: 'POST',
+     mode: 'no-cors',
     body: formData
   })
   .then(response => {
