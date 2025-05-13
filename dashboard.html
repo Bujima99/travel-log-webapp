@@ -19,11 +19,11 @@
       <span id="driverName"></span>
     </div>
     <div class="menu">
-      <button onclick="showSection('home')">Home</button>
-      <button onclick="showSection('addJourney')">Add Journey</button>
-      <button onclick="showSection('fuel')">Fuel</button>
-      <button onclick="showSection('history')">History</button>
-      <button onclick="logout()">Logout</button>
+      <button class="btn btn-primary" onclick="showSection('home')">Home</button>
+      <button class="btn btn-primary" onclick="showSection('addJourney')">Add Journey</button>
+      <button class="btn btn-primary" onclick="showSection('fuel')">Fuel</button>
+      <button class="btn btn-primary" onclick="showSection('history')">History</button>
+      <button class="btn btn-primary" onclick="logout()">Logout</button>
     </div>
   </div>
 
@@ -52,7 +52,7 @@
       <input type="number" id="passengerCount" placeholder="No. of Passengers" required>
       <input type="text" id="passengerName" placeholder="One Passenger Name" required>
       <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" pattern="[0-9]{10}" required>
-      <button type="button" onclick="saveAsPending()">Save as Pending</button>
+      <button type="button" class="btn btn-primary" onclick="saveAsPending()">Save as Pending</button>
     </form>
   </div>
 
@@ -76,7 +76,7 @@
     <input type="number" id="fuelLiters" placeholder="Liters" step="0.01" required>
     <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
     <input type="file" id="fuelBillImage" accept="image/*" required>
-    <button type="button" onclick="submitFuelEntry()">Submit Fuel Entry</button>
+    <button type="button" class="btn btn-primary" onclick="submitFuelEntry()">Submit Fuel Entry</button>
   </form>
 </div>
 
@@ -272,7 +272,7 @@ function completeJourney(travelId) {
               <input type="time" id="completeEndTime" required>
             </div>
             
-            <button type="button" onclick="submitCompletedJourney()">Complete Journey</button>
+            <button type="button" class="btn btn-primary" onclick="submitCompletedJourney()">Complete Journey</button>
           </form>
         </div>
       </div>
