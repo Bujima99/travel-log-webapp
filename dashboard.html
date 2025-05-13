@@ -501,85 +501,90 @@ function formatTime(timeString) {
   return timeString;
 }
 
-// Function to generate a unique Fuel ID
-function generateFuelId() {
-  const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).substr(2, 5);
-  return `FUEL-${timestamp}-${random}`.toUpperCase();
-}
 
-// Function to submit fuel entry
-function submitFuelEntry() {
+function submitFuelEntry(event) {
+  event.preventDefault();
+  
+  const form = document.getElementById('fuelForm');
+  const submitBtn = document.getElementById('submitFuelBtn');
+  const progress = document.getElementById('submitProgress');
+  
+  // Get driver data
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   if (!driverData) {
-    alert('Driver data not found. Please login again.');
+    alert('Please login again to continue.');
     return;
   }
-
-  // Get form values
-  const fuelId = generateFuelId();
-  const vehicleNumber = document.getElementById('fuelVehicleNumber').value;
-  const vehicleName = document.getElementById('fuelVehicleName').value;
-  const date = document.getElementById('fuelDate').value;
-  const invoiceNumber = document.getElementById('fuelInvoiceNumber').value;
-  const fuelType = document.getElementById('fuelType').value;
-  const amount = document.getElementById('fuelAmount').value;
-  const liters = document.getElementById('fuelLiters').value;
-  const currentKm = document.getElementById('fuelCurrentKm').value;
-  const billImage = document.getElementById('fuelBillImage').files[0];
   
-  // Validate required fields
-  if (!vehicleNumber || !date || !invoiceNumber || !fuelType || !amount || !liters || !currentKm || !billImage) {
-    alert('Please fill in all required fields');
-    return;
-  }
-
-  // Create form data to include the file
-  const formData = new FormData();
+  // Create FormData object
+  const formData = new FormData(form);
+  
+  // Add additional data
   formData.append('type', 'add-fuel-entry');
-  formData.append('fuelId', fuelId);
+  formData.append('fuelId', generateFuelId());
   formData.append('driverId', driverData.id);
   formData.append('driverName', driverData.name);
-  formData.append('vehicleNumber', vehicleNumber);
-  formData.append('vehicleName', vehicleName);
-  formData.append('date', date);
-  formData.append('invoiceNumber', invoiceNumber);
-  formData.append('fuelType', fuelType);
-  formData.append('amount', amount);
-  formData.append('liters', liters);
-  formData.append('currentKm', currentKm);
-  formData.append('billImage', billImage, `${fuelId}.jpg`);
-
+  
+  // Validate file
+  const fileInput = document.getElementById('fuelBillImage');
+  if (!fileInput.files[0]) {
+    alert('Please select a bill image');
+    return;
+  }
+  
   // Show loading state
-  const submitBtn = document.querySelector('#fuelForm button');
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Submitting...';
-
-  // Send data to Google Sheets web app
+  progress.classList.remove('hidden');
+  
+  // Send data to server
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
-    body: formData,
-    mode: 'no-cors'
+    body: formData
   })
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    return response.text();
+    return response.json();
   })
   .then(result => {
-    console.log("Fuel entry result:", result);
-    alert("Fuel entry submitted successfully!");
-    document.getElementById('fuelForm').reset();
+    if (result.success) {
+      alert('Fuel entry submitted successfully!');
+      form.reset();
+      document.querySelector('.file-preview').innerHTML = '';
+    } else {
+      throw new Error(result.message || 'Failed to submit fuel entry');
+    }
   })
   .catch(error => {
-    console.error("Error submitting fuel entry:", error);
-    alert("Error submitting fuel entry. Please try again.");
+    console.error('Error:', error);
+    alert('Error submitting fuel entry: ' + error.message);
   })
   .finally(() => {
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Fuel Entry';
+    progress.classList.add('hidden');
   });
+}
+
+// Add this helper function
+function generateFuelId() {
+  return 'FUEL-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+}
+
+// Function to handle file preview
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  const preview = document.querySelector('.file-preview');
+  
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.innerHTML = `<img src="${e.target.result}" alt="Bill preview">`;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    preview.innerHTML = '';
+  }
 }
 
   
