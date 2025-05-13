@@ -13,7 +13,7 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Show login section and hide signup
+// Show login section  hide signup
 function showLogin() {
   document.getElementById('loginSection').classList.remove('hidden');
   document.getElementById('signupSection').classList.add('hidden');
