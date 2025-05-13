@@ -1,14 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Travel Log Login</title>
   <link rel="stylesheet" href="./css/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
    <div class="container">
@@ -16,8 +16,8 @@
     
     <!-- Login/Signup Toggle -->
     <div class="auth-toggle">
-      <button id="loginTab" class="active btn btn-primary" onclick="showLogin()">Login</button>
-      <button id="signupTab" class="btn btn-primary" onclick="showSignup()">Sign Up</button>
+      <button id="loginTab" class="active" onclick="showLogin()">Login</button>
+      <button id="signupTab" onclick="showSignup()">Sign Up</button>
     </div>
 
     <!-- Login Form -->
@@ -28,29 +28,29 @@
       <div id="classicLogin">
         <input type="text" id="usernameInput" placeholder="Username">
         <input type="password" id="passwordInput" placeholder="Password">
-        <button class="btn btn-primary" onclick="checkClassicLogin()">Login</button>
+        <button onclick="checkClassicLogin()">Login</button>
       </div>
 
       <p>OR</p>
 
       <!-- Login Buttons -->
       <div id="loginOptions">
-        <button class="btn btn-primary" onclick="showGoogleLogin()">Login with Google</button>
-        <button class="btn btn-primary" onclick="showPhoneLogin()">Login with Phone Number</button>
+        <button onclick="showGoogleLogin()">Login with Google</button>
+        <button onclick="showPhoneLogin()">Login with Phone Number</button>
       </div>
 
       <!-- Google Sign-in -->
       <div id="googleLogin" class="hidden">
-        <button class="btn btn-primary" onclick="signInWithGoogle()">Sign in with Google</button>
+        <button onclick="signInWithGoogle()">Sign in with Google</button>
       </div>
 
       <!-- Phone Login -->
       <div id="phoneLogin" class="hidden">
         <input type="text" id="phoneNumber" placeholder="Enter phone number (+91...)">
         <div id="recaptcha-container"></div>
-        <button class="btn btn-primary" onclick="sendOTP()">Send OTP</button>
+        <button onclick="sendOTP()">Send OTP</button>
         <input type="text" id="otp" placeholder="Enter OTP">
-        <button class="btn btn-primary" onclick="verifyOTP()">Verify OTP</button>
+        <button onclick="verifyOTP()">Verify OTP</button>
       </div>
     </div>
 
@@ -63,7 +63,7 @@
         <input type="text" id="signupUsername" placeholder="Username">
         <input type="password" id="signupPassword" placeholder="Password">
         <input type="password" id="signupConfirmPassword" placeholder="Confirm Password">
-        <button class="btn btn-primary" onclick="signupUser()">Sign Up</button>
+        <button onclick="signupUser()">Sign Up</button>
       </div>
     </div>
   </div>
