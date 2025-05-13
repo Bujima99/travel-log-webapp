@@ -1,3 +1,4 @@
+
 // Your Firebase config
   var firebaseConfig = {
     apiKey: "AIzaSyAhSLSI_QA-VhXmzGhu_SLDFEvASz9rCek",
@@ -287,29 +288,15 @@ function completeRegistration() {
 
 
 function showSection(sectionId) {
-  // Hide all sections
-    document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('active');
-    });
-    
-    // Show selected section
-    const selectedSection = document.getElementById(sectionId);
-    if (selectedSection) {
-        selectedSection.classList.add('active');
-    }
-    
-    // Update active menu button
-    document.querySelectorAll('.menu button').forEach(button => {
-        button.classList.remove('active');
-        if (button.getAttribute('onclick').includes(sectionId)) {
-            button.classList.add('active');
-        }
-    });
-    
-    // Load appropriate data
-    if (sectionId === 'history') {
-        loadCompletedJourneys();
-    }
+   document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+  
+  // Load appropriate data when section changes
+  if (sectionId === 'home') {
+    // This should already be handled by your DOMContentLoaded event
+  } else if (sectionId === 'history') {
+    loadCompletedJourneys();
+  }
 }
 
 
@@ -483,6 +470,3 @@ function viewCompletedTrip(travelId) {
   // Redirect to a form or display the form with the selected completed trip details.
   console.log("Viewing completed trip: ", travelId);
 }
-
-
-
