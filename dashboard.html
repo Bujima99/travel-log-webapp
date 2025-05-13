@@ -502,18 +502,10 @@ function formatTime(timeString) {
   return timeString;
 }
 
-// Function to generate a unique Fuel ID
-function generateFuelId() {
-  const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).substr(2, 5);
-  return `FUEL-${timestamp}-${random}`.toUpperCase();
-}
-
-// Function to submit fuel entry
 function submitFuelEntry() {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   if (!driverData) {
-    alert('Driver data not found. Please login again.');
+    alert('Please login again');
     return;
   }
 
@@ -528,14 +520,14 @@ function submitFuelEntry() {
   const liters = document.getElementById('fuelLiters').value;
   const currentKm = document.getElementById('fuelCurrentKm').value;
   const billImage = document.getElementById('fuelBillImage').files[0];
-  
+
   // Validate required fields
   if (!vehicleNumber || !date || !invoiceNumber || !fuelType || !amount || !liters || !currentKm || !billImage) {
     alert('Please fill in all required fields');
     return;
   }
 
-  // Create form data to include the file
+  // Create FormData object
   const formData = new FormData();
   formData.append('type', 'add-fuel-entry');
   formData.append('fuelId', fuelId);
@@ -556,31 +548,31 @@ function submitFuelEntry() {
   submitBtn.disabled = true;
   submitBtn.textContent = 'Submitting...';
 
-  // Send data to Google Sheets web app
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  // Send data to Google Apps Script
+  fetch('https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec', {
     method: 'POST',
     body: formData,
     mode: 'no-cors'
   })
   .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.text();
-  })
-  .then(result => {
-    console.log("Fuel entry result:", result);
-    alert("Fuel entry submitted successfully!");
+    console.log('Fuel entry submitted successfully');
+    alert('Fuel entry submitted successfully!');
     document.getElementById('fuelForm').reset();
   })
   .catch(error => {
-    console.error("Error submitting fuel entry:", error);
-    alert("Error submitting fuel entry. Please try again.");
+    console.error('Error submitting fuel entry:', error);
+    alert('Error submitting fuel entry. Please try again.');
   })
   .finally(() => {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit Fuel Entry';
   });
+}
+
+function generateFuelId() {
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substr(2, 5);
+  return `FUEL-${timestamp}-${random}`.toUpperCase();
 }
 
   
