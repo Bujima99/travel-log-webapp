@@ -1,45 +1,35 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>Driver Dashboard</title>
   <link rel="stylesheet" href="css/style.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<!-- Add Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 
 <!-- Then your app.js -->
 <script src="./js/app.js"></script>
 
 </head>
 <body>
-  <!-- Add this in your navbar section -->
-<div class="navbar">
-  <div class="navbar-content">
+  <div class="navbar">
     <div class="user-info">
       <div class="avatar"></div>
       <span id="driverName"></span>
     </div>
-    <button class="menu-toggle" id="menuToggle">
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="menu" id="menu">
-      <button onclick="showSection('home')" class="active">Home</button>
+    <div class="menu">
+      <button onclick="showSection('home')">Home</button>
       <button onclick="showSection('addJourney')">Add Journey</button>
       <button onclick="showSection('fuel')">Fuel</button>
       <button onclick="showSection('history')">History</button>
       <button onclick="logout()">Logout</button>
     </div>
   </div>
-</div>
-
-
 
   <div id="home" class="section active">
     <h2>Pending Journeys</h2>
-    <div class="table-container">
     <table id="pendingTable">
       <thead>
         <tr>
@@ -50,7 +40,6 @@
         <!-- Data will be inserted here by JavaScript -->
     </tbody>
     </table>
-    </div>
   </div>
 
   <div id="addJourney" class="section">
@@ -64,7 +53,7 @@
       <input type="number" id="passengerCount" placeholder="No. of Passengers" required>
       <input type="text" id="passengerName" placeholder="One Passenger Name" required>
       <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" pattern="[0-9]{10}" required>
-      <button type="button" class="btn btn-primary" onclick="saveAsPending()">Save as Pending</button>
+      <button type="button" onclick="saveAsPending()">Save as Pending</button>
     </form>
   </div>
 
@@ -72,74 +61,28 @@
   <!-- Add the Fuel section after the History section -->
 <div id="fuel" class="section">
   <h2>Fuel Entry</h2>
-  <div class="form-container">
-    <form id="fuelForm" enctype="multipart/form-data">
-      <div class="form-group">
-        <label for="fuelVehicleNumber">Vehicle Number</label>
-        <input type="text" id="fuelVehicleNumber" name="vehicleNumber" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="fuelVehicleName">Vehicle Name</label>
-        <input type="text" id="fuelVehicleName" name="vehicleName" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="fuelDate">Date</label>
-        <input type="date" id="fuelDate" name="date" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="fuelInvoiceNumber">Invoice Number</label>
-        <input type="text" id="fuelInvoiceNumber" name="invoiceNumber" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="fuelType">Fuel Type</label>
-        <select id="fuelType" name="fuelType" required>
-          <option value="">Select Fuel Type</option>
-          <option value="Petrol">Petrol</option>
-          <option value="Diesel">Diesel</option>
-          <option value="CNG">CNG</option>
-          <option value="Electric">Electric</option>
-        </select>
-      </div>
-      
-      <div class="form-group">
-        <label for="fuelAmount">Amount (₹)</label>
-        <input type="number" id="fuelAmount" name="amount" step="0.01" min="0" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="fuelLiters">Liters</label>
-        <input type="number" id="fuelLiters" name="liters" step="0.01" min="0" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="fuelCurrentKm">Current KM</label>
-        <input type="number" id="fuelCurrentKm" name="currentKm" min="0" required>
-      </div>
-      
-      <div class="form-group file-upload">
-        <label for="fuelBillImage">Upload Bill Image</label>
-        <input type="file" id="fuelBillImage" name="billImage" accept="image/*" required>
-        <div class="file-preview"></div>
-      </div>
-      
-      <div class="form-actions">
-        <button type="submit" id="submitFuelBtn" class="btn btn-primary">Submit Fuel Entry</button>
-        <div id="submitProgress" class="hidden">
-          <div class="spinner"></div>
-          <span>Uploading...</span>
-        </div>
-      </div>
-    </form>
-  </div>
+  <form id="fuelForm" enctype="multipart/form-data">
+    <input type="text" id="fuelVehicleNumber" placeholder="Vehicle Number" required>
+    <input type="text" id="fuelVehicleName" placeholder="Vehicle Name" required>
+    <input type="date" id="fuelDate" required>
+    <input type="text" id="fuelInvoiceNumber" placeholder="Invoice Number" required>
+    <select id="fuelType" required>
+      <option value="">Select Fuel Type</option>
+      <option value="Petrol">Petrol</option>
+      <option value="Diesel">Diesel</option>
+      <option value="CNG">CNG</option>
+      <option value="Electric">Electric</option>
+    </select>
+    <input type="number" id="fuelAmount" placeholder="Amount" step="0.01" required>
+    <input type="number" id="fuelLiters" placeholder="Liters" step="0.01" required>
+    <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
+    <input type="file" id="fuelBillImage" accept="image/*" required>
+    <button type="button" onclick="submitFuelEntry()">Submit Fuel Entry</button>
+  </form>
 </div>
 
  <div id="history" class="section">
   <h2>Journey History</h2>
-   <div class="table-container">
   <table id="completedTripsTable">
     <thead>
       <tr>
@@ -160,7 +103,6 @@
     </thead>
     <tbody></tbody>
   </table>
-   </div>
 </div>
 
   <script src="js/app.js"></script>
@@ -170,40 +112,13 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Fetch pending journeys from Google Sheets web app endpoint
   const driverData = JSON.parse(localStorage.getItem('driverData'));
+    
     if (driverData) {
         // Display driver name
         const driverNameElement = document.getElementById('driverName');
         if (driverNameElement) {
             driverNameElement.textContent = driverData.name;
         }
-    const fuelForm = document.getElementById('fuelForm');
-    if (fuelForm) {
-        fuelForm.addEventListener('submit', submitFuelEntry);
-    }
-      // File input preview
-    const fileInput = document.getElementById('fuelBillImage');
-    if (fileInput) {
-        fileInput.addEventListener('change', handleFileSelect);
-    }
-      const menuToggle = document.getElementById('menuToggle');
-    const menu = document.getElementById('menu');
-    
-    // Toggle menu
-    menuToggle.addEventListener('click', function() {
-        menu.classList.toggle('show');
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
-            menu.classList.remove('show');
-        }
-    });
-    
-    // Close menu when a menu item is clicked
-    menu.addEventListener('click', function() {
-        menu.classList.remove('show');
-    });
         
         // You can use other data as needed
         console.log('Driver ID:', driverData.id);
@@ -358,7 +273,7 @@ function completeJourney(travelId) {
               <input type="time" id="completeEndTime" required>
             </div>
             
-            <button type="button" class="btn btn-primary" onclick="submitCompletedJourney()">Complete Journey</button>
+            <button type="button" onclick="submitCompletedJourney()">Complete Journey</button>
           </form>
         </div>
       </div>
@@ -587,90 +502,85 @@ function formatTime(timeString) {
   return timeString;
 }
 
+// Function to generate a unique Fuel ID
+function generateFuelId() {
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substr(2, 5);
+  return `FUEL-${timestamp}-${random}`.toUpperCase();
+}
 
-function submitFuelEntry(event) {
-  event.preventDefault();
-  
-  const form = document.getElementById('fuelForm');
-  const submitBtn = document.getElementById('submitFuelBtn');
-  const progress = document.getElementById('submitProgress');
-  
-  // Get driver data
+// Function to submit fuel entry
+function submitFuelEntry() {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   if (!driverData) {
-    alert('Please login again to continue.');
+    alert('Driver data not found. Please login again.');
     return;
   }
+
+  // Get form values
+  const fuelId = generateFuelId();
+  const vehicleNumber = document.getElementById('fuelVehicleNumber').value;
+  const vehicleName = document.getElementById('fuelVehicleName').value;
+  const date = document.getElementById('fuelDate').value;
+  const invoiceNumber = document.getElementById('fuelInvoiceNumber').value;
+  const fuelType = document.getElementById('fuelType').value;
+  const amount = document.getElementById('fuelAmount').value;
+  const liters = document.getElementById('fuelLiters').value;
+  const currentKm = document.getElementById('fuelCurrentKm').value;
+  const billImage = document.getElementById('fuelBillImage').files[0];
   
-  // Create FormData object
-  const formData = new FormData(form);
-  
-  // Add additional data
+  // Validate required fields
+  if (!vehicleNumber || !date || !invoiceNumber || !fuelType || !amount || !liters || !currentKm || !billImage) {
+    alert('Please fill in all required fields');
+    return;
+  }
+
+  // Create form data to include the file
+  const formData = new FormData();
   formData.append('type', 'add-fuel-entry');
-  formData.append('fuelId', generateFuelId());
+  formData.append('fuelId', fuelId);
   formData.append('driverId', driverData.id);
   formData.append('driverName', driverData.name);
-  
-  // Validate file
-  const fileInput = document.getElementById('fuelBillImage');
-  if (!fileInput.files[0]) {
-    alert('Please select a bill image');
-    return;
-  }
-  
+  formData.append('vehicleNumber', vehicleNumber);
+  formData.append('vehicleName', vehicleName);
+  formData.append('date', date);
+  formData.append('invoiceNumber', invoiceNumber);
+  formData.append('fuelType', fuelType);
+  formData.append('amount', amount);
+  formData.append('liters', liters);
+  formData.append('currentKm', currentKm);
+  formData.append('billImage', billImage, `${fuelId}.jpg`);
+
   // Show loading state
+  const submitBtn = document.querySelector('#fuelForm button');
   submitBtn.disabled = true;
-  progress.classList.remove('hidden');
-  
-  // Send data to server
+  submitBtn.textContent = 'Submitting...';
+
+  // Send data to Google Sheets web app
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
-    body: formData
+    body: formData,
+    mode: 'no-cors'
   })
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    return response.json();
+    return response.text();
   })
   .then(result => {
-    if (result.success) {
-      alert('Fuel entry submitted successfully!');
-      form.reset();
-      document.querySelector('.file-preview').innerHTML = '';
-    } else {
-      throw new Error(result.message || 'Failed to submit fuel entry');
-    }
+    console.log("Fuel entry result:", result);
+    alert("Fuel entry submitted successfully!");
+    document.getElementById('fuelForm').reset();
   })
   .catch(error => {
-    console.error('Error:', error);
-    alert('Error submitting fuel entry: ' + error.message);
+    console.error("Error submitting fuel entry:", error);
+    alert("Error submitting fuel entry. Please try again.");
   })
   .finally(() => {
     submitBtn.disabled = false;
-    progress.classList.add('hidden');
+    submitBtn.textContent = 'Submit Fuel Entry';
   });
-}
-
-// Add this helper function
-function generateFuelId() {
-  return 'FUEL-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-}
-
-// Function to handle file preview
-function handleFileSelect(event) {
-  const file = event.target.files[0];
-  const preview = document.querySelector('.file-preview');
-  
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      preview.innerHTML = `<img src="${e.target.result}" alt="Bill preview">`;
-    };
-    reader.readAsDataURL(file);
-  } else {
-    preview.innerHTML = '';
-  }
 }
 
   
