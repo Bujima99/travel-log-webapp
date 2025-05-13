@@ -287,15 +287,29 @@ function completeRegistration() {
 
 
 function showSection(sectionId) {
-   document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-  document.getElementById(sectionId).classList.add('active');
-  
-  // Load appropriate data when section changes
-  if (sectionId === 'home') {
-    // This should already be handled by your DOMContentLoaded event
-  } else if (sectionId === 'history') {
-    loadCompletedJourneys();
-  }
+  // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show selected section
+    const selectedSection = document.getElementById(sectionId);
+    if (selectedSection) {
+        selectedSection.classList.add('active');
+    }
+    
+    // Update active menu button
+    document.querySelectorAll('.menu button').forEach(button => {
+        button.classList.remove('active');
+        if (button.getAttribute('onclick').includes(sectionId)) {
+            button.classList.add('active');
+        }
+    });
+    
+    // Load appropriate data
+    if (sectionId === 'history') {
+        loadCompletedJourneys();
+    }
 }
 
 
