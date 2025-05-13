@@ -62,24 +62,69 @@
   <!-- Add the Fuel section after the History section -->
 <div id="fuel" class="section">
   <h2>Fuel Entry</h2>
-  <form id="fuelForm" enctype="multipart/form-data">
-    <input type="text" id="fuelVehicleNumber" placeholder="Vehicle Number" required>
-    <input type="text" id="fuelVehicleName" placeholder="Vehicle Name" required>
-    <input type="date" id="fuelDate" required>
-    <input type="text" id="fuelInvoiceNumber" placeholder="Invoice Number" required>
-    <select id="fuelType" required>
-      <option value="">Select Fuel Type</option>
-      <option value="Petrol">Petrol</option>
-      <option value="Diesel">Diesel</option>
-      <option value="CNG">CNG</option>
-      <option value="Electric">Electric</option>
-    </select>
-    <input type="number" id="fuelAmount" placeholder="Amount" step="0.01" required>
-    <input type="number" id="fuelLiters" placeholder="Liters" step="0.01" required>
-    <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
-    <input type="file" id="fuelBillImage" accept="image/*" required>
-    <button type="button" class="btn btn-primary" onclick="submitFuelEntry()">Submit Fuel Entry</button>
-  </form>
+  <div class="form-container">
+    <form id="fuelForm" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="fuelVehicleNumber">Vehicle Number</label>
+        <input type="text" id="fuelVehicleNumber" name="vehicleNumber" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="fuelVehicleName">Vehicle Name</label>
+        <input type="text" id="fuelVehicleName" name="vehicleName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="fuelDate">Date</label>
+        <input type="date" id="fuelDate" name="date" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="fuelInvoiceNumber">Invoice Number</label>
+        <input type="text" id="fuelInvoiceNumber" name="invoiceNumber" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="fuelType">Fuel Type</label>
+        <select id="fuelType" name="fuelType" required>
+          <option value="">Select Fuel Type</option>
+          <option value="Petrol">Petrol</option>
+          <option value="Diesel">Diesel</option>
+          <option value="CNG">CNG</option>
+          <option value="Electric">Electric</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="fuelAmount">Amount (₹)</label>
+        <input type="number" id="fuelAmount" name="amount" step="0.01" min="0" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="fuelLiters">Liters</label>
+        <input type="number" id="fuelLiters" name="liters" step="0.01" min="0" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="fuelCurrentKm">Current KM</label>
+        <input type="number" id="fuelCurrentKm" name="currentKm" min="0" required>
+      </div>
+      
+      <div class="form-group file-upload">
+        <label for="fuelBillImage">Upload Bill Image</label>
+        <input type="file" id="fuelBillImage" name="billImage" accept="image/*" required>
+        <div class="file-preview"></div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" id="submitFuelBtn" class="btn btn-primary">Submit Fuel Entry</button>
+        <div id="submitProgress" class="hidden">
+          <div class="spinner"></div>
+          <span>Uploading...</span>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
  <div id="history" class="section">
@@ -122,6 +167,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (driverNameElement) {
             driverNameElement.textContent = driverData.name;
         }
+      const fuelForm = document.getElementById('fuelForm');
+    if (fuelForm) {
+        fuelForm.addEventListener('submit', submitFuelEntry);
+    }
+
+      // File input preview
+    const fileInput = document.getElementById('fuelBillImage');
+    if (fileInput) {
+        fileInput.addEventListener('change', handleFileSelect);
+    }
         
         // You can use other data as needed
         console.log('Driver ID:', driverData.id);
