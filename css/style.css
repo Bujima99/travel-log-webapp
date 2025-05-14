@@ -23,19 +23,59 @@ body {
   color: white;
 }
 
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
 .user-info {
   display: flex;
   align-items: center;
+  gap: 12px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .avatar {
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: linear-gradient(45deg, #ff7e5f, #feb47b);
-  margin-right: 10px;
-  animation: pulse 2s infinite;
+  flex-shrink: 0;
+}
+
+#driverName {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.nav-toggle {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: 8px;
+}
+
+/* When rail is collapsed */
+.nav-rail:not(.expanded) .user-info {
+  justify-content: center;
+}
+
+.nav-rail:not(.expanded) #driverName {
+  opacity: 0;
+  width: 0;
+}
+
+.nav-rail:not(.expanded) .nav-toggle {
+  margin-left: 0;
 }
 
 /* Navigation Rail Styles */
@@ -62,13 +102,7 @@ body {
   justify-content: flex-end;
 }
 
-.nav-toggle {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 8px;
-}
+
 
 .nav-menu ul {
   list-style: none;
