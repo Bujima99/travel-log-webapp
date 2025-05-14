@@ -365,7 +365,7 @@ function completeJourney(travelId) {
   })
   .catch(error => {
     console.error("Error fetching journey details:", error);
-    alert("Error loading journey details. Please try again.");
+    showPopup('Error', 'Error loading journey details. Please try again.');
   })
   .finally(hideLoader());
 }
@@ -399,7 +399,7 @@ function submitCompletedJourney() {
 
   // Validate required fields
   if (!endPoint || !endKm || !endTime) {
-    alert('Please fill in all completion details');
+    showPopup('Validation Error', 'Please fill in all completion details');
     return;
   }
 
@@ -434,13 +434,13 @@ function submitCompletedJourney() {
   .then(response => response.text())
   .then(result => {
     console.log("Journey completion result:", result);
-    alert("Journey completed successfully!");
+    showPopup('Success', 'Journey completed successfully!');
     closeModal();
     location.reload();
   })
   .catch(error => {
     console.error("Error completing journey:", error);
-    alert("Error completing journey. Please try again.");
+    showPopup('Error', 'Error completing journey. Please try again.');
   })
   .finally(hideLoader());
 }
@@ -463,7 +463,7 @@ function saveAsPending() {
 
   // Validate required fields
   if (!vehicleNumber || !startPoint || !startKm || !startTime) {
-    alert('Please fill in all required fields');
+   showPopup('Validation Error', 'Please fill in all required fields');
     return;
   }
 
@@ -496,14 +496,14 @@ function saveAsPending() {
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Pending result:", result);
-    alert("Journey saved as pending successfully!");
+    showPopup('Success', 'Journey saved as pending successfully!');
     document.getElementById('journeyForm').reset();
     showSection('home');
     location.reload();
   })
   .catch(error => {
     console.error("Error saving pending journey:", error);
-    alert("Error saving journey as pending. Please try again.");
+    showPopup('Error', 'Error saving journey as pending. Please try again.');
   }).finally(hideLoader());
 }
 
@@ -591,7 +591,7 @@ function formatTime(timeString) {
 async function submitFuelEntry() {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   if (!driverData) {
-    alert('Please login again');
+    showPopup('Authentication Error', 'Please login again');
     return;
   }
 
@@ -609,7 +609,7 @@ async function submitFuelEntry() {
 
   // Validate required fields
   if (!vehicleNumber || !date || !invoiceNumber || !fuelType || !amount || !liters || !currentKm || !billImage) {
-    alert('Please fill in all required fields');
+    showPopup('Validation Error', 'Please fill in all required fields');
     return;
   }
 
@@ -648,14 +648,14 @@ async function submitFuelEntry() {
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Fuel result:", result);
-    alert("Fuel saved successfully!");
+    showPopup('Success', 'Fuel saved successfully!');
     document.getElementById('journeyForm').reset();
     showSection('home');
     location.reload();
   })
   .catch(error => {
     console.error("Error saving Fuel:", error);
-    alert("Error saving Fuel. Please try again.");
+    showPopup('Error', 'Error saving Fuel. Please try again.');
   }).finally(hideLoader());
 }
 
@@ -665,7 +665,49 @@ function generateFuelId() {
   const random = Math.random().toString(36).substr(2, 5);
   return `FUEL-${timestamp}-${random}`.toUpperCase();
 }
+
+
+// Custom Popup Function
+function showPopup(title, message) {
+  const popup = document.getElementById('customPopup');
+  const popupTitle = document.getElementById('popupTitle');
+  const popupMessage = document.getElementById('popupMessage');
+  
+  popupTitle.textContent = title;
+  popupMessage.textContent = message;
+  popup.classList.add('active');
+  
+  // Close popup when clicking OK or close button
+  document.getElementById('popupOk').onclick = function() {
+    popup.classList.remove('active');
+  };
+  
+  document.getElementById('popupClose').onclick = function() {
+    popup.classList.remove('active');
+  };
+  
+  // Also close when clicking outside the popup
+  popup.onclick = function(e) {
+    if (e.target === popup) {
+      popup.classList.remove('active');
+    }
+  };
+}
   
 </script>
+
+
+  <!-- Custom Popup Structure -->
+<div class="popup-overlay" id="customPopup">
+  <div class="popup-container">
+    <button class="popup-close" id="popupClose">&times;</button>
+    <h3 class="popup-title" id="popupTitle">Message</h3>
+    <div class="popup-message" id="popupMessage"></div>
+    <div class="popup-buttons">
+      <button class="popup-button" id="popupOk">OK</button>
+    </div>
+  </div>
+</div>
+  
 </body>
 </html>
