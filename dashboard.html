@@ -154,11 +154,12 @@
   
 <script>
 document.getElementById('addJourneyBtn').addEventListener('click', function() {
-  // Your logic to open the Add Journey form/modal/page
-  showSection('addJourney')
-  console.log("Add Journey button clicked!");
-  // or if you're showing a modal:
-  // document.getElementById('addJourneyModal').style.display = 'block';
+  showSection('addJourney');
+  
+  // Remove active class from all nav items since addJourney isn't in the nav
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+  });
 });
 
   // Toggle navigation rail
@@ -201,6 +202,24 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = './index.html';
     }
 
+
+   const activeSection = document.querySelector('.section.active');
+  if (activeSection) {
+    const sectionId = activeSection.id;
+    const navItems = document.querySelectorAll('.nav-item');
+    switch(sectionId) {
+      case 'home':
+        navItems[0].classList.add('active');
+        break;
+      case 'fuel':
+        navItems[1].classList.add('active');
+        break;
+      case 'history':
+        navItems[2].classList.add('active');
+        break;
+    }
+  }
+  
   const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.querySelector('.sidebar');
     const overlay = document.getElementById('overlay');
