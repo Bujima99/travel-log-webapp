@@ -364,3 +364,28 @@ input {
   .popup-button:hover {
     background-color: #45a049;
   }
+
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2563eb; /* Blue-600 */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+}
+
+.fab:hover {
+  background-color: #1e40af; /* Blue-700 */
+  transform: scale(1.1);
+}
+
