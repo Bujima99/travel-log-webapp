@@ -566,12 +566,13 @@ async function submitFuelEntry() {
     showSection('home');
     location.reload();
   })
-  .catch(error => {
+  }
+  catch(error => {
     console.error("Error saving Fuel:", error);
     alert("Error saving Fuel. Please try again.");
   });
 }
-}
+
   
 function generateFuelId() {
   const timestamp = Date.now().toString(36);
