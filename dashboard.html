@@ -140,8 +140,39 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = './index.html';
     }
 
+  const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('overlay');
+
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    }
+
+    // Loader functions
+    window.showLoader = function() {
+        document.getElementById('loader').style.display = 'flex';
+    };
+
+    window.hideLoader = function() {
+        document.getElementById('loader').style.display = 'none';
+    };
+
+    // Show loader on initial page load
+    showLoader();
+    window.addEventListener('load', hideLoader);
+
+
   const driverId= driverData.id;
   fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=pending-journeys&driverId=${encodeURIComponent(driverId)}`)
+    .then(showLoader())
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -198,7 +229,8 @@ document.addEventListener('DOMContentLoaded', function() {
           <td colspan="5">Error loading data. Please try again later.</td>
         </tr>
       `;
-    });
+    })
+    .finally(hideLoader());
 });
 
 // Function to mark a journey as complete
@@ -206,7 +238,8 @@ function completeJourney(travelId) {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   const driverId= driverData.id;
    fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=complete-journey&travelId=${encodeURIComponent(travelId)}&driverId=${encodeURIComponent(driverId)}`)
-  .then(response => {
+  .then(showLoader())
+     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -297,7 +330,8 @@ function completeJourney(travelId) {
   .catch(error => {
     console.error("Error fetching journey details:", error);
     alert("Error loading journey details. Please try again.");
-  });
+  })
+  .finally(hideLoader());
 }
 
 // Function to close the modal
@@ -360,6 +394,7 @@ function submitCompletedJourney() {
     mode: 'no-cors',
     body: JSON.stringify(completionData)
   })
+  .then(showLoader())
   .then(response => response.text())
   .then(result => {
     console.log("Journey completion result:", result);
@@ -370,7 +405,8 @@ function submitCompletedJourney() {
   .catch(error => {
     console.error("Error completing journey:", error);
     alert("Error completing journey. Please try again.");
-  });
+  })
+  .finally(hideLoader());
 }
 
 // Function to save journey as pending
@@ -420,6 +456,7 @@ function saveAsPending() {
       "Content-Type": "application/json"
     }
   })
+  .then(showLoader())
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Pending result:", result);
@@ -431,7 +468,7 @@ function saveAsPending() {
   .catch(error => {
     console.error("Error saving pending journey:", error);
     alert("Error saving journey as pending. Please try again.");
-  });
+  }).finally(hideLoader());
 }
 
 
@@ -444,6 +481,7 @@ function loadCompletedJourneys() {
   }
 
   fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=history-journey&driverId=${encodeURIComponent(driverData.id)}`)
+    .then(showLoader())
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -488,7 +526,7 @@ function loadCompletedJourneys() {
           <td colspan="15">Error loading data. Please try again later.</td>
         </tr>
       `;
-    });
+    }).finally(hideLoader());
 }
 
 function formatTime(timeString) {
@@ -570,6 +608,7 @@ async function submitFuelEntry() {
       "Content-Type": "application/json"
     }
   })
+  .then(showLoader())
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Fuel result:", result);
@@ -581,7 +620,7 @@ async function submitFuelEntry() {
   .catch(error => {
     console.error("Error saving Fuel:", error);
     alert("Error saving Fuel. Please try again.");
-  });
+  }).finally(hideLoader());
 }
 
   
