@@ -154,12 +154,14 @@ document.addEventListener('DOMContentLoaded', function() {
 ];
 
     const vehicleNameSelect = document.getElementById('vehicleName');
+  const fuelvehicleNameSelect = document.getElementById('fuelVehicleName');
   
   vehicles.forEach(vehicle => {
     const option = document.createElement('option');
     option.value = vehicle.name;
     option.textContent = vehicle.name;
     vehicleNameSelect.appendChild(option);
+    fuelvehicleNameSelect.appendChild(option);
   });
 
 
@@ -259,8 +261,11 @@ function updateVehicleNumber() {
   { name: 'Ertiga', number: 'KL23Y0927' }
 ];
   const selectedName = document.getElementById('vehicleName').value;
+  const fuelselectedName = document.getElementById('fuelVehicleName').valu
   const vehicle = vehicles.find(v => v.name === selectedName);
+   const fuelvehicle = vehicles.find(v => v.name === fuelselectedName);
   document.getElementById('vehicleNumber').value = vehicle ? vehicle.number : '';
+  document.getElementById('fuelVehicleNumber').value = vehicle ? vehicle.number : '';
 }
 
 
