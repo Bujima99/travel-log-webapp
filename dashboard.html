@@ -532,7 +532,7 @@ async function submitFuelEntry() {
   submitBtn.disabled = true;
   submitBtn.textContent = 'Submitting...';
 
-  try {
+  
     // Create FormData for proper file upload
      const formData = {
     type: 'add-fuel-entry',
@@ -566,8 +566,7 @@ async function submitFuelEntry() {
     showSection('home');
     location.reload();
   })
-  }
-  catch(error => {
+  .catch(error => {
     console.error("Error saving Fuel:", error);
     alert("Error saving Fuel. Please try again.");
   });
