@@ -312,6 +312,7 @@ function showSection(sectionId) {
       break;
     case 'history':
       navItems[2].classList.add('active');
+      loadCompletedJourneys();
       break;
     // Logout doesn't need active state
   }
