@@ -294,7 +294,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     window.hideLoader = function() {
-        const elapsed = Date.now() - loaderShownTime;
+        //const elapsed = Date.now() - loaderShownTime;
+       const elapsed = 0;
     const remaining = loaderMinimumTime - elapsed;
     
     if (remaining > 0) {
