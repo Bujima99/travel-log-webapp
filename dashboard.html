@@ -423,7 +423,7 @@ async function submitCompletedJourney() {
   };
 
   // Send data to Google Sheets web app
-  await fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -435,7 +435,7 @@ async function submitCompletedJourney() {
   .then(response => response.text())
   .then(result => {
     console.log("Journey completion result:", result);
-    await showPopup('Success', 'Journey completed successfully!');
+    showPopup('Success', 'Journey completed successfully!');
     closeModal();
     location.reload();
   })
@@ -497,7 +497,7 @@ async function saveAsPending() {
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Pending result:", result);
-    await showPopup('Success', 'Journey saved as pending successfully!');
+    showPopup('Success', 'Journey saved as pending successfully!');
     document.getElementById('journeyForm').reset();
     showSection('home');
     location.reload();
@@ -650,7 +650,7 @@ async function submitFuelEntry() {
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Fuel result:", result);
-    await showPopup('Success', 'Fuel saved successfully!');
+    showPopup('Success', 'Fuel saved successfully!');
     document.getElementById('journeyForm').reset();
     showSection('home');
     location.reload();
