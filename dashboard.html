@@ -270,7 +270,7 @@ function updateVehicleNumber() {
 
 
 // Function to mark a journey as complete
-function completeJourney(travelId) {
+async function completeJourney(travelId) {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   const driverId= driverData.id;
    fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=complete-journey&travelId=${encodeURIComponent(travelId)}&driverId=${encodeURIComponent(driverId)}`)
@@ -366,6 +366,7 @@ function completeJourney(travelId) {
   .catch(error => {
     console.error("Error fetching journey details:", error);
     showPopup('Error', 'Error loading journey details. Please try again.');
+    return;
   })
   .finally(hideLoader());
 }
@@ -379,7 +380,7 @@ function closeModal() {
 }
 
 // Function to submit the completed journey
-function submitCompletedJourney() {
+async function submitCompletedJourney() {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   const driverId = driverData.id;
   
@@ -434,19 +435,20 @@ function submitCompletedJourney() {
   .then(response => response.text())
   .then(result => {
     console.log("Journey completion result:", result);
-    showPopup('Success', 'Journey completed successfully!');
+    await showPopup('Success', 'Journey completed successfully!');
     closeModal();
     location.reload();
   })
   .catch(error => {
     console.error("Error completing journey:", error);
     showPopup('Error', 'Error completing journey. Please try again.');
+    return;
   })
   .finally(hideLoader());
 }
 
 // Function to save journey as pending
-function saveAsPending() {
+async function saveAsPending() {
   // Get form values
    const driverData = JSON.parse(localStorage.getItem('driverData'));
   const driverName = driverData.name;
@@ -496,7 +498,7 @@ function saveAsPending() {
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Pending result:", result);
-    showPopup('Success', 'Journey saved as pending successfully!');
+    await showPopup('Success', 'Journey saved as pending successfully!');
     document.getElementById('journeyForm').reset();
     showSection('home');
     location.reload();
@@ -504,6 +506,7 @@ function saveAsPending() {
   .catch(error => {
     console.error("Error saving pending journey:", error);
     showPopup('Error', 'Error saving journey as pending. Please try again.');
+    return;
   }).finally(hideLoader());
 }
 
@@ -648,7 +651,7 @@ async function submitFuelEntry() {
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Fuel result:", result);
-    showPopup('Success', 'Fuel saved successfully!');
+    await showPopup('Success', 'Fuel saved successfully!');
     document.getElementById('journeyForm').reset();
     showSection('home');
     location.reload();
@@ -656,6 +659,7 @@ async function submitFuelEntry() {
   .catch(error => {
     console.error("Error saving Fuel:", error);
     showPopup('Error', 'Error saving Fuel. Please try again.');
+    return;
   }).finally(hideLoader());
 }
 
@@ -669,29 +673,38 @@ function generateFuelId() {
 
 // Custom Popup Function
 function showPopup(title, message) {
-  const popup = document.getElementById('customPopup');
-  const popupTitle = document.getElementById('popupTitle');
-  const popupMessage = document.getElementById('popupMessage');
-  
-  popupTitle.textContent = title;
-  popupMessage.textContent = message;
-  popup.classList.add('active');
-  
-  // Close popup when clicking OK or close button
-  document.getElementById('popupOk').onclick = function() {
-    popup.classList.remove('active');
-  };
-  
-  document.getElementById('popupClose').onclick = function() {
-    popup.classList.remove('active');
-  };
-  
-  // Also close when clicking outside the popup
-  popup.onclick = function(e) {
-    if (e.target === popup) {
+  return new Promise((resolve) => {
+    const popup = document.getElementById('customPopup');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupMessage = document.getElementById('popupMessage');
+    
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    popup.classList.add('active');
+    
+    // Create a function to handle closing
+    const closePopup = () => {
       popup.classList.remove('active');
-    }
-  };
+      resolve(); // Resolve the promise when popup is closed
+      
+      // Remove event listeners to prevent memory leaks
+      document.getElementById('popupOk').removeEventListener('click', closePopup);
+      document.getElementById('popupClose').removeEventListener('click', closePopup);
+      popup.removeEventListener('click', outsideClick);
+    };
+    
+    // Handle outside clicks
+    const outsideClick = (e) => {
+      if (e.target === popup) {
+        closePopup();
+      }
+    };
+    
+    // Add event listeners
+    document.getElementById('popupOk').addEventListener('click', closePopup);
+    document.getElementById('popupClose').addEventListener('click', closePopup);
+    popup.addEventListener('click', outsideClick);
+  });
 }
   
 </script>
