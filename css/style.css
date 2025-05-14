@@ -76,6 +76,21 @@ body {
   margin: 0;
 }
 
+.nav-item.active {
+  background: rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #4285f4;
+}
+
 .nav-item {
   display: flex;
   align-items: center;
@@ -84,15 +99,14 @@ body {
   text-decoration: none;
   transition: background 0.3s;
   white-space: nowrap;
+  position: relative;
 }
 
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.nav-item.active {
-  background: rgba(255, 255, 255, 0.2);
-}
+
 
 .nav-item .material-symbols-outlined {
   font-size: 24px;
