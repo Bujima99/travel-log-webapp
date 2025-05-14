@@ -534,25 +534,26 @@ async function submitFuelEntry() {
 
   try {
     // Create FormData for proper file upload
-    const formData = new FormData();
-    formData.append('type', 'add-fuel-entry');
-    formData.append('fuelId', fuelId);
-    formData.append('driverId', driverData.id);
-    formData.append('driverName', driverData.name);
-    formData.append('vehicleNumber', vehicleNumber);
-    formData.append('vehicleName', vehicleName);
-    formData.append('date', date);
-    formData.append('invoiceNumber', invoiceNumber);
-    formData.append('fuelType', fuelType);
-    formData.append('amount', amount);
-    formData.append('liters', liters);
-    formData.append('currentKm', currentKm);
-    formData.append('billImage', billImage, `${fuelId}.jpg`);
+     const formData = {
+    type: 'add-fuel-entry',
+    fuelId:fuelId,
+    driverId:driverData.id,
+    driverName:driverId,
+    vehicleNumber: vehicleNumber,
+    vehicleName: vehicleName,
+    date: date,
+    invoiceNumber: invoiceNumber,
+    fuelType: fuelType,
+    amount: amount,
+    liters: liters,
+    currentKm: currentKm,
+    billImage: billImage
+  };
 
     // Send data to Google Apps Script
     const response = await fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
       method: 'POST',
-      body: formData
+      body: JSON.stringify(formData)
     });
 
     if (!response.ok) {
