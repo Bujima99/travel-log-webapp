@@ -28,34 +28,34 @@
     </button>
   </div>
   
-  <nav class="nav-menu">
-    <ul>
-      <li>
-        <a href="#" onclick="showSection('home')" class="nav-item active">
-          <span class="material-symbols-outlined">home</span>
-          <span class="nav-text">Home</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" onclick="showSection('fuel')" class="nav-item">
-          <span class="material-symbols-outlined">local_gas_station</span>
-          <span class="nav-text">Fuel</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" onclick="showSection('history')" class="nav-item">
-          <span class="material-symbols-outlined">history</span>
-          <span class="nav-text">History</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" onclick="logout()" class="nav-item">
-          <span class="material-symbols-outlined">logout</span>
-          <span class="nav-text">Logout</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
+ <nav class="nav-menu">
+  <ul>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('home')" class="nav-item active">
+        <span class="material-symbols-outlined">home</span>
+        <span class="nav-text">Home</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('fuel')" class="nav-item">
+        <span class="material-symbols-outlined">local_gas_station</span>
+        <span class="nav-text">Fuel</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('history')" class="nav-item">
+        <span class="material-symbols-outlined">history</span>
+        <span class="nav-text">History</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="logout()" class="nav-item">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="nav-text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</nav>
 </div>
 
 <!-- Add this overlay for mobile -->
