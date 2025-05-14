@@ -64,14 +64,14 @@ select:disabled {
 /* Dark mode support (optional) */
 @media (prefers-color-scheme: dark) {
     select {
-        background-color: #2d3748;
-        color: #f8f9fa;
-        border-color: #4a5568;
+        background-color: #f8f9fa;
+        color: #4a5568;
+        border-color: #f8f9fa;
     }
     
     select option {
-        background-color: #2d3748;
-        color: #f8f9fa;
+        background-color: #f8f9fa;
+        color: #2d3748;
     }
 }
 
