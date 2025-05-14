@@ -1,4 +1,9 @@
 
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f7fc;
+}
 
 .auth-toggle {
   display: flex;
@@ -26,26 +31,6 @@
   color: #fff;
   align-items: center;
 }
-/* Base Styles */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #f4f7fc;
-  padding-bottom: 60px; /* Space for bottom nav */
-}
-
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 20px;
-  background: #24292e;
-  color: #fff;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
 
 .user-info {
   display: flex;
@@ -61,156 +46,107 @@ body {
   animation: pulse 2s infinite;
 }
 
-/* Main Content */
-.main-content {
-  padding: 15px;
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+.menu button {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #fff;
+  margin-left: 10px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.menu button:hover {
+  background: #444;
 }
 
 .section {
   display: none;
+  padding: 20px;
 }
 
 .section.active {
   display: block;
 }
 
-/* Tables */
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin: 15px 0;
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  gap: 10px;
+}
+
+form input, form button {
+  padding: 10px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid #ccc;
+}
+
+form button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  transition: background 0.3s;
+}
+
+form button:hover {
+  background: #0056b3;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px; /* Ensures scrolling on small screens */
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
 }
 
 th, td {
   padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
 }
 
-th {
-  background-color: #f8f9fa;
-  font-weight: 500;
-  position: sticky;
-  top: 0;
-}
 
-/* Forms */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 15px 0;
-}
-
-input, select, button {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+.container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 button {
-  background: #007bff;
-  color: white;
+  margin: 10px;
+  padding: 10px 20px;
   border: none;
+  background: #4285f4;
+  color: white;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
 button:hover {
-  background: #0056b3;
+  background: #357ae8;
 }
 
-/* Mobile Bottom Navigation */
-.mobile-bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  background: white;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-  z-index: 100;
-  padding: 8px 0;
+input {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 90%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-.mobile-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-decoration: none;
-  color: #666;
-  font-size: 12px;
-  flex: 1;
-}
-
-.mobile-nav-item.active {
-  color: #007bff;
-}
-
-.mobile-nav-text {
-  margin-top: 4px;
-}
-
-.material-symbols-outlined {
-  font-size: 24px;
-}
-
-/* Floating Action Button */
-.fab {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  z-index: 101;
-}
-
-/* Responsive Adjustments */
-@media (min-width: 768px) {
-  .mobile-bottom-nav {
-    display: none;
-  }
-  
-  body {
-    padding-bottom: 0;
-  }
-  
-  .fab {
-    bottom: 20px;
-  }
-  
-  .table-container {
-    overflow-x: visible;
-  }
-  
-  table {
-    min-width: auto;
-  }
-}
-
-/* Keep all your existing animations, popup styles, loader styles etc. */
-/* They remain the same as in your original CSS */
 .hidden {
   display: none;
 }
@@ -452,4 +388,3 @@ button:hover {
   background-color: #1e40af; /* Blue-700 */
   transform: scale(1.1);
 }
-
