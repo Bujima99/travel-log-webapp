@@ -533,27 +533,8 @@ async function submitFuelEntry() {
   submitBtn.textContent = 'Submitting...';
 
   try {
-    // Create FormData object
-
-  // Send data to Google Sheets web app
- 
-    
-    const formData = {
-    type: 'add-fuel-entry',
-    fuelId:fuelId,
-    driverId:driverData.id,
-    driverName:driverId,
-    vehicleNumber: vehicleNumber,
-    vehicleName: vehicleName,
-    date: date,
-    invoiceNumber: invoiceNumber,
-    fuelType: fuelType,
-    amount: amount,
-    liters: liters,
-    currentKm: currentKm,
-    billImage: billImage
-  };
-    /*
+    // Create FormData for proper file upload
+    const formData = new FormData();
     formData.append('type', 'add-fuel-entry');
     formData.append('fuelId', fuelId);
     formData.append('driverId', driverData.id);
@@ -568,36 +549,31 @@ async function submitFuelEntry() {
     formData.append('currentKm', currentKm);
     formData.append('billImage', billImage, `${fuelId}.jpg`);
 
-    // Debug: Log formData contents
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value instanceof Blob ? `Blob (${value.type}, ${value.size} bytes)` : value);
-    }*/
-
     // Send data to Google Apps Script
-    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
-    method: 'POST',
-    body: JSON.stringify(formData),
-    mode: 'no-cors',
-    headers: {
-      "Content-Type": "application/json"
+    const response = await fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-  })
-  .then(response =>response.text())
-  .then(result => {
-    console.log("Save as Fuel result:", result);
-    alert("Fuel Details entered successfully!");
-    showSection('home');
-    location.reload();
-  })
-  .catch(error => {
-    console.error("Error saving Fuel Details:", error);
-    alert("Error saving Fuel Details. Please try again.");
-  });
-  
-   
+
+    const result = await response.text();
+    console.log("Fuel entry result:", result);
+    
+    // Check if the result contains success message
+    if (result.includes('success') || result.includes('Success')) {
+      alert("Fuel Details entered successfully!");
+      document.getElementById('fuelForm').reset();
+      showSection('home');
+      location.reload();
+    } else {
+      throw new Error(result || 'Unknown error from server');
+    }
   } catch (error) {
-    console.error('Full error:', error);
-    alert('Submission failed: ' + error.message);
+    console.error("Error saving Fuel Details:", error);
+    alert("Error saving Fuel Details: " + error.message);
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit Fuel Entry';
