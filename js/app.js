@@ -288,17 +288,39 @@ function completeRegistration() {
 
 
 function showSection(sectionId) {
-   document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Show the selected section
   document.getElementById(sectionId).classList.add('active');
   
-  // Load appropriate data when section changes
-  if (sectionId === 'home') {
-    // This should already be handled by your DOMContentLoaded event
-  } else if (sectionId === 'history') {
-    loadCompletedJourneys();
+  // Remove active class from all nav items
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  
+  // Add active class to the clicked nav item
+  const navItems = document.querySelectorAll('.nav-item');
+  switch(sectionId) {
+    case 'home':
+      navItems[0].classList.add('active');
+      break;
+    case 'fuel':
+      navItems[1].classList.add('active');
+      break;
+    case 'history':
+      navItems[2].classList.add('active');
+      break;
+    // Logout doesn't need active state
+  }
+  
+  // Close the nav rail on mobile after selection
+  if (window.innerWidth <= 768) {
+    document.querySelector('.nav-rail').classList.remove('expanded');
   }
 }
-
 
 // Assuming driverId is stored in localStorage after login
 const driverId = localStorage.getItem("driverId");
