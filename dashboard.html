@@ -68,12 +68,17 @@
 
   <div id="home" class="section active">
     <h2>Pending Journeys</h2>
-    <table id="pendingTable">
-      <thead>
+    <div class="table-wrapper">
+    <table class="fl-table" id="pendingTable">
+        <thead>
         <tr>
-          <th>Vehicle</th><th>Start Point</th><th>Start KM</th><th>Start Time</th><th>Action</th>
+            <th>Vehicle</th>
+            <th>Start Point</th>
+            <th>Start KM</th>
+            <th>Start Time</th>
+            <th>Action</th>
         </tr>
-      </thead>
+        </thead>
       <tbody id="journeys-table-body">
         <!-- Data will be inserted here by JavaScript -->
     </tbody>
@@ -157,6 +162,28 @@
   <script src="js/app.js"></script>
   
 <script>
+  // Add data labels for mobile view
+function addMobileLabels() {
+    if (window.innerWidth <= 767) {
+        const headers = document.querySelectorAll('.fl-table thead th');
+        const rows = document.querySelectorAll('.fl-table tbody tr');
+        
+        headers.forEach((header, index) => {
+            const label = header.textContent;
+            rows.forEach(row => {
+                const cell = row.querySelectorAll('td')[index];
+                if (cell) {
+                    cell.setAttribute('data-label', label);
+                }
+            });
+        });
+    }
+}
+
+// Run on load and resize
+window.addEventListener('load', addMobileLabels);
+window.addEventListener('resize', addMobileLabels);
+  
 document.getElementById('addJourneyBtn').addEventListener('click', function() {
   showSection('addJourney');
   
