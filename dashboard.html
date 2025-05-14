@@ -423,7 +423,7 @@ async function submitCompletedJourney() {
   };
 
   // Send data to Google Sheets web app
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  await fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -442,7 +442,6 @@ async function submitCompletedJourney() {
   .catch(error => {
     console.error("Error completing journey:", error);
     showPopup('Error', 'Error completing journey. Please try again.');
-    return;
   })
   .finally(hideLoader());
 }
