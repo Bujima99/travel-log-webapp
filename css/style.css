@@ -5,6 +5,28 @@ body {
   background: #f4f7fc;
 }
 
+h2 {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+  color: #2d3748; /* Dark gray */
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: #2563eb; /* Blue */
+  transition: width 0.3s ease;
+}
+
+h2:hover::after {
+  width: 100%;
+}
+
 .auth-toggle {
   display: flex;
   margin-bottom: 20px;
