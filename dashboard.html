@@ -261,7 +261,7 @@ function updateVehicleNumber() {
   { name: 'Ertiga', number: 'KL23Y0927' }
 ];
   const selectedName = document.getElementById('vehicleName').value;
-  const fuelselectedName = document.getElementById('fuelVehicleName').valu
+  const fuelselectedName = document.getElementById('fuelVehicleName').value;
   const vehicle = vehicles.find(v => v.name === selectedName);
    const fuelvehicle = vehicles.find(v => v.name === fuelselectedName);
   document.getElementById('vehicleNumber').value = vehicle ? vehicle.number : '';
