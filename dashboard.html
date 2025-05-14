@@ -265,7 +265,7 @@ function updateVehicleNumber() {
   const vehicle = vehicles.find(v => v.name === selectedName);
    const fuelvehicle = vehicles.find(v => v.name === fuelselectedName);
   document.getElementById('vehicleNumber').value = vehicle ? vehicle.number : '';
-  document.getElementById('fuelVehicleNumber').value = vehicle ? vehicle.number : '';
+  document.getElementById('fuelVehicleNumber').value = fuelvehicle ? fuelvehicle.number : '';
 }
 
 
