@@ -579,7 +579,7 @@ input {
     }
 }
 
-/* Loader Styles */
+/* Remove existing loader styles and replace with: */
 .loader-container {
     position: fixed;
     top: 0;
@@ -591,22 +591,40 @@ input {
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    display: none;
+    display: none; /* Hidden by default */
 }
 
 .loader {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
-    border-radius: 50%;
     width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
+    aspect-ratio: 1;
+    display: grid;
+    color: #4285f4; /* Changed to match your theme */
+    background:
+        linear-gradient(90deg,currentColor 2px,#0000 0 calc(100% - 2px),currentColor 0) center/100% 14px,
+        linear-gradient(0deg, currentColor 2px,#0000 0 calc(100% - 2px),currentColor 0) center/14px 100%,
+        linear-gradient(currentColor 0 0) center/100% 2px,
+        linear-gradient(currentColor 0 0) center/2px 100%;
+    background-repeat: no-repeat;
+    animation: l6 4s infinite linear;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.loader::before,
+.loader::after {
+    content: "";
+    grid-area: 1/1;
+    background: inherit;
+    transform-origin: inherit;
+    animation: inherit;
 }
+
+.loader::after {
+    animation-duration: 2s;
+}
+
+@keyframes l6 {
+    100% {transform:rotate(1turn)}
+}
+
 
 
  /* Custom Popup Styles */
