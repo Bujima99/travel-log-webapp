@@ -160,7 +160,27 @@ document.getElementById('addJourneyBtn').addEventListener('click', function() {
   // or if you're showing a modal:
   // document.getElementById('addJourneyModal').style.display = 'block';
 });
+
+  // Toggle navigation rail
+document.getElementById('navToggle').addEventListener('click', function() {
+  document.querySelector('.nav-rail').classList.toggle('expanded');
+});
+
+// Close rail when clicking overlay (mobile)
+document.getElementById('navOverlay').addEventListener('click', function() {
+  document.querySelector('.nav-rail').classList.remove('expanded');
+});
+
+// Close rail when clicking outside (desktop)
+document.addEventListener('click', function(event) {
+  const rail = document.querySelector('.nav-rail');
+  const isClickInsideRail = rail.contains(event.target);
+  const isClickOnToggle = event.target.closest('#navToggle');
   
+  if (!isClickInsideRail && !isClickOnToggle && window.innerWidth > 768) {
+    rail.classList.remove('expanded');
+  }
+});
 // Function to load pending journeys when the page loads
 document.addEventListener('DOMContentLoaded', function() {
   // Fetch pending journeys from Google Sheets web app endpoint
