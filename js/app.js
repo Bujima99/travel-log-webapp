@@ -1,5 +1,5 @@
 
-// Your Firebase config
+// Your Firebase confg
   var firebaseConfig = {
     apiKey: "AIzaSyAhSLSI_QA-VhXmzGhu_SLDFEvASz9rCek",
     authDomain: "travel-log-webapp-cfbcc.firebaseapp.com",
