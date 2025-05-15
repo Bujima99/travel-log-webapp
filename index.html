@@ -10,250 +10,176 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <style>
-/* Travel Log Login Styles */
-body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  font-family: 'Jost', sans-serif;
-  background: 
-    linear-gradient(rgba(0, 0, 0, 0.5), 
-    url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
-  background-size: cover;
-  background-blend-mode: darken;
-}
-
-.main {
-  width: 400px;
-  height: 600px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea);
-  border-radius: 15px;
+/* Login/Signup Form Styles */
+.container {
+  width: 350px;
+  height: 500px;
+  position: relative;
+  margin: 6% auto;
+  background: linear-gradient(to bottom, #1a2980, #26d0ce);
+  border-radius: 10px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  position: relative;
+  overflow: hidden;
 }
 
-#chk {
-  display: none;
+h1 {
+  text-align: center;
+  color: #fff;
+  font-size: 2em;
+  margin: 40px 0 20px;
+  font-weight: bold;
 }
 
-.signup, .login {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.auth-toggle {
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  margin-bottom: 30px;
 }
 
-label {
-  color: #00796b;
-  font-size: 2.3em;
-  justify-content: center;
-  display: flex;
-  margin: 30px 0 20px;
+.auth-toggle button {
+  padding: 10px 30px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.1em;
   font-weight: bold;
   cursor: pointer;
-  transition: .5s ease-in-out;
+  outline: none;
+  position: relative;
+}
+
+.auth-toggle button.active {
+  color: #fff;
+}
+
+.auth-toggle button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
+}
+
+#loginSection, #signupSection {
+  position: absolute;
+  width: 100%;
+  padding: 0 40px;
+  box-sizing: border-box;
+  transition: 0.5s;
+}
+
+#loginSection {
+  left: 0;
+}
+
+#signupSection {
+  left: 100%;
+}
+
+#signupSection.active {
+  left: 0;
+}
+
+#loginSection.inactive {
+  left: -100%;
+}
+
+#loginSection p, #signupSection p {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
 }
 
 input {
-  width: 70%;
-  height: 20px;
-  background: #f5f5f5;
-  justify-content: center;
-  display: flex;
-  margin: 15px auto;
+  width: 100%;
   padding: 12px;
+  margin: 10px 0;
   border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.9);
   outline: none;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  font-size: 14px;
 }
 
-input:focus {
+button[onclick^="checkClassicLogin"],
+button[onclick^="signupUser"],
+button[onclick^="showGoogleLogin"],
+button[onclick^="showPhoneLogin"],
+button[onclick^="signInWithGoogle"],
+button[onclick^="sendOTP"],
+button[onclick^="verifyOTP"] {
+  width: 100%;
+  padding: 12px;
+  margin: 20px 0 10px;
+  border: none;
+  border-radius: 5px;
   background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-button {
-  width: 70%;
-  height: 45px;
-  margin: 15px auto;
-  justify-content: center;
-  display: block;
-  color: #fff;
-  background: #00796b;
+  color: #1a2980;
   font-size: 1em;
   font-weight: bold;
-  outline: none;
-  border: none;
-  border-radius: 8px;
-  transition: all 0.2s ease;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
 }
 
-button:hover {
-  background: #00897b;
+button[onclick^="checkClassicLogin"]:hover,
+button[onclick^="signupUser"]:hover,
+button[onclick^="showGoogleLogin"]:hover,
+button[onclick^="showPhoneLogin"]:hover,
+button[onclick^="signInWithGoogle"]:hover,
+button[onclick^="sendOTP"]:hover,
+button[onclick^="verifyOTP"]:hover {
+  background: rgba(255, 255, 255, 0.8);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.login {
-  height: 500px;
-  background: #fff;
-  border-radius: 60% / 10%;
-  transform: translateY(-180px);
-  transition: .8s ease-in-out;
-  box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.login label {
-  color: #00796b;
-  transform: scale(.6);
-  margin: 40px 0 15px;
-}
-
-#chk:checked ~ .login {
-  transform: translateY(-600px);
-}
-
-#chk:checked ~ .login label {
-  transform: scale(1);	
-}
-
-#chk:checked ~ .signup label {
-  transform: scale(.6);
-}
-
-/* Social Login Styles */
-.social-login {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.social-login p {
-  color: #757575;
-  margin: 15px 0;
-  position: relative;
-}
-
-.social-login p::before,
-.social-login p::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 30%;
-  height: 1px;
-  background: #e0e0e0;
-}
-
-.social-login p::before {
-  left: 0;
-}
-
-.social-login p::after {
-  right: 0;
-}
-
-.social-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 10px;
-}
-
-.social-buttons button {
-  width: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 0;
-}
-
-.google-btn {
-  background: #4285F4;
-}
-
-.google-btn:hover {
-  background: #357ae8;
-}
-
-.phone-btn {
-  background: #34a853;
-}
-
-.phone-btn:hover {
-  background: #2d8e47;
-}
-
-/* Phone Login Container */
-.phone-login-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.95);
+#classicLogin, #loginOptions, #googleLogin, #phoneLogin, #signupForm {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 15px;
-  z-index: 10;
 }
 
-.phone-login-content {
-  width: 80%;
-  text-align: center;
-}
-
-.phone-login-content h3 {
-  color: #00796b;
-  margin-bottom: 25px;
-}
-
-.back-btn {
-  background: #f44336;
+#loginOptions {
   margin-top: 20px;
 }
 
-.back-btn:hover {
-  background: #d32f2f;
+#googleLogin, #phoneLogin {
+  margin-top: 20px;
 }
 
-/* Hidden class */
+#recaptcha-container {
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+}
+
 .hidden {
   display: none;
 }
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-  .main {
+  .container {
     width: 90%;
-    height: 550px;
+    height: auto;
+    padding-bottom: 30px;
   }
   
-  input, button {
-    width: 80%;
+  h1 {
+    font-size: 1.8em;
+    margin: 30px 0 15px;
   }
   
-  .social-buttons {
-    flex-direction: column;
-    align-items: center;
+  .auth-toggle button {
+    padding: 8px 20px;
+    font-size: 1em;
   }
   
-  .social-buttons button {
-    width: 80%;
+  #loginSection, #signupSection {
+    padding: 0 20px;
   }
 }
-
 
 </style>
 </head>
