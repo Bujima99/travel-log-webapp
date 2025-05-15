@@ -9,10 +9,6 @@ body {
   overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
-/* Make sure all containers use border-box */
-*, *:before, *:after {
-  box-sizing: border-box;
-}
 
 /* Style for all select elements to match your design */
 select {
@@ -109,9 +105,7 @@ select:disabled {
     flex: 1;
    
     flex-direction: column;
-  max-width: 100%;
-  overflow-x: auto;
-  display: block;
+
 }
 
 .fl-table thead {
@@ -418,9 +412,6 @@ h2:hover::after {
 
 /* Main content adjustment */
 .main-content {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
   margin-left: 72px;
   transition: margin-left 0.3s ease;
   padding: 20px;
@@ -466,9 +457,6 @@ h2:hover::after {
     margin-left: 0;
   }
   
-  .nav-rail.expanded ~ .main-content {
-    margin-left: 0;
-  }
   
   .nav-rail.expanded ~ .nav-overlay {
     opacity: 1;
