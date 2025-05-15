@@ -84,10 +84,22 @@
     </tbody>
     </table>
   </div>
-     <!-- Floating Add Button -->
-<button id="addJourneyBtn" class="fab">
-  <span>＋</span>
-</button>
+
+<!-- Replace the existing FAB button with this -->
+<div class="fab-wrapper">
+  <input type="checkbox" id="fabToggle" />
+  <div class="fab">
+    <span>＋</span>
+  </div>
+  <div class="fab-actions">
+    <a href="#" onclick="event.preventDefault(); showSection('fuel')">
+      <span class="material-symbols-outlined">local_gas_station</span>
+    </a>
+    <a href="#" onclick="event.preventDefault(); showSection('addJourney')">
+      <span class="material-symbols-outlined">directions_car</span>
+    </a>
+  </div>
+</div>
     
   </div>
   <div id="addJourney" class="section">
@@ -252,15 +264,7 @@ function addMobileLabels() {
 // Run on load and resize
 window.addEventListener('load', addMobileLabels);
 window.addEventListener('resize', addMobileLabels);
-  
-document.getElementById('addJourneyBtn').addEventListener('click', function() {
-  showSection('addJourney');
-  
-  // Remove active class from all nav items since addJourney isn't in the nav
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.classList.remove('active');
-  });
-});
+
 
   // Toggle navigation rail
 document.getElementById('navToggle').addEventListener('click', function() {
