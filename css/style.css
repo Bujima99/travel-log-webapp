@@ -525,7 +525,7 @@ h2:hover::after {
   
   /* Make sure tables and other content don't overflow */
   .table-wrapper {
-    max-height: calc(100vh - 200px); /* Adjust based on your header/footer */
+    max-height: calc(100vh - 230px); /* Adjust based on your header/footer */
   }
   
   .nav-rail {
