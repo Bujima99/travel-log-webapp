@@ -161,6 +161,72 @@
 
 </div>
 
+<div id="completeJourney" class="section">
+  <h2>Complete Journey</h2>
+  <form id="completeJourneyForm">
+    <input type="hidden" id="travelId">
+    
+    <div class="form-group">
+      <label>Vehicle Number:</label>
+      <input type="text" id="completeVehicleNumber" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Vehicle Name:</label>
+      <input type="text" id="completeVehicleName" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Start Point:</label>
+      <input type="text" id="completeStartPoint" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Start KM:</label>
+      <input type="number" id="completeStartKm" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Start Time:</label>
+      <input type="time" id="completeStartTime" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Passenger Count:</label>
+      <input type="number" id="completePassengerCount" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Passenger Name:</label>
+      <input type="text" id="completePassengerName" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Passenger Phone:</label>
+      <input type="tel" id="completePassengerPhone" pattern="[0-9]{10}" required>
+    </div>
+    
+    <!-- Additional fields for completion -->
+    <div class="form-group">
+      <label>End Point:</label>
+      <input type="text" id="completeEndPoint" required>
+    </div>
+    
+    <div class="form-group">
+      <label>End KM:</label>
+      <input type="number" id="completeEndKm" required>
+    </div>
+    
+    <div class="form-group">
+      <label>End Time:</label>
+      <input type="time" id="completeEndTime" required>
+    </div>
+    
+    <button type="button" onclick="submitCompletedJourney()">Complete Journey</button>
+    <button type="button" class="cancel-btn" onclick="showSection('home')">Cancel</button>
+  </form>
+</div>
+
 </div>
   <script src="js/app.js"></script>
   
@@ -411,79 +477,30 @@ async function completeJourney(travelId) {
       const journey = data.data;
       console.log("Journey details:", journey);
     
-    // Create a modal/form to show and edit the details
-    const modalHTML = `
-      <div id="completeJourneyModal" class="modal" style="display:block;">
-        <div class="modal-content">
-          <span class="close" onclick="closeModal()">&times;</span>
-          <h2>Complete Journey</h2>
-          <form id="completeJourneyForm">
-            <input type="hidden" id="travelId" value="${travelId}">
-            
-            <div class="form-group">
-              <label>Vehicle Number:</label>
-              <input type="text" id="completeVehicleNumber" value="${journey.VehicleNumber || ''}" required>
-            </div>
-            
-            <div class="form-group">
-              <label>Vehicle Name:</label>
-              <input type="text" id="completeVehicleName" value="${journey.VehicleName || ''}" required>
-            </div>
-            
-            <div class="form-group">
-              <label>Start Point:</label>
-              <input type="text" id="completeStartPoint" value="${journey.StartPoint || ''}" required>
-            </div>
-            
-            <div class="form-group">
-              <label>Start KM:</label>
-              <input type="number" id="completeStartKm" value="${journey.StartKM || ''}" required>
-            </div>
-            
-            <div class="form-group">
-              <label>Start Time:</label>
-              <input type="time" id="completeStartTime" value="${(journey.StartTime).split('T')[1].split('.')[0] || ''}" required>
-            </div>
-            
-            <div class="form-group">
-              <label>Passenger Count:</label>
-              <input type="number" id="completePassengerCount" value="${journey.PassengerCount || ''}" required>
-            </div>
-            
-            <div class="form-group">
-              <label>Passenger Name:</label>
-              <input type="text" id="completePassengerName" value="${journey.PassengerName || ''}" required>
-            </div>
-            
-            <div class="form-group">
-              <label>Passenger Phone:</label>
-              <input type="tel" id="completePassengerPhone" value="${journey.PassengerPhone || ''}" pattern="[0-9]{10}" required>
-            </div>
-            
-            <!-- Additional fields for completion -->
-            <div class="form-group">
-              <label>End Point:</label>
-              <input type="text" id="completeEndPoint" required>
-            </div>
-            
-            <div class="form-group">
-              <label>End KM:</label>
-              <input type="number" id="completeEndKm" required>
-            </div>
-            
-            <div class="form-group">
-              <label>End Time:</label>
-              <input type="time" id="completeEndTime" required>
-            </div>
-            
-            <button type="button" onclick="submitCompletedJourney()">Complete Journey</button>
-          </form>
-        </div>
-      </div>
-    `;
-    
-    // Add the modal to the body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    // Populate the form fields
+      document.getElementById('travelId').value = travelId;
+      document.getElementById('completeVehicleNumber').value = journey.VehicleNumber || '';
+      document.getElementById('completeVehicleName').value = journey.VehicleName || '';
+      document.getElementById('completeStartPoint').value = journey.StartPoint || '';
+      document.getElementById('completeStartKm').value = journey.StartKM || '';
+      
+      // Format the time (assuming it comes in ISO format)
+      const startTime = journey.StartTime ? new Date(journey.StartTime) : new Date();
+      const formattedTime = startTime.toTimeString().substring(0, 5);
+      document.getElementById('completeStartTime').value = formattedTime;
+      
+      document.getElementById('completePassengerCount').value = journey.PassengerCount || '';
+      document.getElementById('completePassengerName').value = journey.PassengerName || '';
+      document.getElementById('completePassengerPhone').value = journey.PassengerPhone || '';
+      
+      // Clear the completion fields
+      document.getElementById('completeEndPoint').value = '';
+      document.getElementById('completeEndKm').value = '';
+      document.getElementById('completeEndTime').value = '';
+      
+      // Show the complete journey section
+      showSection('completeJourney');
+
   })
   .catch(error => {
     console.error("Error fetching journey details:", error);
@@ -543,6 +560,11 @@ async function submitCompletedJourney() {
     endKm: endKm,
     endTime: endTime
   };
+
+  // Show loading state
+  const submitBtn = document.querySelector('#completeJourneyForm button[type="button"]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
 
   // Send data to Google Sheets web app
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
