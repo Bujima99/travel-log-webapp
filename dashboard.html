@@ -979,8 +979,9 @@ function showPopup(title, message) {
     
     popupTitle.textContent = title;
     popupMessage.textContent = message;
-    popup.classList.add('active');
     hideLoader();
+    popup.classList.add('active');
+    
     // Create a function to handle closing
     const closePopup = () => {
       popup.classList.remove('active');
