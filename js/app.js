@@ -316,10 +316,6 @@ function showSection(sectionId) {
       navItems[2].classList.add('active');
       loadCompletedJourneys();
       break;
-
-    case 'AddFuelForm':
-      showAddFuelForm();
-      break;
     // Logout doesn't need active state
   }
   
