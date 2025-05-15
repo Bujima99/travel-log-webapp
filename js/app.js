@@ -37,12 +37,12 @@ function signupUser() {
   const confirmPassword = document.getElementById("signupConfirmPassword").value;
 
   if (!firstName || !lastName || !phone || !username || !newPassword || !confirmPassword) {
-    alert("Please fill all fields.");
+    showPopup('Authentication Error', 'Please fill all fields.');
     return;
   }
 
   if (newPassword !== confirmPassword) {
-    alert("Passwords do not match.");
+     showPopup('Authentication Error', 'Passwords do not match.');
     return;
   }
 
@@ -67,14 +67,14 @@ function signupUser() {
   })
   .then(res => res.text())
   .then(resp => {
-    alert("Registration complete!");
+     showPopup('Success', 'Registration complete!');
     localStorage.setItem("driverId", driverId);
     localStorage.setItem("driverName", firstName + " " + lastName);
     window.location.href = "./index.html";
   })
   .catch(err => {
     console.error("Error registering driver:", err);
-    alert("Registration failed.");
+     showPopup('Error', 'Registration failed.');
   });
 }
 
@@ -83,7 +83,7 @@ function checkClassicLogin() {
   const password = document.getElementById("passwordInput").value.trim();
 
   if (!username || !password) {
-    alert("Please enter both username and password.");
+    showPopup('Error', 'Please enter both username and password.');
     return;
   }
 
@@ -100,7 +100,7 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
     console.log("Parsed data:", data);
     const user = data.find(driver => driver.username === username && driver.password === password);
     if (user) {
-      alert(`Welcome ${user.username}!`);
+      showPopup('Success', `Welcome ${user.username}!`);
       const driverData = {
         name: user.username, // Replace with actual data
         id: user.DriverID,  // Replace with actual data
@@ -111,12 +111,12 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
       
       window.location.href = "./dashboard.html";
     } else {
-      alert("Invalid username or password.");
+       showPopup('Error', 'Invalid username or password.');
     }
   })
   .catch(error => {
     console.error("Error:", error);
-    alert("Could not verify login. Please try again later.");
+    showPopup('Error', 'Could not verify login. Please try again later.');
   });
 }
 
@@ -237,12 +237,12 @@ function completeRegistration() {
   const confirmPassword = document.getElementById("confirmPassword").value;
 
   if (!firstName || !lastName || !username || !newPassword || !confirmPassword) {
-    alert("Please fill all fields.");
+    showPopup('Authentication Error', 'Please fill all fields.');
     return;
   }
 
   if (newPassword !== confirmPassword) {
-    alert("Passwords do not match.");
+    showPopup('Authentication Error', 'Passwords do not match.');
     return;
   }
 
@@ -267,14 +267,14 @@ function completeRegistration() {
   })
   .then(res => res.text())
   .then(resp => {
-    alert("Registration complete!");
+     showPopup('Success', 'Registration complete!');
     localStorage.setItem("driverId", driverId);
     localStorage.setItem("driverName", firstName + " " + lastName);
     window.location.href = "dashboard.html";
   })
   .catch(err => {
     console.error("Error registering driver:", err);
-    alert("Registration failed.");
+     showPopup('Error', 'Registration failed.');
   });
 }
 
@@ -345,7 +345,7 @@ function saveAsPending() {
   let pending = JSON.parse(localStorage.getItem('pendingJourneys') || '[]');
   pending.push(journey);
   localStorage.setItem('pendingJourneys', JSON.stringify(pending));
-  alert("Journey saved as pending.");
+  showPopup('Sucess', 'Journey saved as pending.');
   document.getElementById('journeyForm').reset();
 }
 
