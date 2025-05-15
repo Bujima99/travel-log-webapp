@@ -89,14 +89,14 @@
 <div class="fab-wrapper">
   <input type="checkbox" id="fabToggle" />
   <div class="fab">
-    <span>＋</span>
+    <span class="plus-icon">＋</span>
   </div>
   <div class="fab-actions">
-    <a href="#" onclick="event.preventDefault(); showSection('fuel')">
-      <span class="material-symbols-outlined">local_gas_station</span>
-    </a>
-    <a href="#" onclick="event.preventDefault(); showSection('addJourney')">
+    <a href="#" onclick="event.preventDefault(); showSection('addJourney')" class="fab-action">
       <span class="material-symbols-outlined">directions_car</span>
+    </a>
+    <a href="#" onclick="event.preventDefault(); showSection('fuel')" class="fab-action">
+      <span class="material-symbols-outlined">local_gas_station</span>
     </a>
   </div>
 </div>
