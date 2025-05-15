@@ -384,6 +384,30 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
     }
   }
+
+  const fabToggle = document.getElementById('fabToggle');
+  const fabWrapper = document.querySelector('.fab-wrapper');
+  const fabActions = document.querySelector('.fab-actions');
+
+  // Close when clicking outside
+  document.addEventListener('click', function(event) {
+    const isClickInsideFab = fabWrapper.contains(event.target);
+    const isFabToggle = event.target === fabToggle || event.target.closest('.fab');
+    
+    if (!isClickInsideFab && fabToggle.checked) {
+      fabToggle.checked = false;
+    }
+  });
+
+  // Handle action clicks
+  document.querySelectorAll('.fab-action').forEach(action => {
+    action.addEventListener('click', function(e) {
+      e.preventDefault();
+      const section = this.getAttribute('data-section');
+      showSection(section);
+      fabToggle.checked = false;
+    });
+  });
   
   const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.querySelector('.sidebar');
