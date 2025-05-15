@@ -399,15 +399,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Handle action clicks
-  document.querySelectorAll('.fab-action').forEach(action => {
-    action.addEventListener('click', function(e) {
-      e.preventDefault();
-      const section = this.getAttribute('data-section');
-      showSection(section);
-      fabToggle.checked = false;
-    });
-  });
+ 
   
   const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.querySelector('.sidebar');
