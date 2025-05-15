@@ -98,7 +98,7 @@
     <a href="#" onclick="event.preventDefault(); showSection('addJourney')" class="fab-action">
       <span class="material-symbols-outlined">directions_car</span>
     </a>
-    <a href="#" onclick="event.preventDefault(); showSection('AddFuelForm')" class="fab-action">
+    <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showAddFuelForm();" class="fab-action">
       <span class="material-symbols-outlined">local_gas_station</span>
     </a>
   </div>
@@ -479,7 +479,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function showAddFuelForm() {
+ / Hide all sections first
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  
+  // Show the form (if you're keeping it separate)
   document.getElementById('addFuelForm').style.display = 'block';
+  
+  // Scroll to form
   window.scrollTo(0, document.body.scrollHeight);
 }
 
