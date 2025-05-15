@@ -98,7 +98,7 @@
     <a href="#" onclick="event.preventDefault(); showSection('addJourney')" class="fab-action">
       <span class="material-symbols-outlined">directions_car</span>
     </a>
-    <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showAddFuelForm();" class="fab-action">
+    <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addFuelForm');" class="fab-action">
       <span class="material-symbols-outlined">local_gas_station</span>
     </a>
   </div>
@@ -147,7 +147,7 @@
   
 
   
-  <div id="addFuelForm" class="fuel-form" style="display: none;">
+  <div id="addFuelForm" class="section" style="display: none;">
     <h3>Add New Fuel Entry</h3>
     <form id="fuelForm" enctype="multipart/form-data">
       <select id="fuelVehicleName" required onchange="updateFuelVehicleNumber()">
