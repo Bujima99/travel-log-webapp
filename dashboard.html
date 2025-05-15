@@ -123,29 +123,58 @@
   </div>
 
 
-  <!-- Add the Fuel section after the History section -->
-<div id="fuel" class="section">
-  <h2>Fuel Entry</h2>
-  <form id="fuelForm" enctype="multipart/form-data">
-     <select id="fuelVehicleName" required onchange="updateVehicleNumber()">
+ <div id="fuel" class="section">
+  <h2>Fuel Entries</h2>
+  <div class="table-wrapper">
+    <table class="fl-table" id="fuelTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Vehicle</th>
+          <th>Invoice No</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Liters</th>
+          <th>KM Reading</th>
+          <th>Bill</th>
+        </tr>
+      </thead>
+      <tbody id="fuel-entries-body">
+        <!-- Data will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  
+  <button class="add-fuel-btn" onclick="event.preventDefault(); showAddFuelForm()">
+    <span class="material-symbols-outlined">add</span> Add Fuel Entry
+  </button>
+  
+  <div id="addFuelForm" class="fuel-form" style="display: none;">
+    <h3>Add New Fuel Entry</h3>
+    <form id="fuelForm" enctype="multipart/form-data">
+      <select id="fuelVehicleName" required onchange="updateFuelVehicleNumber()">
         <option value="">Select Vehicle</option>
       </select>
-     <input type="text" id="fuelVehicleNumber" placeholder="Vehicle Number" readonly required>
-    <input type="date" id="fuelDate" required>
-    <input type="text" id="fuelInvoiceNumber" placeholder="Invoice Number" required>
-    <select id="fuelType" required>
-      <option value="">Select Fuel Type</option>
-      <option value="Petrol">Petrol</option>
-      <option value="Diesel">Diesel</option>
-      <option value="CNG">CNG</option>
-      <option value="Electric">Electric</option>
-    </select>
-    <input type="number" id="fuelAmount" placeholder="Amount" step="0.01" required>
-    <input type="number" id="fuelLiters" placeholder="Liters" step="0.01" required>
-    <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
-    <input type="file" id="fuelBillImage" accept="image/*" required>
-    <button type="button" onclick="submitFuelEntry()">Submit Fuel Entry</button>
-  </form>
+      <input type="text" id="fuelVehicleNumber" placeholder="Vehicle Number" readonly required>
+      <input type="date" id="fuelDate" required>
+      <input type="text" id="fuelInvoiceNumber" placeholder="Invoice Number" required>
+      <select id="fuelType" required>
+        <option value="">Select Fuel Type</option>
+        <option value="Petrol">Petrol</option>
+        <option value="Diesel">Diesel</option>
+        <option value="CNG">CNG</option>
+        <option value="Electric">Electric</option>
+      </select>
+      <input type="number" id="fuelAmount" placeholder="Amount" step="0.01" required>
+      <input type="number" id="fuelLiters" placeholder="Liters" step="0.01" required>
+      <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
+      <input type="file" id="fuelBillImage" accept="image/*" required>
+      <div class="form-buttons">
+        <button type="button" onclick="submitFuelEntry()">Submit</button>
+        <button type="button" class="cancel-btn" onclick="hideAddFuelForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>
 
  <div id="history" class="section">
@@ -449,6 +478,72 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .finally(hideLoader());
 });
+
+
+function showAddFuelForm() {
+  document.getElementById('addFuelForm').style.display = 'block';
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+function hideAddFuelForm() {
+  document.getElementById('addFuelForm').style.display = 'none';
+  document.getElementById('fuelForm').reset();
+}
+
+function loadFuelEntries() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) {
+    console.error('No driver data found');
+    return;
+  }
+
+  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-fuel-entries&driverId=${encodeURIComponent(driverData.id)}`)
+    .then(showLoader())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Fuel entries data:", data);
+      const tableBody = document.getElementById('fuel-entries-body');
+      tableBody.innerHTML = '';
+      
+      if (data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="8">No fuel entries found</td></tr>';
+        return;
+      }
+      
+      data.forEach(entry => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+          <td>${entry.Date || ''}</td>
+          <td>${entry.VehicleNumber || ''}</td>
+          <td>${entry.InvoiceNumber || ''}</td>
+          <td>${entry.FuelType || ''}</td>
+          <td>₹${entry.Amount || '0'}</td>
+          <td>${entry.Liters || '0'}L</td>
+          <td>${entry.CurrentKM || ''}</td>
+          <td>
+            ${entry.BillImage ? 
+              `<a href="${entry.BillImage}" target="_blank" class="view-bill-link">View</a>` : 
+              'No bill'}
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    })
+    .catch(error => {
+      console.error("Error loading fuel entries:", error);
+      document.getElementById('fuel-entries-body').innerHTML = `
+        <tr>
+          <td colspan="8">Error loading data. Please try again later.</td>
+        </tr>
+      `;
+    }).finally(hideLoader());
+}
 
 function updateVehicleNumber() {
    const vehicles = [
