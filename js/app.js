@@ -13,25 +13,18 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Show login section  hide signup
 function showLogin() {
-  document.getElementById('loginSection').classList.remove('hidden');
-  document.getElementById('signupSection').classList.add('hidden');
   document.getElementById('loginTab').classList.add('active');
   document.getElementById('signupTab').classList.remove('active');
-  
-  // Also hide any special login methods that might be visible
-  document.getElementById('googleLogin').classList.add('hidden');
-  document.getElementById('phoneLogin').classList.add('hidden');
-  document.getElementById('loginOptions').classList.remove('hidden');
+  document.getElementById('loginSection').classList.remove('inactive');
+  document.getElementById('signupSection').classList.remove('active');
 }
 
-// Show signup section and hide login
 function showSignup() {
-  document.getElementById('loginSection').classList.add('hidden');
-  document.getElementById('signupSection').classList.remove('hidden');
-  document.getElementById('loginTab').classList.remove('active');
   document.getElementById('signupTab').classList.add('active');
+  document.getElementById('loginTab').classList.remove('active');
+  document.getElementById('loginSection').classList.add('inactive');
+  document.getElementById('signupSection').classList.add('active');
 }
 
 // Sign Up User
