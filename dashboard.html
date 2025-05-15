@@ -731,7 +731,7 @@ async function submitCompletedJourney() {
   .then(result => {
     console.log("Journey completion result:", result);
     showPopup('Success', 'Journey completed successfully!');
-    location.reload();
+    //location.reload();
   })
   .catch(error => {
     console.error("Error completing journey:", error);
@@ -795,7 +795,7 @@ async function saveAsPending() {
     showPopup('Success', 'Journey saved as pending successfully!');
     document.getElementById('journeyForm').reset();
     showSection('home');
-    location.reload();
+   // location.reload();
   })
   .catch(error => {
     console.error("Error saving pending journey:", error);
@@ -951,7 +951,7 @@ async function submitFuelEntry() {
     showPopup('Success', 'Fuel saved successfully!');
     document.getElementById('journeyForm').reset();
     showSection('home');
-    location.reload();
+    //location.reload();
   })
   .catch(error => {
     console.error("Error saving Fuel:", error);
