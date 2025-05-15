@@ -432,7 +432,7 @@ h2:hover::after {
   }
 
   button {
-    margin: 0px;
+    margin: 0px !important;
   }
   
   .main-content {
