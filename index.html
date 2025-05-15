@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Travel Log Login</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
 
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">	
@@ -19,7 +19,8 @@
 	align-items: center;
 	min-height: 100vh;
 	font-family: 'Jost', sans-serif;
-	background: url(./img/travellogimg.png);
+	background: url(./img/travellogimg.png) no-repeat center center fixed;
+	background-size: cover;
 }
 .main{
 	width: 350px;
@@ -99,6 +100,57 @@ button:hover{
 }
 #chk:checked ~ .signup label{
 	transform: scale(.6);
+}
+
+	  /* Mobile responsiveness */
+@media only screen and (max-width: 600px) {
+  .main {
+    width: 90%;
+    max-width: 350px;
+    height: auto;
+    min-height: 500px;
+  }
+  
+  input {
+    width: 80%;
+    padding: 15px;
+    height: 15px;
+  }
+  
+  button {
+    width: 80%;
+    padding: 12px;
+    height: 45px;
+    font-size: 1.1em;
+  }
+  
+  label {
+    font-size: 2em;
+    margin: 15px 5px;
+  }
+  
+  .login {
+    height: auto;
+    padding-bottom: 20px;
+  }
+  
+  #chk:checked ~ .login {
+    transform: translateY(-100%);
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  input {
+    width: 85%;
+  }
+  
+  button {
+    width: 85%;
+  }
+  
+  label {
+    font-size: 1.8em;
+  }
 }
 
   </style>
