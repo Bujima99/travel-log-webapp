@@ -987,11 +987,13 @@ function showPopup(title, message) {
        console.log("Popup closed by user action");
       popup.classList.remove('active');
       resolve(); // Resolve the promise when popup is closed
+      showSection('home');
       
       // Remove event listeners to prevent memory leaks
       document.getElementById('popupOk').removeEventListener('click', closePopup);
       document.getElementById('popupClose').removeEventListener('click', closePopup);
       popup.removeEventListener('click', outsideClick);
+      location.reload();
     };
     
     // Handle outside clicks
