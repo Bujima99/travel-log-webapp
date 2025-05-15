@@ -1,10 +1,18 @@
 
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Segoe UI', sans-serif;
   background: #f4f7fc;
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
+  width: 100vw; /* Ensure body takes full viewport width */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
+/* Make sure all containers use border-box */
+*, *:before, *:after {
+  box-sizing: border-box;
+}
 
 /* Style for all select elements to match your design */
 select {
@@ -101,6 +109,9 @@ select:disabled {
     flex: 1;
    
     flex-direction: column;
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
 }
 
 .fl-table thead {
@@ -407,9 +418,14 @@ h2:hover::after {
 
 /* Main content adjustment */
 .main-content {
-  margin-left: 72px; /* Same as collapsed rail width */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-left: 72px;
   transition: margin-left 0.3s ease;
   padding: 20px;
+  min-height: calc(100vh - 40px); /* Adjust padding */
+  box-sizing: border-box; /* Include padding in height calculation */
 }
 
 .nav-rail.expanded ~ .main-content {
@@ -418,9 +434,28 @@ h2:hover::after {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+   button, select, .nav-item {
+    min-height: 44px; /* Recommended minimum touch target size */
+  }
+  
+  .main-content {
+    margin-left: 0;
+    padding: 15px;
+    min-height: calc(100vh - 30px);
+  }
+  
+  /* Make sure tables and other content don't overflow */
+  .table-wrapper {
+    max-height: calc(100vh - 200px); /* Adjust based on your header/footer */
+  }
+  
   .nav-rail {
     transform: translateX(-100%);
     width: 250px;
+  }
+
+   .nav-rail.expanded ~ .main-content {
+    margin-left: 0;
   }
   
   .nav-rail.expanded {
@@ -608,45 +643,7 @@ input {
     padding: 10px;
 }
 
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
 
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: -250px;
-        width: 250px;
-        height: 100vh;
-        background: #2c3e50;
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
-
-    .sidebar.active {
-        left: 0;
-    }
-
-    .main-content {
-        margin-left: 0;
-    }
-
-    .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        display: none;
-    }
-
-    .overlay.active {
-        display: block;
-    }
-}
 
 /* Remove existing loader styles and replace with: */
 .loader-container {
