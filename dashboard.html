@@ -731,7 +731,6 @@ async function submitCompletedJourney() {
   .then(result => {
     console.log("Journey completion result:", result);
     showPopup('Success', 'Journey completed successfully!');
-    closeModal();
     location.reload();
   })
   .catch(error => {
