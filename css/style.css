@@ -15,7 +15,6 @@ body {
   flex-direction: column;
   gap: 15px;
   max-width: 600px;
-  margin: 0 auto;
   padding: 20px;
   background: #fff;
   border-radius: 8px;
