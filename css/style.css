@@ -402,12 +402,26 @@ h2:hover::after {
   justify-content: flex-end;
 }
 
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
 
 .nav-menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  flex: 1;
+}
+
+.nav-footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+  padding-bottom: 20px; /* Adds some space at the bottom */
+}
+
+/* Optional: Add a subtle border above the logout button */
+.nav-footer .nav-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
 }
 
 .nav-item.active {
