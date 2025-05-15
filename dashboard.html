@@ -975,45 +975,7 @@ function generateFuelId() {
 }
 
 
-// Custom Popup Function
-function showPopup(title, message) {
-  return new Promise((resolve) => {
-    const popup = document.getElementById('customPopup');
-    const popupTitle = document.getElementById('popupTitle');
-    const popupMessage = document.getElementById('popupMessage');
-    
-    popupTitle.textContent = title;
-    popupMessage.textContent = message;
-    hideLoader();
-    popup.classList.add('active');
-    
-    // Create a function to handle closing
-    const closePopup = () => {
-       console.log("Popup closed by user action");
-      popup.classList.remove('active');
-      resolve(); // Resolve the promise when popup is closed
-      showSection('home');
-      
-      // Remove event listeners to prevent memory leaks
-      document.getElementById('popupOk').removeEventListener('click', closePopup);
-      document.getElementById('popupClose').removeEventListener('click', closePopup);
-      popup.removeEventListener('click', outsideClick);
-      location.reload();
-    };
-    
-    // Handle outside clicks
-    const outsideClick = (e) => {
-     if (e.target === popup && !e.target.closest('.popup-container')) {
-        closePopup();
-      }
-    };
-    
-    // Add event listeners
-    document.getElementById('popupOk').addEventListener('click', closePopup);
-    document.getElementById('popupClose').addEventListener('click', closePopup);
-    popup.addEventListener('click', outsideClick);
-  });
-}
+
   
 </script>
 
