@@ -867,8 +867,9 @@ input {
 
 .fab .plus-icon {
   color: var(--fab-icon-color);
-  font-size: 32px;
+  font-size: 50px;
   transition: transform 0.3s ease;
+  margin:4px;
 }
 
 .fab-actions {
