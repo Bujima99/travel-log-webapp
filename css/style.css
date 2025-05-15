@@ -93,6 +93,7 @@ select:disabled {
 }
 
 .fl-table {
+    
     border-radius: 8px;
     font-size: 14px;
     font-weight: normal;
@@ -175,6 +176,7 @@ select:disabled {
     }
     
     .fl-table {
+        padding:10px;
         display: block;
     }
     
