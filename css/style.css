@@ -459,9 +459,7 @@ h2:hover::after {
     transform: translateX(0);
   }
   
-  .main-content {
-    margin-left: 0;
-  }
+  
   
   
   .nav-rail.expanded ~ .nav-overlay {
