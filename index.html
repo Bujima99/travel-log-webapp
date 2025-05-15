@@ -105,14 +105,15 @@ button:hover{
 	  /* Mobile responsiveness */
 @media only screen and (max-width: 600px) {
   .main {
-    width: 90%;
-    max-width: 350px;
-    height: auto;
-    min-height: 500px;
+        margin: 6vh;
+        width: 100%;
+        max-width: 249px;
+        height: auto;
+        max-height: 500px;
   }
   
   input {
-    width: 80%;
+    width: 70%;
     padding: 15px;
     height: 15px;
   }
@@ -130,18 +131,19 @@ button:hover{
   }
   
   .login {
-    height: auto;
+    height: 450px;
     padding-bottom: 20px;
+	transform: translateY(-10px);
   }
   
   #chk:checked ~ .login {
-    transform: translateY(-100%);
+    transform: translateY(-82%);
   }
 }
 
 @media only screen and (max-width: 400px) {
   input {
-    width: 85%;
+    width: 70%;
   }
   
   button {
