@@ -872,6 +872,7 @@ input {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  position: fixed;
 }
 
 .fab {
@@ -915,6 +916,7 @@ margin:4px;
   align-items: center;
   pointer-events: none;
   transition: all 0.3s ease;
+  pointer-events: none;
 }
 
 .fab-action {
@@ -928,6 +930,7 @@ margin:4px;
   color: var(--fab-action-color);
   text-decoration: none;
   transition: all 0.2s ease;
+  pointer-events: auto;
 }
 
 .fab-action:hover {
