@@ -411,11 +411,14 @@ h2:hover::after {
 
 .nav-menu ul {
   flex: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .nav-footer {
   margin-top: auto; /* Pushes the footer to the bottom */
-  padding-bottom: 20px; /* Adds some space at the bottom */
+  padding-bottom: 15vh; /* Adds some space at the bottom */
 }
 
 /* Optional: Add a subtle border above the logout button */
@@ -503,6 +506,12 @@ h2:hover::after {
    button, select, .nav-item {
     min-height: 44px; /* Recommended minimum touch target size */
   }
+
+  .nav-footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+  padding-bottom: 12vh !important; /* Adds some space at the bottom */
+}
+
 
   button {
     margin: 0px !important;
