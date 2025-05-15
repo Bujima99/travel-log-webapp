@@ -430,9 +430,13 @@ h2:hover::after {
    button, select, .nav-item {
     min-height: 44px; /* Recommended minimum touch target size */
   }
+
+  button {
+    margin: 0px;
+  }
   
   .main-content {
-    margin-left: 0;
+   margin-left: 50px;
     padding: 15px;
     min-height: calc(100vh - 30px);
   }
@@ -443,8 +447,8 @@ h2:hover::after {
   }
   
   .nav-rail {
-    transform: translateX(-100%);
-    width: 250px;
+    transform: translateX(0%);
+        width: 60px;
   }
 
    .nav-rail.expanded ~ .main-content {
