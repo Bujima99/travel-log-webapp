@@ -231,7 +231,7 @@ select:disabled {
 /* Responsive Styles */
 @media (max-width: 767px) {
     .table-wrapper {
-        margin: 10px 5px;
+         margin: 0px -15px;
     }
     
     .fl-table {
