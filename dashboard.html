@@ -419,8 +419,8 @@ document.addEventListener('DOMContentLoaded', function() {
           <td>${journey['StartKM'] || ''}</td>
           <td>${journey['StartTime'] || ''}</td>
           <td>
-            <button class="btn btn-primary complete-btn" data-id="${journey['TravelID'] || ''}">
-              Complete
+            <button class="btn btn-primary complete-btn" data-id="${journey['TravelID'] || ''}" style="background:#FFB343;">
+              Pending
             </button>
           </td>
         `;
