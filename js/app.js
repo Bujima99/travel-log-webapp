@@ -306,9 +306,11 @@ function showSection(sectionId) {
   switch(sectionId) {
     case 'home':
       navItems[0].classList.add('active');
+      document.dispatchEvent(new Event('DOMContentLoaded'));
       break;
     case 'fuel':
       navItems[1].classList.add('active');
+      loadFuelEntries();
       break;
     case 'history':
       navItems[2].classList.add('active');
