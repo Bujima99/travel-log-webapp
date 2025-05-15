@@ -607,10 +607,11 @@ function updateVehicleNumber() {
 }
 
 
-showLoader();
+
 async function completeJourney(travelId) {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   const driverId= driverData.id;
+  showLoader();
    fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=complete-journey&travelId=${encodeURIComponent(travelId)}&driverId=${encodeURIComponent(driverId)}`)
      .then(response => {
       if (!response.ok) {
