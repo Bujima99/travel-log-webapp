@@ -285,6 +285,22 @@ function showSection(sectionId) {
   document.querySelectorAll('.section').forEach(section => {
     section.classList.remove('active');
   });
+
+    const vehicles = [
+  { name: 'Hycross', number: 'KL02BY3091 ' },
+  { name: 'Ertiga', number: 'KL23Y0927' }
+];
+
+    const vehicleNameSelect = document.getElementById('vehicleName');
+  const fuelvehicleNameSelect = document.getElementById('fuelVehicleName');
+  
+  vehicles.forEach(vehicle => {
+    const option = document.createElement('option');
+    option.value = vehicle.name;
+    option.textContent = vehicle.name;
+    vehicleNameSelect.appendChild(option);
+    fuelvehicleNameSelect.appendChild(option);
+  });
   
   // Show the selected section
   document.getElementById(sectionId).classList.add('active');
