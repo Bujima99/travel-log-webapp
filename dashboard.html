@@ -459,11 +459,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show loader on initial page load
     showLoader();
    // window.addEventListener('load', hideLoader);
-
-
   const driverId= driverData.id;
   fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=pending-journeys&driverId=${encodeURIComponent(driverId)}`)
-    .then(showLoader())
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -472,14 +469,8 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(data => {
       console.log("Pending journeys data:", data);
-      
-      // Get the table body element
       const tableBody = document.querySelector('#home tbody');
-      
-      // Clear any existing rows
       tableBody.innerHTML = '';
-      
-      // Check if there's any data
       if (data.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="5">No pending journeys found</td></tr>';
         return;
@@ -521,7 +512,9 @@ document.addEventListener('DOMContentLoaded', function() {
         </tr>
       `;
     })
-    .finally(hideLoader());
+    .finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 });
 
 
@@ -550,9 +543,8 @@ function loadFuelEntries() {
     console.error('No driver data found');
     return;
   }
-
+  showLoader();
   fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-fuel-entries&driverId=${encodeURIComponent(driverData.id)}`)
-    .then(showLoader())
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -596,7 +588,9 @@ function loadFuelEntries() {
           <td colspan="8">Error loading data. Please try again later.</td>
         </tr>
       `;
-    }).finally(hideLoader());
+    }).finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 }
 
 function updateVehicleNumber() {
@@ -613,12 +607,11 @@ function updateVehicleNumber() {
 }
 
 
-// Function to mark a journey as complete
+showLoader();
 async function completeJourney(travelId) {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   const driverId= driverData.id;
    fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=complete-journey&travelId=${encodeURIComponent(travelId)}&driverId=${encodeURIComponent(driverId)}`)
-  .then(showLoader())
      .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -663,7 +656,9 @@ async function completeJourney(travelId) {
     showPopup('Error', 'Error loading journey details. Please try again.');
     return;
   })
-  .finally(hideLoader());
+  .finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 }
 
 // Function to close the modal
@@ -722,7 +717,7 @@ async function submitCompletedJourney() {
   submitBtn.disabled = true;
   submitBtn.textContent = 'Submitting...';
 
-  // Send data to Google Sheets web app
+ showLoader();
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
     headers: {
@@ -731,7 +726,6 @@ async function submitCompletedJourney() {
     mode: 'no-cors',
     body: JSON.stringify(completionData)
   })
-  .then(showLoader())
   .then(response => response.text())
   .then(result => {
     console.log("Journey completion result:", result);
@@ -743,7 +737,9 @@ async function submitCompletedJourney() {
     console.error("Error completing journey:", error);
     showPopup('Error', 'Error completing journey. Please try again.');
   })
-  .finally(hideLoader());
+  .finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 }
 
 // Function to save journey as pending
@@ -784,7 +780,7 @@ async function saveAsPending() {
     passengerPhone: passengerPhone
   };
 
-  // Send data to Google Sheets web app
+  showLoader();
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
     body: JSON.stringify(journeyData),
@@ -793,7 +789,6 @@ async function saveAsPending() {
       "Content-Type": "application/json"
     }
   })
-  .then(showLoader())
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Pending result:", result);
@@ -806,7 +801,9 @@ async function saveAsPending() {
     console.error("Error saving pending journey:", error);
     showPopup('Error', 'Error saving journey as pending. Please try again.');
     return;
-  }).finally(hideLoader());
+  }).finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 }
 
 
@@ -817,9 +814,8 @@ function loadCompletedJourneys() {
     console.error('No driver data found');
     return;
   }
-
+  showLoader();
   fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=history-journey&driverId=${encodeURIComponent(driverData.id)}`)
-    .then(showLoader())
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -864,7 +860,9 @@ function loadCompletedJourneys() {
           <td colspan="15">Error loading data. Please try again later.</td>
         </tr>
       `;
-    }).finally(hideLoader());
+    }).finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 }
 
 function formatTime(timeString) {
@@ -938,6 +936,7 @@ async function submitFuelEntry() {
     billImage: billImage
   };
 
+  showLoader();
    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
     body: JSON.stringify(formData),
@@ -946,7 +945,6 @@ async function submitFuelEntry() {
       "Content-Type": "application/json"
     }
   })
-  .then(showLoader())
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Fuel result:", result);
@@ -959,7 +957,9 @@ async function submitFuelEntry() {
     console.error("Error saving Fuel:", error);
     showPopup('Error', 'Error saving Fuel. Please try again.');
     return;
-  }).finally(hideLoader());
+  }).finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 }
 
   
