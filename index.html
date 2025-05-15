@@ -10,176 +10,108 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <style>
-/* Login/Signup  Styles */
-.container {
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Jost', sans-serif;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+.main {
   width: 350px;
   height: 500px;
-  position: relative;
-  margin: 6% auto;
-  background: linear-gradient(to bottom, #1a2980, #26d0ce);
-  border-radius: 10px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-}
-
-h1 {
-  text-align: center;
-  color: #fff;
-  font-size: 2em;
-  margin: 40px 0 20px;
-  font-weight: bold;
-}
-
-.auth-toggle {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.auth-toggle button {
-  padding: 10px 30px;
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 1.1em;
-  font-weight: bold;
-  cursor: pointer;
-  outline: none;
+  background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/cover;
+  border-radius: 10px;
+  box-shadow: 5px 20px 50px #000;
   position: relative;
 }
 
-.auth-toggle button.active {
-  color: #fff;
-}
-
-.auth-toggle button.active::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: #fff;
-  border-radius: 3px;
-}
-
-#loginSection, #signupSection {
-  position: absolute;
-  width: 100%;
-  padding: 0 40px;
-  box-sizing: border-box;
-  transition: 0.5s;
-}
-
-#loginSection {
-  left: 0;
-}
-
-#signupSection {
-  left: 100%;
-}
-
-#signupSection.active {
-  left: 0;
-}
-
-#loginSection.inactive {
-  left: -100%;
-}
-
-#loginSection p, #signupSection p {
-  text-align: center;
-  color: #fff;
-  margin-bottom: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.9);
-  outline: none;
-  font-size: 14px;
-}
-
-button[onclick^="checkClassicLogin"],
-button[onclick^="signupUser"],
-button[onclick^="showGoogleLogin"],
-button[onclick^="showPhoneLogin"],
-button[onclick^="signInWithGoogle"],
-button[onclick^="sendOTP"],
-button[onclick^="verifyOTP"] {
-  width: 100%;
-  padding: 12px;
-  margin: 20px 0 10px;
-  border: none;
-  border-radius: 5px;
-  background: #fff;
-  color: #1a2980;
-  font-size: 1em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button[onclick^="checkClassicLogin"]:hover,
-button[onclick^="signupUser"]:hover,
-button[onclick^="showGoogleLogin"]:hover,
-button[onclick^="showPhoneLogin"]:hover,
-button[onclick^="signInWithGoogle"]:hover,
-button[onclick^="sendOTP"]:hover,
-button[onclick^="verifyOTP"]:hover {
-  background: rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px);
-}
-
-#classicLogin, #loginOptions, #googleLogin, #phoneLogin, #signupForm {
-  display: flex;
-  flex-direction: column;
-}
-
-#loginOptions {
-  margin-top: 20px;
-}
-
-#googleLogin, #phoneLogin {
-  margin-top: 20px;
-}
-
-#recaptcha-container {
-  margin: 10px 0;
-  display: flex;
-  justify-content: center;
-}
-
-.hidden {
+#chk {
   display: none;
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .container {
-    width: 90%;
-    height: auto;
-    padding-bottom: 30px;
-  }
-  
-  h1 {
-    font-size: 1.8em;
-    margin: 30px 0 15px;
-  }
-  
-  .auth-toggle button {
-    padding: 8px 20px;
-    font-size: 1em;
-  }
-  
-  #loginSection, #signupSection {
-    padding: 0 20px;
-  }
+.signup, .login {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: .8s ease-in-out;
 }
+
+label {
+  color: #fff;
+  font-size: 2.3em;
+  display: flex;
+  justify-content: center;
+  margin: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .5s ease-in-out;
+}
+
+input {
+  width: 60%;
+  height: 10px;
+  background: #e0dede;
+  display: flex;
+  margin: 20px auto;
+  padding: 12px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+button {
+  width: 60%;
+  height: 40px;
+  margin: 10px auto;
+  display: block;
+  color: #fff;
+  background: #573b8a;
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 30px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  transition: .2s ease-in;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #6d44b8;
+}
+
+.login {
+  background: #eee;
+  border-radius: 60% / 10%;
+  transform: translateY(0);
+  z-index: 1;
+}
+
+.login label {
+  color: #573b8a;
+  transform: scale(0.6);
+}
+
+#chk:checked ~ .login {
+  transform: translateY(-500px);
+}
+
+#chk:checked ~ .login label {
+  transform: scale(1);
+}
+
+#chk:checked ~ .signup label {
+  transform: scale(0.6);
+}
+
 
 </style>
 </head>
