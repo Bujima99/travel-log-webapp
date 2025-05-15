@@ -826,11 +826,29 @@ input {
     background-color: #45a049;
   }
 
-.fab {
+
+/* FAB Styles */
+.fab-wrapper {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #2563eb; /* Blue-600 */
+  width: 56px;
+  height: 56px;
+  z-index: 100;
+}
+
+.fab-wrapper input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.fab {
+  position: absolute;
+  background-color: #2563eb;
   color: white;
   border: none;
   border-radius: 50%;
@@ -843,9 +861,80 @@ input {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+  z-index: 3;
 }
 
 .fab:hover {
-  background-color: #1e40af; /* Blue-700 */
+  background-color: #1e40af;
+}
+
+.fab-actions {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  width: 56px;
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.fab-actions a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0;
+  color: #4285f4;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.fab-actions a:hover {
+  background: #e9ecef;
   transform: scale(1.1);
 }
+
+.fab-wrapper input:checked ~ .fab {
+  transform: rotate(45deg);
+  background-color: #dc3545;
+}
+
+.fab-wrapper input:checked ~ .fab-actions {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Animation for the FAB actions */
+@keyframes fab-action-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fab-wrapper input:checked ~ .fab-actions a:nth-child(1) {
+  animation: fab-action-in 0.2s ease-out 0.1s forwards;
+}
+
+.fab-wrapper input:checked ~ .fab-actions a:nth-child(2) {
+  animation: fab-action-in 0.2s ease-out 0.2s forwards;
+}
+
