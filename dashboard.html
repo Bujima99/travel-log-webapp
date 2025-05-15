@@ -414,11 +414,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const fuelvehicleNameSelect = document.getElementById('fuelVehicleName');
   
   vehicles.forEach(vehicle => {
-    const option = document.createElement('option');
-    option.value = vehicle.name;
-    option.textContent = vehicle.name;
-    vehicleNameSelect.appendChild(option);
-    fuelvehicleNameSelect.appendChild(option);
+    const option1 = document.createElement('option');
+  option1.value = vehicle.name;
+  option1.textContent = vehicle.name;
+  vehicleNameSelect.appendChild(option1);
+  
+  // Create second option for fuelVehicleName select
+  const option2 = document.createElement('option');
+  option2.value = vehicle.name;
+  option2.textContent = vehicle.name;
+  fuelvehicleNameSelect.appendChild(option2);
   });
 
 
