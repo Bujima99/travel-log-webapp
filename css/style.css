@@ -857,7 +857,7 @@ input {
   --fab-width: 56px;
   --fab-height: 56px;
   --fab-border-radius: 100%;
-  --fab-action-size: 40px;
+  --fab-action-size: 60px;
 }
 
 .fab-wrapper {
@@ -898,7 +898,7 @@ margin:4px;
 }
 
 .fab-actions {
-  width: calc(var(--fab-action-size) * 2 + 20px);
+  width: calc(var(--fab-action-size) * 2 + 40px);
   height: var(--fab-action-size);
   border-radius: calc(var(--fab-action-size) / 2);
   position: absolute;
