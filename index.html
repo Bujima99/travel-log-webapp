@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-<link rel="icon" type="image/png" href="./img/travelicon.png">
-  <title>Travel Log Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
-
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">	
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <style>
+	<meta charset="UTF-8">
+	<link rel="icon" type="image/png" href="./img/travelicon.png">
+  	<title>Travel Log Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">	
+	<!-- Firebase SDKs -->
+  	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  	<style>
 
 	  
     body{
@@ -25,6 +23,31 @@
 	background: url(./img/travellogimg10.png) no-repeat center center fixed;
 	background-size: cover;
 }
+
+		/* NEW CSS FOR PASSWORD TOGGLE */
+.password-container {
+  position: relative;
+  width: 60%;
+  margin: 10px auto;
+}
+
+.password-container input {
+  width: 100%;
+  margin: 0;
+  padding-right: 30px; /* Space for the eye icon */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  user-select: none;
+}
+
+/* END OF NEW CSS */
 
 	   
   .popup-overlay {
@@ -255,7 +278,11 @@ button:hover{
 				<form id="loginForm">
 					<label for="chk" aria-hidden="true">Login</label>
 					 <input type="text" id="usernameInput" placeholder="Username" required>
-        <input type="password" id="passwordInput" placeholder="Password" required>
+         <!-- Modified password field with toggle -->
+                     <div class="password-container">
+                        <input type="password" id="passwordInput" placeholder="Password" required>
+                        <span class="toggle-password" onclick="togglePassword('passwordInput')">👁️</span>
+                     </div>
         <button type="button" onclick="checkClassicLogin()">Login</button>
 				</form>
 				
@@ -268,8 +295,15 @@ button:hover{
 					<input type="text" id="signupLastName" placeholder="Last Name" required>
           <input type="text" id="signupPhone" placeholder="Phone Number (+91...)" required>
 					 <input type="text" id="signupUsername" placeholder="Username" required>
-        <input type="password" id="signupPassword" placeholder="Password" required>
-        <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+        <!-- Modified password fields with toggles -->
+                     <div class="password-container">
+                        <input type="password" id="signupPassword" placeholder="Password" required>
+                        <span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
+                     </div>
+                     <div class="password-container">
+                        <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+                        <span class="toggle-password" onclick="togglePassword('signupConfirmPassword')">👁️</span>
+                     </div>
 					<button type="button" onclick="signupUser()">Sign up</button>	
 				</form>
 	    
@@ -290,5 +324,21 @@ button:hover{
 </div>
 	
   <script src="./js/app.js"></script>
+	<!-- NEW SCRIPT FOR PASSWORD TOGGLE -->
+  <script>
+    function togglePassword(inputId) {
+      const input = document.getElementById(inputId);
+      const toggle = event.currentTarget;
+      
+      if (input.type === "password") {
+        input.type = "text";
+        toggle.textContent = "👁️";
+      } else {
+        input.type = "password";
+        toggle.textContent = "👁️";
+      }
+    }
+  </script>
+  <!-- END OF NEW SCRIPT -->
 </body>
 </html>
