@@ -12,7 +12,8 @@
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
+let loaderMinimumTime = 500; // 500ms minimum show time
+    let loaderShownTime;
  // Loader functions
     window.showLoader = function() {
         loaderShownTime = Date.now();
