@@ -13,6 +13,26 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+ // Loader functions
+    window.showLoader = function() {
+        loaderShownTime = Date.now();
+        document.getElementById('loader').style.display = 'flex';
+    };
+
+    window.hideLoader = function() {
+        const elapsed = Date.now() - loaderShownTime;
+       //const elapsed = 0;
+    const remaining = loaderMinimumTime - elapsed;
+    
+    if (remaining > 0) {
+        setTimeout(() => {
+            document.getElementById('loader').style.display = 'none';
+        }, remaining);
+    } else {
+        document.getElementById('loader').style.display = 'none';
+    }
+    };
+
 function showLogin() {
   document.getElementById('loginTab').classList.add('active');
   document.getElementById('signupTab').classList.remove('active');
