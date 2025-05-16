@@ -77,6 +77,7 @@ function signupUser() {
     driverPassword: newPassword
   };
 
+  showLoader();
   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: "POST",
     body: JSON.stringify(data),
@@ -95,7 +96,9 @@ function signupUser() {
   .catch(err => {
     console.error("Error registering driver:", err);
      showPopup('Error', 'Registration failed.');
-  });
+  }).finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 }
 
 function checkClassicLogin() {
@@ -107,7 +110,7 @@ function checkClassicLogin() {
     return;
   }
 
-
+showLoader();
   // Fetch driver data from Google Sheets web app endpoint
 fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers")
   .then(response => {
@@ -137,7 +140,9 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
   .catch(error => {
     console.error("Error:", error);
     showPopup('Error', 'Could not verify login. Please try again later.');
-  });
+  }).finally(() => {
+        hideLoader(); // Now this will only run after everything is complete
+    });
 }
 
 
