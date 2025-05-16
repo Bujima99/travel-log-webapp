@@ -352,6 +352,9 @@ h2:hover::after {
   font-weight: 500;
   opacity: 1;
   transition: opacity 0.3s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-toggle {
