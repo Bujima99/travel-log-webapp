@@ -355,6 +355,7 @@ h2:hover::after {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 5px;
 }
 
 .nav-toggle {
