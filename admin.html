@@ -1,251 +1,922 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Jost', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        .header {
-            background-color: #008ae6;
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #333;
-            color: white;
-            height: 100vh;
-            position: fixed;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            display: block;
-            color: white;
-            padding: 15px;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #008ae6;
-        }
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #008ae6;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .btn {
-            background-color: #008ae6;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #006bb3;
-        }
-    </style>
+  <link rel="icon" type="image/png" href="./img/travelicon.png">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="./js/app.js"></script>
+  <style>
+    /* Add admin-specific styles here */
+    .admin-badge {
+      background-color: #ff5722;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    
+    .status-badge {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .status-pending {
+      background-color: #FFB343;
+      color: #000;
+    }
+    
+    .status-approved {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .status-rejected {
+      background-color: #f44336;
+      color: white;
+    }
+    
+    .status-hold {
+      background-color: #2196F3;
+      color: white;
+    }
+    
+    .request-details {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    
+    .request-details p {
+      margin: 5px 0;
+    }
+    
+    .request-details strong {
+      display: inline-block;
+      width: 120px;
+    }
+    
+    .approval-form {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e8f5e9;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Admin Dashboard</h1>
-        <button class="btn" onclick="logout()">Logout</button>
-    </div>
-    
-    <div class="sidebar">
-        <a href="#" onclick="showSection('dashboard')">Dashboard</a>
-        <a href="#" onclick="showSection('drivers')">Manage Drivers</a>
-        <a href="#" onclick="showSection('trips')">All Trips</a>
-        <a href="#" onclick="showSection('reports')">Reports</a>
-        <a href="#" onclick="showSection('settings')">Settings</a>
-    </div>
-    
-    <div class="main-content">
-        <div id="dashboard" class="section card">
-            <h2>Admin Overview</h2>
-            <p>Welcome to the admin dashboard. Here you can manage all aspects of the system.</p>
-            <!-- Add admin-specific stats/widgets here -->
-        </div>
-        
-        <div id="drivers" class="section card" style="display:none;">
-            <h2>Manage Drivers</h2>
-            <button class="btn" onclick="showAddDriverForm()">Add New Driver</button>
-            <table id="driversTable">
-                <thead>
-                    <tr>
-                        <th>Driver ID</th>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Drivers will be loaded here -->
-                </tbody>
-            </table>
-        </div>
-        
-        <div id="trips" class="section card" style="display:none;">
-            <h2>All Trips</h2>
-            <table id="allTripsTable">
-                <thead>
-                    <tr>
-                        <th>Trip ID</th>
-                        <th>Date</th>
-                        <th>Driver</th>
-                        <th>Vehicle</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Trips will be loaded here -->
-                </tbody>
-            </table>
-        </div>
-        
-        <div id="reports" class="section card" style="display:none;">
-            <h2>Reports</h2>
-            <!-- Reports content will go here -->
-        </div>
-        
-        <div id="settings" class="section card" style="display:none;">
-            <h2>Settings</h2>
-            <!-- Settings content will go here -->
-        </div>
-    </div>
+<div class="loader-container" id="loader">
+    <div class="loader"></div>
+</div>
 
-    <script>
-        // Load driver data on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadDrivers();
-            loadAllTrips();
+<div class="nav-rail">
+  <div class="nav-header">
+    <div class="user-info">
+      <div class="avatar"></div>
+      <span id="driverName"></span>
+      <span class="admin-badge">ADMIN</span>
+    </div>
+    <button class="nav-toggle" id="navToggle">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+  </div>
+  
+  <nav class="nav-menu">
+    <ul>
+      <li>
+        <a href="#" onclick="event.preventDefault(); showSection('home')" class="nav-item active">
+          <span class="material-symbols-outlined">home</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="event.preventDefault(); showSection('journeys')" class="nav-item">
+          <span class="material-symbols-outlined">directions_car</span>
+          <span class="nav-text">Journeys</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="event.preventDefault(); showSection('fuel')" class="nav-item">
+          <span class="material-symbols-outlined">local_gas_station</span>
+          <span class="nav-text">Fuel</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="event.preventDefault(); showSection('service')" class="nav-item">
+          <span class="material-symbols-outlined">build</span>
+          <span class="nav-text">Services</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="event.preventDefault(); showSection('requests')" class="nav-item">
+          <span class="material-symbols-outlined">assignment</span>
+          <span class="nav-text">Requests</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="event.preventDefault(); showSection('profile')" class="nav-item">
+          <span class="material-symbols-outlined">account_circle</span>
+          <span class="nav-text">Profile</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="nav-footer">
+      <a href="#" onclick="logout()" class="nav-item">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="nav-text">Logout</span>
+      </a>
+    </div>
+  </nav>
+</div>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<div class="main-content">
+
+  <div id="home" class="section active">
+    <h2>Admin Dashboard</h2>
+    <div class="stats-container">
+      <div class="stat-card">
+        <span class="material-symbols-outlined">directions_car</span>
+        <h3 id="totalJourneys">0</h3>
+        <p>Total Journeys</p>
+      </div>
+      <div class="stat-card">
+        <span class="material-symbols-outlined">local_gas_station</span>
+        <h3 id="totalFuel">0</h3>
+        <p>Fuel Entries</p>
+      </div>
+      <div class="stat-card">
+        <span class="material-symbols-outlined">build</span>
+        <h3 id="totalServices">0</h3>
+        <p>Service Records</p>
+      </div>
+      <div class="stat-card">
+        <span class="material-symbols-outlined">assignment</span>
+        <h3 id="pendingRequests">0</h3>
+        <p>Pending Requests</p>
+      </div>
+    </div>
+    
+    <h3>Recent Activity</h3>
+    <div class="table-wrapper">
+      <table class="fl-table" id="recentActivityTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Details</th>
+            <th>User</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div id="journeys" class="section">
+    <h2>All Journeys</h2>
+    <div class="table-wrapper">
+      <table class="fl-table" id="allJourneysTable">
+        <thead>
+          <tr>
+            <th>Travel ID</th>
+            <th>Date</th>
+            <th>Driver</th>
+            <th>Vehicle</th>
+            <th>Start Point</th>
+            <th>End Point</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="fuel" class="section">
+    <h2>All Fuel Entries</h2>
+    <div class="table-wrapper">
+      <table class="fl-table" id="allFuelTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Driver</th>
+            <th>Vehicle</th>
+            <th>Invoice No</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Liters</th>
+            <th>KM Reading</th>
+            <th>Bill</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="service" class="section">
+    <h2>All Service Records</h2>
+    <div class="table-wrapper">
+      <table class="fl-table" id="allServiceTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Driver</th>
+            <th>Vehicle</th>
+            <th>Invoice No</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>KM Reading</th>
+            <th>Next Service</th>
+            <th>Workshop</th>
+            <th>Bill</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="requests" class="section">
+    <h2>All Requests</h2>
+    <div class="table-wrapper">
+      <table class="fl-table" id="allRequestsTable">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Date</th>
+            <th>Requester</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="requestDetails" class="section">
+    <h2>Request Details</h2>
+    <div id="requestDetailsContent"></div>
+    
+    <div class="approval-form" id="approvalForm">
+      <h3>Update Request Status</h3>
+      <form id="requestApprovalForm">
+        <input type="hidden" id="requestId">
+        
+        <div class="form-group">
+          <label for="approvalStatus">Status:</label>
+          <select id="approvalStatus" required>
+            <option value="">Select Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Hold">Hold</option>
+          </select>
+        </div>
+        
+        <div id="driverSelection" style="display:none;">
+          <div class="form-group">
+            <label for="assignedDriver">Assign Driver:</label>
+            <select id="assignedDriver">
+              <option value="">Select Driver</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="approvalRemarks">Remarks:</label>
+          <textarea id="approvalRemarks" rows="3"></textarea>
+        </div>
+        
+        <button type="button" onclick="submitRequestApproval()">Update Request</button>
+        <button type="button" class="cancel-btn" onclick="showSection('requests')">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="profile" class="section">
+    <h2>Admin Profile</h2>
+    <div class="profile-container">
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <span class="material-symbols-outlined">admin_panel_settings</span>
+        </div>
+        <h3 id="profileAdminName"></h3>
+      </div>
+      
+      <div class="profile-details">
+        <div class="detail-row">
+          <span class="detail-label">Admin ID:</span>
+          <span class="detail-value" id="profileAdminId"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Username:</span>
+          <span class="detail-value" id="profileUsername"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Phone:</span>
+          <span class="detail-value" id="profilePhone"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+    
+  if (driverData) {
+    // Display admin name
+    const adminNameElement = document.getElementById('driverName');
+    if (adminNameElement) {
+      adminNameElement.textContent = driverData.name;
+    }
+    
+    // Load all data
+    loadDashboardStats();
+    loadAllJourneys();
+    loadAllFuelEntries();
+    loadAllServiceEntries();
+    loadAllRequests();
+    loadDriversForAssignment();
+  } else {
+    // If no admin data found, redirect to login
+    window.location.href = './index.html';
+  }
+  
+  // Initialize navigation
+  initNavigation();
+});
+
+// Navigation functions
+function initNavigation() {
+  document.getElementById('navToggle').addEventListener('click', function() {
+    document.querySelector('.nav-rail').classList.toggle('expanded');
+  });
+
+  document.getElementById('navOverlay').addEventListener('click', function() {
+    document.querySelector('.nav-rail').classList.remove('expanded');
+  });
+
+  document.addEventListener('click', function(event) {
+    const rail = document.querySelector('.nav-rail');
+    const isClickInsideRail = rail.contains(event.target);
+    const isClickOnToggle = event.target.closest('#navToggle');
+    
+    if (!isClickInsideRail && !isClickOnToggle && window.innerWidth > 768) {
+      rail.classList.remove('expanded');
+    }
+  });
+}
+
+function showSection(sectionId) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Show the selected section
+  document.getElementById(sectionId).classList.add('active');
+  
+  // Update active nav item
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  
+  // Find and activate the corresponding nav item
+  const navItems = document.querySelectorAll('.nav-item');
+  switch(sectionId) {
+    case 'home':
+      navItems[0].classList.add('active');
+      break;
+    case 'journeys':
+      navItems[1].classList.add('active');
+      break;
+    case 'fuel':
+      navItems[2].classList.add('active');
+      break;
+    case 'service':
+      navItems[3].classList.add('active');
+      break;
+    case 'requests':
+      navItems[4].classList.add('active');
+      break;
+    case 'profile':
+      navItems[5].classList.add('active');
+      break;
+  }
+}
+
+// Dashboard stats
+function loadDashboardStats() {
+  showLoader();
+  
+  // Fetch all data counts
+  Promise.all([
+    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-journey-count").then(res => res.json()),
+    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-fuel-count").then(res => res.json()),
+    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-service-count").then(res => res.json()),
+    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-pending-request-count").then(res => res.json()),
+    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-recent-activity").then(res => res.json())
+  ])
+  .then(([journeys, fuel, services, requests, activity]) => {
+    document.getElementById('totalJourneys').textContent = journeys.count || 0;
+    document.getElementById('totalFuel').textContent = fuel.count || 0;
+    document.getElementById('totalServices').textContent = services.count || 0;
+    document.getElementById('pendingRequests').textContent = requests.count || 0;
+    
+    // Populate recent activity
+    const activityTable = document.querySelector('#recentActivityTable tbody');
+    activityTable.innerHTML = '';
+    
+    if (activity.length > 0) {
+      activity.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date || ''}</td>
+          <td>${item.type || ''}</td>
+          <td>${item.details || ''}</td>
+          <td>${item.user || ''}</td>
+        `;
+        activityTable.appendChild(row);
+      });
+    } else {
+      activityTable.innerHTML = '<tr><td colspan="4">No recent activity</td></tr>';
+    }
+  })
+  .catch(error => {
+    console.error("Error loading dashboard stats:", error);
+    showPopup('Error', 'Failed to load dashboard data');
+  })
+  .finally(() => {
+    hideLoader();
+  });
+}
+
+// Load all journeys
+function loadAllJourneys() {
+  showLoader();
+  
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-journeys")
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.querySelector('#allJourneysTable tbody');
+      tableBody.innerHTML = '';
+      
+      if (data.length > 0) {
+        data.forEach(journey => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${journey.TravelID || ''}</td>
+            <td>${journey.Date || ''}</td>
+            <td>${journey.DriverName || ''}</td>
+            <td>${journey.VehicleNumber || ''}</td>
+            <td>${journey.StartPoint || ''}</td>
+            <td>${journey.EndPoint || ''}</td>
+            <td>${getStatusBadge(journey.Status || '')}</td>
+            <td><button class="btn" onclick="viewJourneyDetails('${journey.TravelID || ''}')">View</button></td>
+          `;
+          tableBody.appendChild(row);
         });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="8">No journeys found</td></tr>';
+      }
+    })
+    .catch(error => {
+      console.error("Error loading journeys:", error);
+      showPopup('Error', 'Failed to load journeys');
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
 
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.style.display = 'none';
-            });
+// Load all fuel entries
+function loadAllFuelEntries() {
+  showLoader();
+  
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-fuel-entries")
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.querySelector('#allFuelTable tbody');
+      tableBody.innerHTML = '';
+      
+      if (data.length > 0) {
+        data.forEach(entry => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${entry.Date || ''}</td>
+            <td>${entry.DriverName || ''}</td>
+            <td>${entry.VehicleNumber || ''}</td>
+            <td>${entry.InvoiceNumber || ''}</td>
+            <td>${entry.FuelType || ''}</td>
+            <td>₹${entry.Amount || '0'}</td>
+            <td>${entry.Liters || '0'}L</td>
+            <td>${entry.CurrentKM || ''}</td>
+            <td>
+              ${entry.BillImage ? 
+                `<a href="${entry.BillImage}" target="_blank" class="view-bill-link">View</a>` : 
+                'No bill'}
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="9">No fuel entries found</td></tr>';
+      }
+    })
+    .catch(error => {
+      console.error("Error loading fuel entries:", error);
+      showPopup('Error', 'Failed to load fuel entries');
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
+
+// Load all service entries
+function loadAllServiceEntries() {
+  showLoader();
+  
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-service-entries")
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.querySelector('#allServiceTable tbody');
+      tableBody.innerHTML = '';
+      
+      if (data.length > 0) {
+        data.forEach(entry => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${entry.ServiceDate || ''}</td>
+            <td>${entry.DriverName || ''}</td>
+            <td>${entry.VehicleNumber || ''}</td>
+            <td>${entry.InvoiceNumber || ''}</td>
+            <td>${entry.ServiceType || ''}</td>
+            <td>₹${entry.Amount || '0'}</td>
+            <td>${entry.CurrentKM || ''}</td>
+            <td>${entry.NextServiceDate || '-'}</td>
+            <td>${entry.Workshop || ''}</td>
+            <td>
+              ${entry.BillImage ? 
+                `<a href="${entry.BillImage}" target="_blank" class="view-bill-link">View</a>` : 
+                'No bill'}
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="10">No service entries found</td></tr>';
+      }
+    })
+    .catch(error => {
+      console.error("Error loading service entries:", error);
+      showPopup('Error', 'Failed to load service entries');
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
+
+// Load all requests
+function loadAllRequests() {
+  showLoader();
+  
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-requests")
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.querySelector('#allRequestsTable tbody');
+      tableBody.innerHTML = '';
+      
+      if (data.length > 0) {
+        data.forEach(request => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${request.RequestID || ''}</td>
+            <td>${request.RequestDate || ''}</td>
+            <td>${request.RequesterName || ''}</td>
+            <td>${request.RequestType || ''}</td>
+            <td>${getStatusBadge(request.Status || 'Pending')}</td>
+            <td><button class="btn" onclick="viewRequestDetails('${request.RequestID || ''}')">View</button></td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="6">No requests found</td></tr>';
+      }
+    })
+    .catch(error => {
+      console.error("Error loading requests:", error);
+      showPopup('Error', 'Failed to load requests');
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
+
+// Load drivers for assignment dropdown
+function loadDriversForAssignment() {
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-drivers")
+    .then(response => response.json())
+    .then(data => {
+      const driverDropdown = document.getElementById('assignedDriver');
+      driverDropdown.innerHTML = '<option value="">Select Driver</option>';
+      
+      if (data.length > 0) {
+        data.forEach(driver => {
+          const option = document.createElement('option');
+          option.value = driver.DriverID;
+          option.textContent = `${driver.DriverName} (${driver.DriverPhone})`;
+          driverDropdown.appendChild(option);
+        });
+      }
+    })
+    .catch(error => {
+      console.error("Error loading drivers:", error);
+    });
+}
+
+// View request details
+function viewRequestDetails(requestId) {
+  showLoader();
+  
+  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-request-details&requestId=${encodeURIComponent(requestId)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
+        document.getElementById('requestId').value = requestId;
+        
+        // Display request details
+        const detailsContent = document.getElementById('requestDetailsContent');
+        detailsContent.innerHTML = `
+          <div class="request-details">
+            <p><strong>Request ID:</strong> ${data.RequestID || ''}</p>
+            <p><strong>Date:</strong> ${data.RequestDate || ''}</p>
+            <p><strong>Requester:</strong> ${data.RequesterName || ''} (${data.RequesterPhone || ''})</p>
+            <p><strong>Type:</strong> ${data.RequestType || ''}</p>
+            <p><strong>Status:</strong> ${getStatusBadge(data.Status || 'Pending')}</p>
+            <p><strong>Details:</strong> ${data.RequestDetails || ''}</p>
+            ${data.ApprovedBy ? `<p><strong>Approved By:</strong> ${data.ApprovedBy || ''}</p>` : ''}
+            ${data.Remarks ? `<p><strong>Remarks:</strong> ${data.Remarks || ''}</p>` : ''}
+            ${data.DriverName ? `<p><strong>Assigned Driver:</strong> ${data.DriverName || ''}</p>` : ''}
+          </div>
+        `;
+        
+        // Set current status in dropdown
+        document.getElementById('approvalStatus').value = data.Status || 'Pending';
+        
+        // Show driver selection if status is Approved
+        if (data.Status === 'Approved') {
+          document.getElementById('driverSelection').style.display = 'block';
+          document.getElementById('assignedDriver').value = data.DriverID || '';
+        }
+        
+        // Set remarks
+        document.getElementById('approvalRemarks').value = data.Remarks || '';
+        
+        showSection('requestDetails');
+      } else {
+        showPopup('Error', 'Request details not found');
+      }
+    })
+    .catch(error => {
+      console.error("Error loading request details:", error);
+      showPopup('Error', 'Failed to load request details');
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
+
+// Handle status change to show/hide driver selection
+document.getElementById('approvalStatus').addEventListener('change', function() {
+  const driverSelection = document.getElementById('driverSelection');
+  if (this.value === 'Approved') {
+    driverSelection.style.display = 'block';
+  } else {
+    driverSelection.style.display = 'none';
+  }
+});
+
+// Submit request approval
+function submitRequestApproval() {
+  const requestId = document.getElementById('requestId').value;
+  const status = document.getElementById('approvalStatus').value;
+  const driverId = document.getElementById('assignedDriver').value;
+  const remarks = document.getElementById('approvalRemarks').value;
+  
+  if (!requestId || !status) {
+    showPopup('Validation Error', 'Please select a status');
+    return;
+  }
+  
+  if (status === 'Approved' && !driverId) {
+    showPopup('Validation Error', 'Please select a driver for approved requests');
+    return;
+  }
+  
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) {
+    showPopup('Authentication Error', 'Please login again');
+    return;
+  }
+  
+  const approvalData = {
+    type: 'update-request-status',
+    requestId: requestId,
+    status: status,
+    approvedBy: driverData.name,
+    driverId: status === 'Approved' ? driverId : '',
+    remarks: remarks
+  };
+  
+  showLoader();
+  
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+    method: 'POST',
+    body: JSON.stringify(approvalData),
+    mode: 'no-cors',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(response => response.text())
+  .then(result => {
+    console.log("Request update result:", result);
+    showPopup('Success', 'Request status updated successfully!');
+    loadAllRequests();
+    showSection('requests');
+  })
+  .catch(error => {
+    console.error("Error updating request:", error);
+    showPopup('Error', 'Failed to update request status');
+  })
+  .finally(() => {
+    hideLoader();
+  });
+}
+
+// View journey details
+function viewJourneyDetails(journeyId) {
+  showLoader();
+  
+  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-journey-details&journeyId=${encodeURIComponent(journeyId)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
+        const detailsContent = document.getElementById('requestDetailsContent');
+        detailsContent.innerHTML = `
+          <div class="request-details">
+            <h3>Journey Details</h3>
+            <p><strong>Travel ID:</strong> ${data.TravelID || ''}</p>
+            <p><strong>Date:</strong> ${data.Date || ''}</p>
+            <p><strong>Driver:</strong> ${data.DriverName || ''} (${data.DriverPhone || ''})</p>
+            <p><strong>Vehicle:</strong> ${data.VehicleNumber || ''} (${data.VehicleName || ''})</p>
+            <p><strong>Status:</strong> ${getStatusBadge(data.Status || '')}</p>
             
-            // Show the selected section
-            document.getElementById(sectionId).style.display = 'block';
-        }
+            <h4>Journey Information</h4>
+            <p><strong>Start Point:</strong> ${data.StartPoint || ''}</p>
+            <p><strong>End Point:</strong> ${data.EndPoint || ''}</p>
+            <p><strong>Start KM:</strong> ${data.StartKM || ''}</p>
+            <p><strong>End KM:</strong> ${data.EndKM || ''}</p>
+            <p><strong>Start Time:</strong> ${formatTime(data.StartTime)}</p>
+            <p><strong>End Time:</strong> ${formatTime(data.EndTime)}</p>
+            
+            <h4>Passenger Information</h4>
+            <p><strong>Passenger Count:</strong> ${data.NoPassengers || ''}</p>
+            <p><strong>Passenger Name:</strong> ${data.PassengerName || ''}</p>
+            <p><strong>Passenger Phone:</strong> ${data.PassengerPhone || ''}</p>
+          </div>
+        `;
+        
+        // Hide approval form for journey details
+        document.getElementById('approvalForm').style.display = 'none';
+        
+        showSection('requestDetails');
+      } else {
+        showPopup('Error', 'Journey details not found');
+      }
+    })
+    .catch(error => {
+      console.error("Error loading journey details:", error);
+      showPopup('Error', 'Failed to load journey details');
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
 
-        function loadDrivers() {
-            fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers")
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.querySelector('#driversTable tbody');
-                    tbody.innerHTML = '';
-                    
-                    data.forEach(driver => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${driver.DriverID}</td>
-                            <td>${driver.driverName}</td>
-                            <td>${driver.username}</td>
-                            <td>${driver.DriverPhone}</td>
-                            <td>
-                                <button class="btn" onclick="editDriver('${driver.DriverID}')">Edit</button>
-                                <button class="btn" onclick="deleteDriver('${driver.DriverID}')">Delete</button>
-                            </td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error loading drivers:', error);
-                });
-        }
+// Helper function to create status badge
+function getStatusBadge(status) {
+  const statusClass = status.toLowerCase();
+  return `<span class="status-badge status-${statusClass}">${status}</span>`;
+}
 
-        function loadAllTrips() {
-            fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=trips")
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.querySelector('#allTripsTable tbody');
-                    tbody.innerHTML = '';
-                    
-                    data.forEach(trip => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${trip.travelId}</td>
-                            <td>${trip.date}</td>
-                            <td>${trip.driverName}</td>
-                            <td>${trip.vehicleNumber}</td>
-                            <td>${trip.status}</td>
-                            <td>
-                                <button class="btn" onclick="viewTrip('${trip.travelId}')">View</button>
-                            </td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error loading trips:', error);
-                });
-        }
+// Helper function to format time
+function formatTime(timeString) {
+  if (!timeString) return '';
+  
+  // If already in HH:MM format
+  if (timeString.includes(':')) return timeString;
+  
+  // If in ISO format
+  if (timeString.includes('T')) {
+    try {
+      const date = new Date(timeString);
+      return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    } catch (e) {
+      return timeString;
+    }
+  }
+  
+  return timeString;
+}
 
-        function showAddDriverForm() {
-            // Implement form to add new driver
-            alert('Add new driver form will appear here');
-        }
+// Load profile data
+function loadProfileData() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) return;
 
-        function editDriver(driverId) {
-            // Implement driver editing
-            alert('Edit driver: ' + driverId);
-        }
+  document.getElementById('profileAdminId').textContent = driverData.id || '';
+  document.getElementById('profileAdminName').textContent = driverData.name || '';
+  document.getElementById('profileUsername').textContent = driverData.username || '';
+  document.getElementById('profilePhone').textContent = driverData.phoneNumber || '';
+}
 
-        function deleteDriver(driverId) {
-            if (confirm('Are you sure you want to delete this driver?')) {
-                // Implement driver deletion
-                alert('Delete driver: ' + driverId);
-            }
-        }
+// Logout function
+function logout() {
+  localStorage.removeItem('driverData');
+  window.location.href = "index.html";
+}
 
-        function viewTrip(tripId) {
-            // Implement trip viewing
-            alert('View trip: ' + tripId);
-        }
+// Loader functions
+window.showLoader = function() {
+  document.getElementById('loader').style.display = 'flex';
+};
 
-        function logout() {
-            localStorage.removeItem('driverData');
-            window.location.href = "index.html";
-        }
-    </script>
+window.hideLoader = function() {
+  document.getElementById('loader').style.display = 'none';
+};
+
+// Show popup function
+function showPopup(title, message) {
+  const popup = document.getElementById('customPopup');
+  const popupTitle = document.getElementById('popupTitle');
+  const popupMessage = document.getElementById('popupMessage');
+  
+  popupTitle.textContent = title;
+  popupMessage.textContent = message;
+  popup.classList.add('active');
+  
+  const closePopup = () => {
+    popup.classList.remove('active');
+    document.getElementById('popupOk').removeEventListener('click', closePopup);
+    document.getElementById('popupClose').removeEventListener('click', closePopup);
+    popup.removeEventListener('click', outsideClick);
+  };
+  
+  const outsideClick = (e) => {
+    if (e.target === popup && !e.target.closest('.popup-container')) {
+      closePopup();
+    }
+  };
+  
+  document.getElementById('popupOk').addEventListener('click', closePopup);
+  document.getElementById('popupClose').addEventListener('click', closePopup);
+  popup.addEventListener('click', outsideClick);
+}
+</script>
+
+<!-- Custom Popup Structure -->
+<div class="popup-overlay" id="customPopup">
+  <div class="popup-container">
+    <button class="popup-close" id="popupClose">&times;</button>
+    <h3 class="popup-title" id="popupTitle">Message</h3>
+    <div class="popup-message" id="popupMessage"></div>
+    <div class="popup-buttons">
+      <button class="popup-button" id="popupOk">OK</button>
+    </div>
+  </div>
+</div>
+
+<footer class="app-footer">
+  <p>© 2025 Travel Log App | Developed by <strong>R Sukrudha Ram</strong></p>
+</footer>
 </body>
 </html>
