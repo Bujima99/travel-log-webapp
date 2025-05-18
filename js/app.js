@@ -129,11 +129,18 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
         name: user.username, // Replace with actual data
         id: user.DriverID,  // Replace with actual data
         phoneNumber: user.DriverPhone // Replace with actual data
+        userType: user.UserType || 'Driver' 
     };
     
     handleSuccessfulLogin(driverData);
       
-      window.location.href = "./dashboard.html";
+     // Redirect based on user type
+        if (driverData.userType === 'admin') {
+          window.location.href = "./admin.html";
+        } else {
+          window.location.href = "./dashboard.html";
+        }
+    
     } else {
        showPopup('Error', 'Invalid username or password.');
     }
