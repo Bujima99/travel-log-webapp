@@ -58,6 +58,12 @@
     <span class="nav-text">Services</span>
   </a>
 </li>
+    <li>
+  <a href="#" onclick="event.preventDefault(); showSection('profile')" class="nav-item">
+    <span class="material-symbols-outlined">account_circle</span>
+    <span class="nav-text">Profile</span>
+  </a>
+</li>
   </ul>
 
     <!--   div  the logout button at  bottom -->
@@ -322,6 +328,45 @@
       <button type="button" class="cancel-btn" onclick="hideAddServiceForm()">Cancel</button>
     </div>
   </form>
+</div>
+
+<div id="profile" class="section">
+  <h2>Driver Profile</h2>
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <span class="material-symbols-outlined">account_circle</span>
+      </div>
+      <h3 id="profileDriverName"></h3>
+    </div>
+    
+    <div class="profile-details">
+      <div class="detail-row">
+        <span class="detail-label">Driver ID:</span>
+        <span class="detail-value" id="profileDriverId"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Username:</span>
+        <span class="detail-value" id="profileUsername"></span>
+        <span class="edit-icon" onclick="enableProfileEdit()">
+          <span class="material-symbols-outlined">edit</span>
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Password:</span>
+        <span class="detail-value" id="profilePassword"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Phone:</span>
+        <span class="detail-value" id="profilePhone"></span>
+      </div>
+    </div>
+    
+    <div class="profile-actions" id="profileEditActions" style="display: none;">
+      <button class="btn" onclick="saveProfileChanges()">Save Changes</button>
+      <button class="btn cancel" onclick="cancelProfileEdit()">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <div id="completeJourney" class="section">
@@ -1217,6 +1262,133 @@ function generateFuelId() {
   return `FUEL-${timestamp}-${random}`.toUpperCase();
 }
 
+
+  // Load profile data when profile section is shown
+function loadProfileData() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) return;
+
+  showLoader();
+  
+  // Fetch driver details from Google Sheets
+  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-driver-profile&driverId=${encodeURIComponent(driverData.id)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data) {
+        document.getElementById('profileDriverId').textContent = data.DriverID || '';
+        document.getElementById('profileDriverName').textContent = data.DriverName || '';
+        document.getElementById('profileUsername').textContent = data.username || '';
+        document.getElementById('profilePassword').textContent = '••••••••';
+        document.getElementById('profilePhone').textContent = data.DriverPhone || '';
+        
+        // Store original values for cancel
+        document.getElementById('profileUsername').setAttribute('data-original', data.username || '');
+        document.getElementById('profilePassword').setAttribute('data-original', data.password || '');
+        document.getElementById('profilePhone').setAttribute('data-original', data.DriverPhone || '');
+      }
+    })
+    .catch(error => {
+      console.error("Error loading profile:", error);
+      showPopup('Error', 'Failed to load profile data');
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
+
+// Enable edit mode
+function enableProfileEdit() {
+  const username = document.getElementById('profileUsername').textContent;
+  const password = document.getElementById('profilePassword').getAttribute('data-original') || '';
+  const phone = document.getElementById('profilePhone').textContent;
+  
+  // Replace text with input fields
+  document.getElementById('profileUsername').innerHTML = `<input type="text" class="detail-input" value="${username}" id="editUsername">`;
+  document.getElementById('profilePassword').innerHTML = `<input type="password" class="detail-input" value="${password}" id="editPassword">`;
+  document.getElementById('profilePhone').innerHTML = `<input type="tel" class="detail-input" value="${phone}" id="editPhone">`;
+  
+  // Show edit buttons
+  document.getElementById('profileEditActions').style.display = 'flex';
+}
+
+// Cancel edit mode
+function cancelProfileEdit() {
+  const username = document.getElementById('profileUsername').getAttribute('data-original');
+  const phone = document.getElementById('profilePhone').getAttribute('data-original');
+  
+  // Restore original values
+  document.getElementById('profileUsername').textContent = username;
+  document.getElementById('profilePassword').textContent = '••••••••';
+  document.getElementById('profilePhone').textContent = phone;
+  
+  // Hide edit buttons
+  document.getElementById('profileEditActions').style.display = 'none';
+}
+
+// Save profile changes
+function saveProfileChanges() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) return;
+
+  const newUsername = document.getElementById('editUsername').value;
+  const newPassword = document.getElementById('editPassword').value;
+  const newPhone = document.getElementById('editPhone').value;
+  
+  if (!newUsername || !newPassword || !newPhone) {
+    showPopup('Validation Error', 'Please fill in all fields');
+    return;
+  }
+
+  showLoader();
+  
+  const profileData = {
+    type: 'update-driver-profile',
+    driverId: driverData.id,
+    username: newUsername,
+    password: newPassword,
+    phone: newPhone
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+    method: 'POST',
+    body: JSON.stringify(profileData),
+    mode: 'no-cors',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(response => response.text())
+  .then(result => {
+    console.log("Profile update result:", result);
+    showPopup('Success', 'Profile updated successfully!');
+    
+    // Update displayed values
+    document.getElementById('profileUsername').textContent = newUsername;
+    document.getElementById('profilePassword').textContent = '••••••••';
+    document.getElementById('profilePhone').textContent = newPhone;
+    
+    // Update original values
+    document.getElementById('profileUsername').setAttribute('data-original', newUsername);
+    document.getElementById('profilePassword').setAttribute('data-original', newPassword);
+    document.getElementById('profilePhone').setAttribute('data-original', newPhone);
+    
+    // Hide edit buttons
+    document.getElementById('profileEditActions').style.display = 'none';
+    
+    // Update local storage if username changed
+    if (driverData.username !== newUsername) {
+      driverData.username = newUsername;
+      localStorage.setItem('driverData', JSON.stringify(driverData));
+    }
+  })
+  .catch(error => {
+    console.error("Error updating profile:", error);
+    showPopup('Error', 'Failed to update profile');
+  })
+  .finally(() => {
+    hideLoader();
+  });
+}
 
 
   
