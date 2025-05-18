@@ -159,6 +159,7 @@ function handleSuccessfulLogin(driverData) {
     localStorage.setItem('driverData', JSON.stringify({
         name: driverData.name,
         id: driverData.id,
+        username:driverData.username,
         phoneNumber: driverData.phoneNumber
     }));
     
