@@ -166,6 +166,7 @@ body {
   padding: 24px;
   flex-grow: 1;
   transition: margin-left 0.3s ease;
+   padding-bottom: 80px; /* Add space for footer */
 }
 
 .nav-rail.expanded + .main-content {
@@ -626,9 +627,101 @@ body {
       background-color: #e8f5e9;
       border-radius: 8px;
     }
+
+    /* ===== Footer Fix ===== */
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 72px;
+  right: 0;
+  text-align: center;
+  padding: 10px;
+  color: #666;
+  font-size: 12px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  z-index: 10;
+  transition: left 0.3s ease;
+}
+
+.nav-rail.expanded + .main-content + .app-footer {
+  left: 280px;
+}
+
+@media (max-width: 768px) {
+  .app-footer {
+    left: 0;
+  }
+  
+  .nav-rail.expanded + .main-content + .app-footer {
+    left: 0;
+  }
+}
+
+    @media (max-width: 768px) {
+  .nav-rail {
+    width: 0;
+    position: fixed;
+    z-index: 1000;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .nav-rail.expanded {
+    width: 280px;
+  }
+  
+  .main-content {
+    margin-left: 0;
+    padding-bottom: 60px; /* Add space for footer */
+  }
+  
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+  }
+  
+  .nav-rail.expanded + .nav-overlay {
+    display: block;
+  }
+  
+  /* Add a mobile menu toggle button */
+  .mobile-menu-toggle {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: #1976D2;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    z-index: 800;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Hide desktop toggle in mobile */
+  .nav-toggle {
+    display: none;
+  }
+}
   </style>
 </head>
 <body>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" style="display: none;">
+  <span class="material-symbols-outlined">menu</span>
+</button>
+  
 <div class="loader-container" id="loader">
     <div class="loader"></div>
 </div>
@@ -722,20 +815,7 @@ body {
       </div>
     </div>
     
-    <h3>Recent Activity</h3>
-    <div class="table-wrapper">
-      <table class="fl-table" id="recentActivityTable">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Details</th>
-            <th>User</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+  
   </div>
   
   <div id="journeys" class="section">
@@ -892,6 +972,34 @@ body {
 </div>
 
 <script>
+
+  // Add mobile menu toggle button
+function addMobileMenuToggle() {
+  if (window.innerWidth <= 768) {
+    // Check if toggle button already exists
+    if (!document.getElementById('mobileMenuToggle')) {
+      const toggleBtn = document.createElement('button');
+      toggleBtn.id = 'mobileMenuToggle';
+      toggleBtn.className = 'mobile-menu-toggle';
+      toggleBtn.innerHTML = '<span class="material-symbols-outlined">menu</span>';
+      toggleBtn.onclick = function() {
+        document.querySelector('.nav-rail').classList.toggle('expanded');
+      };
+      document.body.appendChild(toggleBtn);
+    }
+  } else {
+    // Remove if exists when not in mobile view
+    const toggleBtn = document.getElementById('mobileMenuToggle');
+    if (toggleBtn) {
+      toggleBtn.remove();
+    }
+  }
+}
+
+// Call this on load and resize
+window.addEventListener('load', addMobileMenuToggle);
+window.addEventListener('resize', addMobileMenuToggle);
+  
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
@@ -987,33 +1095,14 @@ function loadDashboardStats() {
     fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-journey-count").then(res => res.json()),
     fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-fuel-count").then(res => res.json()),
     fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-service-count").then(res => res.json()),
-    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-pending-request-count").then(res => res.json()),
-    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-recent-activity").then(res => res.json())
+    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-pending-request-count").then(res => res.json())
   ])
-  .then(([journeys, fuel, services, requests, activity]) => {
+  .then(([journeys, fuel, services, requests]) => {
     document.getElementById('totalJourneys').textContent = journeys.count || 0;
     document.getElementById('totalFuel').textContent = fuel.count || 0;
     document.getElementById('totalServices').textContent = services.count || 0;
     document.getElementById('pendingRequests').textContent = requests.count || 0;
-    
-    // Populate recent activity
-    const activityTable = document.querySelector('#recentActivityTable tbody');
-    activityTable.innerHTML = '';
-    
-    if (activity.length > 0) {
-      activity.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item.date || ''}</td>
-          <td>${item.type || ''}</td>
-          <td>${item.details || ''}</td>
-          <td>${item.user || ''}</td>
-        `;
-        activityTable.appendChild(row);
-      });
-    } else {
-      activityTable.innerHTML = '<tr><td colspan="4">No recent activity</td></tr>';
-    }
+   
   })
   .catch(error => {
     console.error("Error loading dashboard stats:", error);
