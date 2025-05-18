@@ -338,6 +338,9 @@ function showSection(sectionId) {
     case 'service':
       loadServiceEntries();
       break;
+    case: 'profile':
+      loadProfileData();
+      break;
     // Logout doesn't need active state
   }
   
