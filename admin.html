@@ -899,8 +899,8 @@ body {
           <tr>
             <th>Request ID</th>
             <th>Date</th>
-            <th>Requester</th>
-            <th>Type</th>
+            <th>Requester Name</th>
+            <th>Requester Phone</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -1264,7 +1264,7 @@ function loadAllRequests() {
             <td>${request.RequestID || ''}</td>
             <td>${request.RequestDate || ''}</td>
             <td>${request.RequesterName || ''}</td>
-            <td>${request.RequestType || ''}</td>
+            <td>${request.RequesterPhone || ''}</td>
             <td>${getStatusBadge(request.Status || 'Pending')}</td>
             <td><button class="btn" onclick="viewRequestDetails('${request.RequestID || ''}')">View</button></td>
           `;
@@ -1321,10 +1321,14 @@ function viewRequestDetails(requestId) {
           <div class="request-details">
             <p><strong>Request ID:</strong> ${data.RequestID || ''}</p>
             <p><strong>Date:</strong> ${data.RequestDate || ''}</p>
-            <p><strong>Requester:</strong> ${data.RequesterName || ''} (${data.RequesterPhone || ''})</p>
-            <p><strong>Type:</strong> ${data.RequestType || ''}</p>
+            <p><strong>Requester Name:</strong> ${data.RequesterName || ''} (${data.RequesterName || ''})</p>
+            <p><strong>Requester Phone:</strong> ${data.RequesterPhone || ''}</p>
             <p><strong>Status:</strong> ${getStatusBadge(data.Status || 'Pending')}</p>
-            <p><strong>Details:</strong> ${data.RequestDetails || ''}</p>
+            <p><strong>No of Passengers:</strong> ${data.NoofPassengers || ''}</p>
+            <p><strong>Purpose:</strong> ${data.Purpose || ''}</p>
+            <p><strong>StartingPoint:</strong> ${data.StartingPoint || ''}</p>
+            <p><strong>StaringTime:</strong> ${data.StaringTime || ''}</p>
+            <p><strong>Destination:</strong> ${data.Destination || ''}</p>
             ${data.ApprovedBy ? `<p><strong>Approved By:</strong> ${data.ApprovedBy || ''}</p>` : ''}
             ${data.Remarks ? `<p><strong>Remarks:</strong> ${data.Remarks || ''}</p>` : ''}
             ${data.DriverName ? `<p><strong>Assigned Driver:</strong> ${data.DriverName || ''}</p>` : ''}
