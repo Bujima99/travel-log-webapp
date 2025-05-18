@@ -52,6 +52,12 @@
         <span class="nav-text">Journeys</span>
       </a>
     </li>
+    <li>
+  <a href="#" onclick="event.preventDefault(); showSection('service')" class="nav-item">
+    <span class="material-symbols-outlined">build</span>
+    <span class="nav-text">Services</span>
+  </a>
+</li>
   </ul>
 
     <!--   div  the logout button at  bottom -->
@@ -101,6 +107,9 @@
     <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addFuelForm');" class="fab-action">
       <span class="material-symbols-outlined">local_gas_station</span>
     </a>
+    <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addServiceForm');" class="fab-action">
+    <span class="material-symbols-outlined">build</span>
+  </a>
   </div>
 </div>
     
@@ -158,6 +167,9 @@
     <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addFuelForm');" class="fab-action">
       <span class="material-symbols-outlined">local_gas_station</span>
     </a>
+    <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addServiceForm');" class="fab-action">
+    <span class="material-symbols-outlined">build</span>
+  </a>
   </div>
 </div>
    
@@ -229,9 +241,67 @@
     <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addFuelForm');" class="fab-action">
       <span class="material-symbols-outlined">local_gas_station</span>
     </a>
+    <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addServiceForm');" class="fab-action">
+    <span class="material-symbols-outlined">build</span>
+  </a>
   </div>
 </div>
 
+</div>
+
+
+<div id="service" class="section">
+  <h2>Service Records</h2>
+  <div class="table-wrapper">
+    <table class="fl-table" id="serviceTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Vehicle</th>
+          <th>Invoice No</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>KM Reading</th>
+          <th>Next Service</th>
+          <th>Workshop</th>
+          <th>Bill</th>
+        </tr>
+      </thead>
+      <tbody id="service-entries-body">
+        <!-- Data will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add this section for New Service Form (around line 280) -->
+<div id="addServiceForm" class="section">
+  <h2>New Service Record</h2>
+  <form id="serviceForm" enctype="multipart/form-data">
+    <select id="serviceVehicleName" required onchange="updateVehicleNumber()">
+      <option value="">Select Vehicle</option>
+    </select>
+    <input type="text" id="serviceVehicleNumber" placeholder="Vehicle Number" readonly required>
+    <input type="date" id="serviceDate" required>
+    <input type="text" id="serviceInvoiceNumber" placeholder="Invoice Number" required>
+    <select id="serviceType" required onchange="toggleNextServiceDate()">
+      <option value="">Select Service Type</option>
+      <option value="Service">Service</option>
+      <option value="Management">Management</option>
+    </select>
+    <input type="number" id="serviceAmount" placeholder="Amount" step="0.01" required>
+    <input type="number" id="serviceCurrentKm" placeholder="Current KM" required>
+    <div id="nextServiceDateContainer" style="display:none;">
+      <input type="date" id="nextServiceDate" placeholder="Next Service Date">
+    </div>
+    <input type="text" id="serviceWorkshop" placeholder="Workshop Name" required>
+    <input type="text" id="serviceWorkshopLocation" placeholder="Workshop Location" required>
+    <input type="file" id="serviceBillImage" accept="image/*" required>
+    <div class="form-buttons">
+      <button type="button" onclick="submitServiceEntry()">Submit</button>
+      <button type="button" class="cancel-btn" onclick="hideAddServiceForm()">Cancel</button>
+    </div>
+  </form>
 </div>
 
 <div id="completeJourney" class="section">
@@ -412,6 +482,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const vehicleNameSelect = document.getElementById('vehicleName');
   const fuelvehicleNameSelect = document.getElementById('fuelVehicleName');
+  const serviceVehicleNameSelect = document.getElementById('serviceVehicleName');
   
   vehicles.forEach(vehicle => {
     const option1 = document.createElement('option');
@@ -424,6 +495,11 @@ document.addEventListener('DOMContentLoaded', function() {
   option2.value = vehicle.name;
   option2.textContent = vehicle.name;
   fuelvehicleNameSelect.appendChild(option2);
+
+  const option3 = document.createElement('option');
+  option3.value = vehicle.name;
+  option3.textContent = vehicle.name;
+  serviceVehicleNameSelect.appendChild(option3);
   });
 
 
@@ -503,6 +579,169 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
+// Add this function to toggle next service date field
+function toggleNextServiceDate() {
+  const serviceType = document.getElementById('serviceType').value;
+  const nextServiceContainer = document.getElementById('nextServiceDateContainer');
+  
+  if (serviceType === 'Service') {
+    nextServiceContainer.style.display = 'block';
+    document.getElementById('nextServiceDate').required = true;
+  } else {
+    nextServiceContainer.style.display = 'none';
+    document.getElementById('nextServiceDate').required = false;
+    document.getElementById('nextServiceDate').value = '';
+  }
+}
+
+// Add this function to show/hide service form
+function hideAddServiceForm() {
+  document.getElementById('addServiceForm').style.display = 'none';
+  document.getElementById('serviceForm').reset();
+}
+
+// Add this function to load service entries
+function loadServiceEntries() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) {
+    console.error('No driver data found');
+    return;
+  }
+  
+  showLoader();
+  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-service-entries&driverId=${encodeURIComponent(driverData.id)}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Service entries data:", data);
+      const tableBody = document.getElementById('service-entries-body');
+      tableBody.innerHTML = '';
+      
+      if (data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="9">No service entries found</td></tr>';
+        return;
+      }
+      
+      data.forEach(entry => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+          <td>${entry.ServiceDate || ''}</td>
+          <td>${entry.VehicleNumber || ''}</td>
+          <td>${entry.InvoiceNumber || ''}</td>
+          <td>${entry.ServiceType || ''}</td>
+          <td>₹${entry.Amount || '0'}</td>
+          <td>${entry.CurrentKM || ''}</td>
+          <td>${entry.NextServiceDate || '-'}</td>
+          <td>${entry.Workshop || ''}</td>
+          <td>
+            ${entry.BillImage ? 
+              `<a href="${entry.BillImage}" target="_blank" class="view-bill-link">View</a>` : 
+              'No bill'}
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    })
+    .catch(error => {
+      console.error("Error loading service entries:", error);
+      document.getElementById('service-entries-body').innerHTML = `
+        <tr>
+          <td colspan="9">Error loading data. Please try again later.</td>
+        </tr>
+      `;
+    }).finally(() => {
+      hideLoader();
+    });
+}
+
+// Add this function to submit service entry
+async function submitServiceEntry() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData) {
+    showPopup('Authentication Error', 'Please login again');
+    return;
+  }
+
+  // Get form values
+  const serviceId = generateServiceId();
+  const vehicleNumber = document.getElementById('serviceVehicleNumber').value;
+  const vehicleName = document.getElementById('serviceVehicleName').value;
+  const date = document.getElementById('serviceDate').value;
+  const invoiceNumber = document.getElementById('serviceInvoiceNumber').value;
+  const serviceType = document.getElementById('serviceType').value;
+  const amount = document.getElementById('serviceAmount').value;
+  const currentKm = document.getElementById('serviceCurrentKm').value;
+  const nextServiceDate = serviceType === 'Service' ? document.getElementById('nextServiceDate').value : '-';
+  const workshop = document.getElementById('serviceWorkshop').value;
+  const workshopLocation = document.getElementById('serviceWorkshopLocation').value;
+  const billImage = document.getElementById('serviceBillImage').files[0];
+
+  // Validate required fields
+  if (!vehicleNumber || !date || !invoiceNumber || !serviceType || !amount || !currentKm || !workshop || !workshopLocation || !billImage) {
+    showPopup('Validation Error', 'Please fill in all required fields');
+    return;
+  }
+
+  // Show loading state
+  const submitBtn = document.querySelector('#serviceForm button[type="button"]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  // Create FormData for proper file upload
+  const formData = {
+    type: 'add-service-entry',
+    serviceId: serviceId,
+    driverId: driverData.id,
+    driverName: driverData.name,
+    vehicleNumber: vehicleNumber,
+    vehicleName: vehicleName,
+    serviceDate: date,
+    invoiceNumber: invoiceNumber,
+    serviceType: serviceType,
+    amount: amount,
+    currentKm: currentKm,
+    nextServiceDate: nextServiceDate,
+    workshop: workshop,
+    workshopLocation: workshopLocation,
+    billImage: billImage
+  };
+
+  showLoader();
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+    method: 'POST',
+    body: JSON.stringify(formData),
+    mode: 'no-cors',
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(response => response.text())
+  .then(result => {
+    console.log("Save as Service result:", result);
+    showPopup('Success', 'Service record saved successfully!');
+    document.getElementById('serviceForm').reset();
+    showSection('service');
+  })
+  .catch(error => {
+    console.error("Error saving Service:", error);
+    showPopup('Error', 'Error saving Service record. Please try again.');
+  }).finally(() => {
+    hideLoader();
+  });
+}
+
+// Add this function to generate service ID
+function generateServiceId() {
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substr(2, 5);
+  return `SVC-${timestamp}-${random}`.toUpperCase();
+}
 
 function showAddFuelForm() {
 // Hide all sections first
