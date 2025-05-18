@@ -1141,7 +1141,7 @@ function loadAllJourneys() {
             <td>${journey.VehicleNumber || ''}</td>
             <td>${journey.StartPoint || ''}</td>
             <td>${journey.EndPoint || ''}</td>
-            <td>${getStatusBadge(journey.Status || '')}</td>
+            <td>${getStatusBadge(journey.status || '')}</td>
             <td><button class="btn" onclick="viewJourneyDetails('${journey.TravelID || ''}')">View</button></td>
           `;
           tableBody.appendChild(row);
@@ -1440,7 +1440,7 @@ function viewJourneyDetails(journeyId) {
             <p><strong>Date:</strong> ${data.Date || ''}</p>
             <p><strong>Driver:</strong> ${data.DriverName || ''} (${data.DriverPhone || ''})</p>
             <p><strong>Vehicle:</strong> ${data.VehicleNumber || ''} (${data.VehicleName || ''})</p>
-            <p><strong>Status:</strong> ${getStatusBadge(data.Status || '')}</p>
+            <p><strong>Status:</strong> ${getStatusBadge(data.status || '')}</p>
             
             <h4>Journey Information</h4>
             <p><strong>Start Point:</strong> ${data.StartPoint || ''}</p>
