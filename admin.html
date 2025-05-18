@@ -632,7 +632,7 @@ function loadAllRequests() {
 
 // Load drivers for assignment dropdown
 function loadDriversForAssignment() {
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-drivers")
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-drivers")
     .then(response => response.json())
     .then(data => {
       const driverDropdown = document.getElementById('assignedDriver');
