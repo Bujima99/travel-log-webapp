@@ -272,6 +272,26 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Replace the existing FAB button with this -->
+<div class="fab-wrapper">
+  <input type="checkbox" id="fabToggle" />
+  <div class="fab">
+    <span class="plus-icon">＋</span>
+  </div>
+  <div class="fab-actions">
+    <a href="#" onclick="event.preventDefault(); showSection('addJourney')" class="fab-action">
+      <span class="material-symbols-outlined">directions_car</span>
+    </a>
+    <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addFuelForm');" class="fab-action">
+      <span class="material-symbols-outlined">local_gas_station</span>
+    </a>
+    <a href="#" onclick="event.preventDefault(); event.stopPropagation(); showSection('addServiceForm');" class="fab-action">
+    <span class="material-symbols-outlined">build</span>
+  </a>
+  </div>
+</div>
+  
 </div>
 
 <!-- Add this section for New Service Form (around line 280) -->
