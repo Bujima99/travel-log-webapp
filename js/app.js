@@ -135,7 +135,7 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
     handleSuccessfulLogin(driverData);
       
      // Redirect based on user type
-        if (driverData.userType === 'admin') {
+        if (driverData.userType === 'Admin') {
           window.location.href = "./admin.html";
         } else {
           window.location.href = "./dashboard.html";
