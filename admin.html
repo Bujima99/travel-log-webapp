@@ -722,6 +722,10 @@ body {
       min-width:0px !important;
     }
 }
+
+    .admin-avatar{
+      display:block;
+    }
   </style>
 </head>
 <body>
@@ -736,7 +740,9 @@ body {
 <div class="nav-rail">
   <div class="nav-header">
     <div class="user-info">
-      <div class="avatar"></div>
+      <div class="avatar">
+        <span class="material-symbols-outlined admin-avatar">admin_panel_settings</span>
+      </div>
       <span id="driverName"></span>
       <span class="admin-badge">ADMIN</span>
     </div>
@@ -1017,6 +1023,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const adminNameElement = document.getElementById('driverName');
     if (adminNameElement) {
       adminNameElement.textContent = driverData.name;
+      
     }
     
     // Load all data
