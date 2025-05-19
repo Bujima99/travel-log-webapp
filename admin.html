@@ -1399,7 +1399,7 @@ function submitRequestApproval() {
     requestId: requestId,
     status: status,
     approvedBy: driverData.name,
-    driverId: status === 'Approved' ? driverId : '',
+    driverId: status === 'Approved' ? driverId : status,
     remarks: remarks
   };
   
