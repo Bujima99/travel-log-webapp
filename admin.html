@@ -726,6 +726,42 @@ body {
     .admin-avatar{
       display:block;
     }
+
+    /* Add this to your existing CSS */
+.stat-card {
+  position: relative; /* Add this to make the badge position relative to the card */
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff5722;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+    
   </style>
 </head>
 <body>
@@ -824,6 +860,7 @@ body {
         <span class="material-symbols-outlined">assignment</span>
         <h3 id="pendingRequests">0</h3>
         <p>Pending Requests</p>
+        <div id="pendingRequestsBadge" class="notification-badge" style="display: none;"></div>
       </div>
     </div>
     
@@ -1118,6 +1155,15 @@ function loadDashboardStats() {
     document.getElementById('totalFuel').textContent = fuel.count || 0;
     document.getElementById('totalServices').textContent = services.count || 0;
     document.getElementById('pendingRequests').textContent = requests.count || 0;
+
+    // Update notification badge
+    const badge = document.getElementById('pendingRequestsBadge');
+    if (requests.count > 0) {
+      badge.style.display = 'flex';
+      badge.textContent = requests.count;
+    } else {
+      badge.style.display = 'none';
+    }
    
   })
   .catch(error => {
@@ -1280,6 +1326,19 @@ function loadAllRequests() {
       } else {
         tableBody.innerHTML = '<tr><td colspan="6">No requests found</td></tr>';
       }
+
+      // Update pending requests count in dashboard
+      const pendingCount = data.filter(req => req.Status === 'Pending').length;
+      document.getElementById('pendingRequests').textContent = pendingCount;
+      
+      const badge = document.getElementById('pendingRequestsBadge');
+      if (pendingCount > 0) {
+        badge.style.display = 'flex';
+        badge.textContent = pendingCount;
+      } else {
+        badge.style.display = 'none';
+      }
+      
     })
     .catch(error => {
       console.error("Error loading requests:", error);
