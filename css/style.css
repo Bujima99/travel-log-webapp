@@ -522,7 +522,7 @@ h2:hover::after {
 
   .nav-footer {
   margin-top: auto; /* Pushes the footer to the bottom */
-  padding-bottom: 25vh !important; /* Adds some space at the bottom */
+  padding-bottom: 15vh !important; /* Adds some space at the bottom */
 }
 
 
