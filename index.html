@@ -195,8 +195,7 @@ button:hover{
   }
 }
 
-
-		.credit {
+.credit {
   position: fixed;
   bottom: -9px;
   right: 5px;
@@ -206,6 +205,24 @@ button:hover{
 .credit span {
   font-weight: bold;
   color: #008ae6;
+}
+
+		/* Add this to your existing CSS */
+.validation-message {
+  color: #ff4444;
+  font-size: 0.8em;
+  margin-top: -8px;
+  margin-bottom: 8px;
+  text-align: center;
+  display: none;
+}
+
+.invalid {
+  border: 1px solid #ff4444 !important;
+}
+
+.valid {
+  border: 1px solid #00C851 !important;
 }
 		
   </style>
@@ -228,6 +245,7 @@ button:hover{
                         <input type="password" id="passwordInput" placeholder="Password" required>
                         <span class="toggle-password" onclick="togglePassword('passwordInput')">👁️</span>
                      </div>
+			<div id="passwordInputError" class="validation-message"></div>
         <button type="button" onclick="checkClassicLogin()">Login</button>
 				</form>
 				
@@ -237,18 +255,23 @@ button:hover{
 				<form  id="signupForm">
 					<label for="chk" aria-hidden="true">Sign up</label>
 					<input type="text" id="signupFirstName" placeholder="First Name" required>
+					<div id="signupFirstNameError" class="validation-message"></div>
 					<input type="text" id="signupLastName" placeholder="Last Name" required>
-          <input type="text" id="signupPhone" placeholder="Phone Number (+91...)" required>
-					 <input type="text" id="signupUsername" placeholder="Username" required>
+					<div id="signupLastNameError" class="validation-message"></div>
+          				<input type="text" id="signupPhone" placeholder="Phone Number (+91...)" required>
+					<div id="signupPhoneError" class="validation-message"></div>
+					<input type="text" id="signupUsername" placeholder="Username" required>
         <!-- Modified password fields with toggles -->
-                     <div class="password-container">
-                        <input type="password" id="signupPassword" placeholder="Password" required>
-                        <span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
-                     </div>
-                     <div class="password-container">
-                        <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
-                        <span class="toggle-password" onclick="togglePassword('signupConfirmPassword')">👁️</span>
-                     </div>
+                     			<div class="password-container">
+                        			<input type="password" id="signupPassword" placeholder="Password" required>
+                        			<span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
+                     			</div>
+					<div id="signupPasswordError" class="validation-message"></div>
+                     			<div class="password-container">
+                        			<input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+                        			<span class="toggle-password" onclick="togglePassword('signupConfirmPassword')">👁️</span>
+                     			</div>
+					<div id="signupConfirmPasswordError" class="validation-message"></div>
 					<button type="button" onclick="signupUser()">Sign up</button>	
 				</form>
 	    
@@ -275,6 +298,46 @@ button:hover{
   <script src="./js/app.js"></script>
 	<!-- NEW SCRIPT FOR PASSWORD TOGGLE -->
   <script>
+
+// Add this to your existing JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  // Signup form validation
+  document.getElementById('signupFirstName').addEventListener('input', function() {
+    validateName(this.value, 'signupFirstName');
+  });
+  
+  document.getElementById('signupLastName').addEventListener('input', function() {
+    validateName(this.value, 'signupLastName');
+  });
+  
+  document.getElementById('signupPhone').addEventListener('input', function() {
+    validatePhone(this.value, 'signupPhone');
+  });
+  
+  document.getElementById('signupPassword').addEventListener('input', function() {
+    validatePassword(this.value, 'signupPassword');
+    // Also validate confirm password when password changes
+    const confirmPassword = document.getElementById('signupConfirmPassword').value;
+    if (confirmPassword) {
+      validateConfirmPassword(this.value, confirmPassword, 'signupConfirmPassword');
+    }
+  });
+  
+  document.getElementById('signupConfirmPassword').addEventListener('input', function() {
+    const password = document.getElementById('signupPassword').value;
+    validateConfirmPassword(password, this.value, 'signupConfirmPassword');
+  });
+  
+  // Login form validation
+  document.getElementById('passwordInput').addEventListener('input', function() {
+    if (!this.value) {
+      showError('passwordInput', 'This field is required');
+    } else {
+      showSuccess('passwordInput');
+    }
+  });
+});
+	  
     function togglePassword(inputId) {
       const input = document.getElementById(inputId);
       const toggle = event.currentTarget;
@@ -287,6 +350,116 @@ button:hover{
         toggle.textContent = "👁️";
       }
     }
+
+// Validation functions
+function validateName(name, fieldId) {
+  const nameRegex = /^[A-Za-z]+$/;
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  if (!name) {
+    showError(fieldId, 'This field is required');
+    return false;
+  }
+  
+  if (!nameRegex.test(name)) {
+    showError(fieldId, 'Only alphabets are allowed');
+    return false;
+  }
+  
+  showSuccess(fieldId);
+  return true;
+}
+
+function validatePhone(phone, fieldId) {
+  const phoneRegex = /^[0-9]{10}$/;
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  if (!phone) {
+    showError(fieldId, 'This field is required');
+    return false;
+  }
+  
+  if (!phoneRegex.test(phone)) {
+    showError(fieldId, 'Please enter a valid 10-digit phone number');
+    return false;
+  }
+  
+  showSuccess(fieldId);
+  return true;
+}
+
+function validatePassword(password, fieldId) {
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  if (!password) {
+    showError(fieldId, 'This field is required');
+    return false;
+  }
+  
+  if (password.length < 8) {
+    showError(fieldId, 'Password must be at least 8 characters');
+    return false;
+  }
+  
+  if (!/[A-Z]/.test(password)) {
+    showError(fieldId, 'Password must contain at least one uppercase letter');
+    return false;
+  }
+  
+  if (!/[a-z]/.test(password)) {
+    showError(fieldId, 'Password must contain at least one lowercase letter');
+    return false;
+  }
+  
+  if (!/[0-9]/.test(password)) {
+    showError(fieldId, 'Password must contain at least one number');
+    return false;
+  }
+  
+  if (!/[^A-Za-z0-9]/.test(password)) {
+    showError(fieldId, 'Password must contain at least one special character');
+    return false;
+  }
+  
+  showSuccess(fieldId);
+  return true;
+}
+
+function validateConfirmPassword(password, confirmPassword, fieldId) {
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  if (!confirmPassword) {
+    showError(fieldId, 'This field is required');
+    return false;
+  }
+  
+  if (password !== confirmPassword) {
+    showError(fieldId, 'Passwords do not match');
+    return false;
+  }
+  
+  showSuccess(fieldId);
+  return true;
+}
+
+function showError(fieldId, message) {
+  const input = document.getElementById(fieldId);
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  input.classList.remove('valid');
+  input.classList.add('invalid');
+  errorElement.textContent = message;
+  errorElement.style.display = 'block';
+}
+
+function showSuccess(fieldId) {
+  const input = document.getElementById(fieldId);
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  input.classList.remove('invalid');
+  input.classList.add('valid');
+  errorElement.style.display = 'none';
+}
   </script>
   <!-- END OF NEW SCRIPT -->
 </body>
