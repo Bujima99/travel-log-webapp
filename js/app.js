@@ -180,6 +180,7 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
           const driverData = {
             name: user.username,
             id: user.DriverID,
+            username : user.username,
             phoneNumber: user.DriverPhone,
             userType: user.UserType || 'Driver'
           };
