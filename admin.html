@@ -961,6 +961,11 @@ background-color: #2ecc71;
 .toggle-input:checked + .toggle-label .toggle-text-off {
   display: none;
 }
+
+    /* Add this to your existing CSS */
+.stat-card .material-symbols-outlined[data-icon="person_add"] {
+  color: #FF9800; /* Orange color for pending icon */
+}
     
   </style>
 </head>
@@ -1047,6 +1052,14 @@ background-color: #2ecc71;
   <div id="home" class="section active">
     <h2>Admin Dashboard</h2>
     <div class="stats-container">
+      <div class="stat-card">
+      <a href="#" onclick="event.preventDefault(); showSection('drivers')">
+      <span class="material-symbols-outlined">person_add</span>
+      <h3 id="pendingDrivers">0</h3>
+      <p>Pending Drivers</p>
+      <div id="pendingDriversBadge" class="notification-badge" style="display: none;"></div>
+      </a>
+    </div>
       <div class="stat-card">
         <a href="#" onclick="event.preventDefault(); showSection('journeys')">
           <span class="material-symbols-outlined">directions_car</span>
@@ -1554,21 +1567,17 @@ function loadDashboardStats() {
     fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-fuel-count").then(res => res.json()),
     fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-service-count").then(res => res.json()),
     fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-pending-request-count").then(res => res.json())
+    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-pending-driver-count").then(res => res.json())
   ])
   .then(([journeys, fuel, services, requests]) => {
     document.getElementById('totalJourneys').textContent = journeys.count || 0;
     document.getElementById('totalFuel').textContent = fuel.count || 0;
     document.getElementById('totalServices').textContent = services.count || 0;
     document.getElementById('pendingRequests').textContent = requests.count || 0;
+     document.getElementById('pendingDrivers').textContent = drivers.count || 0;
 
-    // Update notification badge
-    const badge = document.getElementById('pendingRequestsBadge');
-    if (requests.count > 0) {
-      badge.style.display = 'flex';
-      badge.textContent = requests.count;
-    } else {
-      badge.style.display = 'none';
-    }
+     updateBadge('pendingRequestsBadge', requests.count);
+    updateBadge('pendingDriversBadge', drivers.count);
    
   })
   .catch(error => {
@@ -1578,6 +1587,16 @@ function loadDashboardStats() {
   .finally(() => {
     hideLoader();
   });
+}
+
+  function updateBadge(badgeId, count) {
+  const badge = document.getElementById(badgeId);
+  if (count > 0) {
+    badge.style.display = 'flex';
+    badge.textContent = count;
+  } else {
+    badge.style.display = 'none';
+  }
 }
 
 // Load all journeys
