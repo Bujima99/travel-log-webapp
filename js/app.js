@@ -34,19 +34,8 @@ let loaderMinimumTime = 500; // 500ms minimum show time
     }
     };
 
-function showLogin() {
-  document.getElementById('loginTab').classList.add('active');
-  document.getElementById('signupTab').classList.remove('active');
-  document.getElementById('loginSection').classList.remove('inactive');
-  document.getElementById('signupSection').classList.remove('active');
-}
 
-function showSignup() {
-  document.getElementById('signupTab').classList.add('active');
-  document.getElementById('loginTab').classList.remove('active');
-  document.getElementById('loginSection').classList.add('inactive');
-  document.getElementById('signupSection').classList.add('active');
-}
+
 
 // Sign Up User
 function signupUser() {
@@ -195,149 +184,6 @@ function handleSuccessfulLogin(driverData) {
 }
 
 
-// Show Google login button
-function showGoogleLogin() {
-  document.getElementById('loginOptions').classList.add('hidden');
-  document.getElementById('googleLogin').classList.remove('hidden');
-}
-
-// Initialize recaptcha verifier
-let recaptchaVerifier;
-
-// Show Phone number form
-function showPhoneLogin() {
-  document.getElementById('loginOptions').classList.add('hidden');
-  document.getElementById('phoneLogin').classList.remove('hidden');
-  // Only initialize once
-  if (!recaptchaVerifier) {
-    recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-      'size': 'normal',
-      'callback': (response) => {
-        console.log("Recaptcha verified");
-      },
-      'expired-callback': () => {
-        console.log("Recaptcha expired");
-      }
-    });
-    recaptchaVerifier.render();
-}
-}
-
-// Google Sign-In
-function signInWithGoogle() {
-  var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
-    .then(result => {
-      var user = result.user;
-      onGoogleSignInSuccess(user);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-}
-
-// Send OTP
-function sendOTP() {
-  const phoneNumber = document.getElementById('phoneNumber').value;
-  const appVerifier = recaptchaVerifier;
-
-  firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
-    .then((confirmationResult) => {
-      // SMS sent
-      window.confirmationResult = confirmationResult;
-      alert("OTP sent to " + phoneNumber);
-    })
-    .catch((error) => {
-      console.error("Error during sign-in:", error);
-      alert("Error sending OTP: " + error.message);
-    });
-}
-
-// Verify OTP
-function verifyOTP() {
-  const otp = document.getElementById("otp").value;
-  window.confirmationResult.confirm(otp)
-    .then((result) => {
-      alert("Phone verified");
-      document.getElementById('phoneLogin').classList.add('hidden');
-      document.getElementById('registrationForm').classList.remove('hidden');
-    })
-    .catch((error) => {
-      console.error(error);
-      alert("Invalid OTP: " + error.message);
-    });
-}
-
-// Complete Registration (for now just redirect)
-// Global variable to track logged in phone or Google user info
-let loggedInPhone = "";
-let loggedInGoogleName = "";
-
-// After Google Sign-In Success
-function onGoogleSignInSuccess(user) {
-  loggedInGoogleName = user.displayName;
-  document.getElementById("loginOptions").classList.add("hidden");
-  document.getElementById("googleLogin").classList.add("hidden");
-  document.getElementById("registrationForm").classList.remove("hidden");
-}
-
-// After Phone OTP Verification Success
-function onPhoneVerificationSuccess(phoneNumber) {
-  loggedInPhone = phoneNumber;
-  document.getElementById("loginOptions").classList.add("hidden");
-  document.getElementById("phoneLogin").classList.add("hidden");
-  document.getElementById("registrationForm").classList.remove("hidden");
-}
-
-// Complete Registration
-function completeRegistration() {
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
-  const username = document.getElementById("username").value.trim();
-  const newPassword = document.getElementById("newPassword").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-
-  if (!firstName || !lastName || !username || !newPassword || !confirmPassword) {
-    showPopup('Authentication Error', 'Please fill all fields.');
-    return;
-  }
-
-  if (newPassword !== confirmPassword) {
-    showPopup('Authentication Error', 'Passwords do not match.');
-    return;
-  }
-
-  const driverId = "DRV-" + Date.now();
-
-  const data = {
-    type: "registerDriver",
-    driverId: driverId,
-    driverName: firstName + " " + lastName,
-    driverPhone: loggedInPhone || "Google User",
-    driverUsername: username,
-    driverPassword: newPassword
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    mode: 'no-cors',
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  .then(res => res.text())
-  .then(resp => {
-     showPopup('Success', 'Registration complete!');
-    localStorage.setItem("driverId", driverId);
-    localStorage.setItem("driverName", firstName + " " + lastName);
-    window.location.href = "dashboard.html";
-  })
-  .catch(err => {
-    console.error("Error registering driver:", err);
-     showPopup('Error', 'Registration failed.');
-  });
-}
 
 
 
@@ -457,38 +303,6 @@ function logout() {
 // Initial Load
 loadPendingJourneys();
 
-function startJourney() {
-  const travelId = crypto.randomUUID();
-  const date = new Date().toLocaleDateString();
-
-  const data = {
-    travelId: travelId,
-    date: date,
-    driverName: localStorage.getItem("driverName"),
-    driverId: localStorage.getItem("driverId"),
-    driverPhone: localStorage.getItem("driverPhone"),
-    vehicleNumber: document.getElementById("vehicleNumber").value,
-    vehicleName: document.getElementById("vehicleName").value,
-    startPoint: document.getElementById("startPoint").value,
-    startKm: parseInt(document.getElementById("startKm").value),
-    startTime: document.getElementById("startTime").value,
-    passengerCount: parseInt(document.getElementById("passengerCount").value),
-    passengerName: document.getElementById("passengerName").value,
-    passengerPhone: document.getElementById("passengerPhone").value,
-    endPoint: "",
-    endTime: "",
-    endKm: "",
-    status: "Pending"
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }).then(res => alert("Journey Started!"));
-}
 
 
 function getPendingTrips(driverId) {
