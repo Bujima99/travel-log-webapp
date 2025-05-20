@@ -1473,41 +1473,82 @@ function submitRequestApproval() {
     return;
   }
   
-  const approvalData = {
-    type: 'update-request-status',
-    requestId: requestId,
-    status: status,
-    approvedBy: driverData.name,
-    driverId: status === 'Approved' ? driverId : status,
-    remarks: remarks
-  };
-  
-  showLoader();
-  
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+ // ===== NEW CODE STARTS HERE =====
+  if (status === 'Approved') {
+    // Fetch driver details before submitting
+    showLoader();
+    
+    fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-driver-details&driverId=${encodeURIComponent(driverId)}`)
+      .then(response => response.json())
+      .then(driverDetails => {
+        const approvalData = {
+          type: 'update-request-status',
+          requestId: requestId,
+          status: status,
+          approvedBy: driverData.name,
+          driverId: driverId,
+          driverName: driverDetails.DriverName, // Add driver name
+          driverPhone: driverDetails.DriverPhone, // Add driver phone
+          remarks: remarks
+        };
+        
+        return sendApprovalData(approvalData);
+      })
+      .then(result => {
+        console.log("Request update result:", result);
+        showPopup('Success', 'Request status updated successfully!');
+        loadAllRequests();
+        showSection('requests');
+      })
+      .catch(error => {
+        console.error("Error updating request:", error);
+        showPopup('Error', 'Failed to update request status');
+      })
+      .finally(() => {
+        hideLoader();
+      });
+  } else {
+    // For non-approved statuses
+    const approvalData = {
+      type: 'update-request-status',
+      requestId: requestId,
+      status: status,
+      approvedBy: driverData.name,
+      remarks: remarks
+    };
+    
+    showLoader();
+    sendApprovalData(approvalData)
+      .then(result => {
+        console.log("Request update result:", result);
+        showPopup('Success', 'Request status updated successfully!');
+        loadAllRequests();
+        showSection('requests');
+      })
+      .catch(error => {
+        console.error("Error updating request:", error);
+        showPopup('Error', 'Failed to update request status');
+      })
+      .finally(() => {
+        hideLoader();
+      });
+  }
+}
+
+
+  // Helper function to send approval data
+function sendApprovalData(approvalData) {
+  return fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
     method: 'POST',
     body: JSON.stringify(approvalData),
     mode: 'no-cors',
     headers: {
       "Content-Type": "application/json"
     }
-  })
-  .then(response => response.text())
-  .then(result => {
-    console.log("Request update result:", result);
-    showPopup('Success', 'Request status updated successfully!');
-    loadAllRequests();
-    showSection('requests');
-  })
-  .catch(error => {
-    console.error("Error updating request:", error);
-    showPopup('Error', 'Failed to update request status');
-  })
-  .finally(() => {
-    hideLoader();
-  });
+  }).then(response => response.text());
+  // ===== NEW CODE ENDS HERE =====
 }
-
+  
 // View journey details
 function viewJourneyDetails(journeyId) {
   showLoader();
