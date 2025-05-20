@@ -314,12 +314,12 @@
     <select id="serviceType" required onchange="toggleNextServiceDate()">
       <option value="">Select Service Type</option>
       <option value="Service">Service</option>
-      <option value="Management">Management</option>
+      <option value="Maintainance">Maintainance</option>
     </select>
     <input type="number" id="serviceAmount" placeholder="Amount" step="0.01" required>
     <input type="number" id="serviceCurrentKm" placeholder="Current KM" required>
     <div id="nextServiceDateContainer" style="display:none;">
-      <input type="date" id="nextServiceDate" placeholder="Next Service Date">
+      <input type="text" id="nextServiceDate" placeholder="Next Service KM">
     </div>
     <input type="text" id="serviceWorkshop" placeholder="Workshop Name" required>
     <input type="text" id="serviceWorkshopLocation" placeholder="Workshop Location" required>
