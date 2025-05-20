@@ -1419,7 +1419,7 @@ function showSection(sectionId) {
   function loadAllDrivers() {
   showLoader();
   
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-drivers")
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-dashboard-drivers")
     .then(response => response.json())
     .then(data => {
       const tableBody = document.querySelector('#allDriversTable tbody');
