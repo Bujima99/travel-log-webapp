@@ -1390,26 +1390,26 @@ function showSection(sectionId) {
     case 'home':
       navItems[0].classList.add('active');
       break;
-    case 'journeys':
+     case 'drivers':
       navItems[1].classList.add('active');
+      loadAllDrivers();
       break;
-    case 'fuel':
+    case 'journeys':
       navItems[2].classList.add('active');
       break;
-    case 'service':
+    case 'fuel':
       navItems[3].classList.add('active');
+      break;
+    case 'service':
+      navItems[4].classList.add('active');
       break;
     case 'requests':
       document.getElementById('approvalForm').style.display = 'none';
-      navItems[4].classList.add('active');
+      navItems[5].classList.add('active');
       break;
     case 'profile':
-      navItems[5].classList.add('active');
-     loadProfileData();
-      break;
-    case 'drivers':
       navItems[6].classList.add('active');
-      loadAllDrivers();
+     loadProfileData();
       break;
     case 'driverDetails':
       // No nav item to highlight for details view
@@ -1433,7 +1433,7 @@ function showSection(sectionId) {
             <td>${driver.DriverID || ''}</td>
             <td>${driver.DriverName || ''}</td>
             <td>${driver.DriverPhone || ''}</td>
-            <td>${driver.UserType || 'Guest'}</td>
+            <td>${driver.UserType}</td>
             <td>${getStatusBadge(driver.Status || 'Pending')}</td>
             <td><button class="btn" onclick="viewDriverDetails('${driver.DriverID || ''}')">View/Edit</button></td>
           `;
