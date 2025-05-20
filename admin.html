@@ -101,18 +101,7 @@ body {
   font-weight: bold;
 }
 
-.nav-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #555;
-  padding: 8px;
-  border-radius: 50%;
-}
 
-.nav-toggle:hover {
-  background-color: #f0f0f0;
-}
 
 .nav-menu {
   padding: 8px 0;
@@ -167,7 +156,7 @@ body {
 
 /* ===== Main Content ===== */
 .main-content {
-  margin-left: 72px;
+  /*margin-left: 72px;*/
   padding: 24px;
   flex-grow: 1;
   transition: margin-left 0.3s ease;
@@ -828,26 +817,8 @@ background-color: #2ecc71;
     display: block;
   }
   
-  /* Add a mobile menu toggle button */
-  .mobile-menu-toggle {
-    display: block;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    background: #1976D2;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    z-index: 800;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Hide desktop toggle in mobile */
-  .nav-toggle {
-    display: none;
-  }
+
+
     .fl-table{
       min-width:0px !important;
     }
@@ -966,13 +937,177 @@ background-color: #2ecc71;
 .stat-card .material-symbols-outlined[data-icon="person_add"] {
   color: #FF9800; /* Orange color for pending icon */
 }
+
+
+    /* Mobile Nav Styles */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.mobile-nav [type="checkbox"] {
+  position: absolute;
+  left: -9999px;
+}
+
+.mobile-nav [type="checkbox"] + label {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1;
+  background: #1976D2;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  transition: all 0.2s;
+}
+
+.mobile-nav [type="checkbox"] + label:hover {
+  background: #1565C0;
+}
+
+.mobile-menu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  width: 250px;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transform: scale(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s;
+}
+
+.mobile-menu li {
+  margin: 5px 0;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translateY(10px);
+}
+
+.mobile-menu li a {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: #333;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.mobile-menu li a:hover {
+  background: #f0f0f0;
+}
+
+.mobile-menu li a i {
+  margin-right: 10px;
+  color: #1976D2;
+}
+
+.mobile-nav input:checked + label {
+  background: #333;
+}
+
+.mobile-nav input:checked ~ .mobile-menu {
+  transform: scale(1);
+}
+
+.mobile-nav input:checked ~ .mobile-menu li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-nav input:checked ~ .mobile-menu li:nth-child(1) { transition-delay: 0.1s; }
+.mobile-nav input:checked ~ .mobile-menu li:nth-child(2) { transition-delay: 0.2s; }
+.mobile-nav input:checked ~ .mobile-menu li:nth-child(3) { transition-delay: 0.3s; }
+.mobile-nav input:checked ~ .mobile-menu li:nth-child(4) { transition-delay: 0.4s; }
+.mobile-nav input:checked ~ .mobile-menu li:nth-child(5) { transition-delay: 0.5s; }
+.mobile-nav input:checked ~ .mobile-menu li:nth-child(6) { transition-delay: 0.6s; }
+.mobile-nav input:checked ~ .mobile-menu li:nth-child(7) { transition-delay: 0.7s; }
+.mobile-nav input:checked ~ .mobile-menu li:nth-child(8) { transition-delay: 0.8s; }
+
+/* Show mobile nav only on mobile */
+@media (max-width: 768px) {
+  .mobile-nav {
+    display: block;
+  }
+  
+  .nav-rail {
+    display: none;
+  }
+  
+  .main-content {
+    margin-left: 0 !important;
+  }
+}
     
   </style>
 </head>
 <body>
-  <button class="mobile-menu-toggle" id="mobileMenuToggle" style="display: none;">
-  <span class="material-symbols-outlined" style="margin-left: -0.75rem;">menu</span>
-</button>
+<nav class="mobile-nav">
+  <input id="mobile-menu-toggle" type="checkbox">
+  <label for="mobile-menu-toggle">
+    <span class="material-symbols-outlined">menu</span>
+  </label>
+  <ul class="mobile-menu">
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('home')">
+        <span>Dashboard</span>
+        <i class="material-symbols-outlined">home</i>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('drivers')">
+        <span>Drivers</span>
+        <i class="material-symbols-outlined">people</i>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('journeys')">
+        <span>Journeys</span>
+        <i class="material-symbols-outlined">directions_car</i>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('fuel')">
+        <span>Fuel</span>
+        <i class="material-symbols-outlined">local_gas_station</i>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('service')">
+        <span>Services</span>
+        <i class="material-symbols-outlined">build</i>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('requests')">
+        <span>Requests</span>
+        <i class="material-symbols-outlined">assignment</i>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="event.preventDefault(); showSection('profile')">
+        <span>Profile</span>
+        <i class="material-symbols-outlined">account_circle</i>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="logout()">
+        <span>Logout</span>
+        <i class="material-symbols-outlined">logout</i>
+      </a>
+    </li>
+  </ul>
+</nav>
+  
   
 <div class="loader-container" id="loader">
     <div class="loader"></div>
@@ -986,9 +1121,6 @@ background-color: #2ecc71;
       </div>
       <span id="driverName"></span>
     </div>
-    <button class="nav-toggle" id="navToggle">
-      <span class="material-symbols-outlined">menu</span>
-    </button>
   </div>
   
   <nav class="nav-menu">
@@ -1046,7 +1178,7 @@ background-color: #2ecc71;
   </nav>
 </div>
 
-<div class="nav-overlay" id="navOverlay"></div>
+
 <div class="main-content">
 
   <div id="home" class="section active">
@@ -1307,28 +1439,7 @@ background-color: #2ecc71;
 
 <script>
 
-  // Add mobile menu toggle button
-function addMobileMenuToggle() {
-  if (window.innerWidth <= 768) {
-    // Check if toggle button already exists
-    if (!document.getElementById('mobileMenuToggle')) {
-      const toggleBtn = document.createElement('button');
-      toggleBtn.id = 'mobileMenuToggle';
-      toggleBtn.className = 'mobile-menu-toggle';
-      toggleBtn.innerHTML = '<span class="material-symbols-outlined">menu</span>';
-      toggleBtn.onclick = function() {
-        document.querySelector('.nav-rail').classList.toggle('expanded');
-      };
-      document.body.appendChild(toggleBtn);
-    }
-  } else {
-    // Remove if exists when not in mobile view
-    const toggleBtn = document.getElementById('mobileMenuToggle');
-    if (toggleBtn) {
-      toggleBtn.remove();
-    }
-  }
-}
+
 
 // Call this on load and resize
 window.addEventListener('load', addMobileMenuToggle);
@@ -1358,30 +1469,10 @@ document.addEventListener('DOMContentLoaded', function() {
     window.location.href = './index.html';
   }
   
-  // Initialize navigation
-  initNavigation();
+
 });
 
-// Navigation functions
-function initNavigation() {
-  document.getElementById('navToggle').addEventListener('click', function() {
-    document.querySelector('.nav-rail').classList.toggle('expanded');
-  });
 
-  document.getElementById('navOverlay').addEventListener('click', function() {
-    document.querySelector('.nav-rail').classList.remove('expanded');
-  });
-
-  document.addEventListener('click', function(event) {
-    const rail = document.querySelector('.nav-rail');
-    const isClickInsideRail = rail.contains(event.target);
-    const isClickOnToggle = event.target.closest('#navToggle');
-    
-    if (!isClickInsideRail && !isClickOnToggle && window.innerWidth > 768) {
-      rail.classList.remove('expanded');
-    }
-  });
-}
 
 function showSection(sectionId) {
   // Hide all sections
