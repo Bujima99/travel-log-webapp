@@ -61,11 +61,12 @@ function signupUser() {
   const isFirstNameValid = validateName(firstName, 'signupFirstName');
   const isLastNameValid = validateName(lastName, 'signupLastName');
   const isPhoneValid = validatePhone(phone, 'signupPhone');
+  const isUsernameValid = validateUsername(username, 'signupUsername');
   const isPasswordValid = validatePassword(newPassword, 'signupPassword');
   const isConfirmPasswordValid = validateConfirmPassword(newPassword, confirmPassword, 'signupConfirmPassword');
 
-  if (!isFirstNameValid || !isLastNameValid || !isPhoneValid || 
-      !isPasswordValid || !isConfirmPasswordValid || !username) {
+   if (!isFirstNameValid || !isLastNameValid || !isPhoneValid || 
+      !isUsernameValid || !isPasswordValid || !isConfirmPasswordValid) {
     if (!username) {
       showPopup('Error', 'Please fill all fields.');
     }
@@ -123,6 +124,16 @@ function checkClassicLogin() {
       showPopup('Error', 'Please enter username.');
     } else {
       showPopup('Error', 'Please enter password.');
+    }
+    return;
+  }
+
+  const isUsernameValid = validateUsername(username, 'usernameInput');
+  const isPasswordValid = password.length > 0;
+
+  if (!isUsernameValid || !isPasswordValid) {
+    if (!isPasswordValid) {
+      showError('passwordInput', 'This field is required');
     }
     return;
   }
