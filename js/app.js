@@ -145,7 +145,7 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
       
       if (user) {
         // Check user status
-        if (user.status === "Active" || user.status === "Owner") {
+        if (user.Status === "Active" || user.Status === "Owner") {
           showPopup('Success', `Welcome ${user.username}!`);
           const driverData = {
             name: user.username,
@@ -163,7 +163,7 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
             window.location.href = "./dashboard.html";
           }
         } 
-        else if (user.status === "Pending") {
+        else if (user.Status === "Pending") {
           showPopup('Info', 'Your account is pending approval. Please contact admin.');
         } 
         else {
