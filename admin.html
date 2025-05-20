@@ -1109,6 +1109,41 @@ background-color: #2ecc71;
     margin-left: 0 !important;
   }
 }
+
+
+    /* Add these styles to your existing CSS */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 999; /* Below the menu but above everything else */
+}
+
+.mobile-nav input:checked ~ .mobile-menu-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Update the menu toggle label to appear above overlay */
+.mobile-nav [type="checkbox"] + label {
+  z-index: 1001; /* Above the overlay */
+}
+
+/* Update the menu to appear above overlay */
+.mobile-menu {
+  z-index: 1000; /* Above the overlay */
+}
+
+/* Add this to close menu when overlay is clicked */
+.mobile-menu-overlay {
+  cursor: pointer;
+}
     
   </style>
 </head>
@@ -1118,6 +1153,8 @@ background-color: #2ecc71;
   <label for="mobile-menu-toggle">
     <span class="material-symbols-outlined">menu</span>
   </label>
+  <!-- Add this overlay div -->
+  <div class="mobile-menu-overlay"></div>
   <ul class="mobile-menu">
     <li>
       <a href="#" onclick="event.preventDefault(); showSection('home')">
@@ -1521,6 +1558,13 @@ document.addEventListener('DOMContentLoaded', function() {
       adminNameElement.textContent = driverData.name;
       
     }
+
+    const overlay = document.querySelector('.mobile-menu-overlay');
+  const checkbox = document.getElementById('mobile-menu-toggle');
+  
+  overlay.addEventListener('click', function() {
+    checkbox.checked = false;
+  });
     
     // Load all data
     loadDashboardStats();
