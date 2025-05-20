@@ -69,41 +69,71 @@ function signupUser() {
     return;
   }
 
+  const fullName = firstName + " " + lastName;
   const driverId = "DRV-" + Date.now();
 
-  const data = {
-    type: "registerDriver",
-    driverId: driverId,
-    driverName: firstName + " " + lastName,
-    driverPhone: phone,
-    driverUsername: username,
-    driverPassword: newPassword,
-    userType: "Guest", // Add this line
-    status: "Pending"  // Add this line
-  };
-
   showLoader();
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    mode: 'no-cors',
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  .then(res => res.text())
-  .then(resp => {
-     showPopup('Success', 'Registration complete!');
-    document.getElementById("chk").checked = false;
-    document.getElementById("loginForm").reset();
-    document.getElementById("signupForm").reset();
-    window.location.href = "./index.html";
-  })
-  .catch(err => {
-    console.error("Error registering driver:", err);
-     showPopup('Error', 'Registration failed.');
-  }).finally(() => {
-        hideLoader(); // Now this will only run after everything is complete
+  
+  // First check if user already exists
+  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(existingUsers => {
+      // Check if user with same name, username or phone already exists
+      const userExists = existingUsers.some(user => 
+        user.DriverName === fullName || 
+        user.username === username || 
+        user.DriverPhone === phone
+      );
+
+      if (userExists) {
+        throw new Error('User with same name, username or phone number already exists');
+      }
+
+      // If user doesn't exist, proceed with registration
+      const data = {
+        type: "registerDriver",
+        driverId: driverId,
+        driverName: fullName,
+        driverPhone: phone,
+        driverUsername: username,
+        driverPassword: newPassword,
+        userType: "Guest",
+        status: "Pending"
+      };
+
+      return fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+        mode: 'no-cors',
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Registration failed');
+      }
+      return res.text();
+    })
+    .then(resp => {
+      showPopup('Success', 'Registration complete! Please wait for admin approval.');
+      // Reset forms and switch to login
+      document.getElementById("chk").checked = false;
+      document.getElementById("loginForm").reset();
+      document.getElementById("signupForm").reset();
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      showPopup('Error', err.message || 'Registration failed. User may already exist.');
+    })
+    .finally(() => {
+      hideLoader();
     });
 }
 
