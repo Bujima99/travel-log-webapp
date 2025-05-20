@@ -1079,7 +1079,9 @@ background-color: #2ecc71;
 }
 
 /* Overlay styles remain the same */
-.mobile-menu-overlay {
+
+
+    .mobile-menu-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -1090,11 +1092,34 @@ background-color: #2ecc71;
   pointer-events: none;
   transition: opacity 0.3s ease;
   z-index: 999;
+  /* Ensure overlay stays behind menu items */
 }
 
 .mobile-nav input:checked ~ .mobile-menu-overlay {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* Add these to ensure menu items stay bright */
+.mobile-menu li a i {
+  filter: brightness(1); /* Force full brightness */
+  z-index: 1000; /* Above overlay */
+}
+
+.mobile-menu li a span {
+  z-index: 1000; /* Above overlay */
+  filter: brightness(1); /* Force full brightness */
+}
+
+/* Make sure the menu container stays above overlay */
+.mobile-menu {
+  z-index: 1000;
+}
+
+/* Keep the toggle button bright */
+.mobile-nav [type="checkbox"] + label {
+  z-index: 1001;
+  filter: brightness(1);
 }
 
 /* Show only on mobile */
