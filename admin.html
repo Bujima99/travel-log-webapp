@@ -592,9 +592,28 @@ body {
       background-color: #2196F3;
       color: white;
     }
+
+    #requestDetails {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    overflow: hidden;
+  }
+
+    #requestDetails h2 {
+  position: sticky;
+  top: 0;
+  padding: 15px 0;
+  margin: 0;
+  z-index: 100;
+}
     
    /* Base Styles (Mobile First) */
 #requestDetailsContent {
+  flex: 1;
+    overflow-y: auto;
+    margin-top: 45px !important;
+    padding-top: 10px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   max-width: 100%;
   margin: 0px;
@@ -726,7 +745,7 @@ body {
 .app-footer {
   position: fixed;
   bottom: 0;
-  left: -1rem;
+  left: -5rem;
   right: 0;
   text-align: center;
   padding: 10px;
@@ -744,7 +763,7 @@ body {
 
 @media (max-width: 768px) {
   .app-footer {
-    left: 0;
+   /* left:0;*/
   }
   
   .nav-rail.expanded + .main-content + .app-footer {
