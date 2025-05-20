@@ -77,7 +77,9 @@ function signupUser() {
     driverName: firstName + " " + lastName,
     driverPhone: phone,
     driverUsername: username,
-    driverPassword: newPassword
+    driverPassword: newPassword,
+    userType: "Guest", // Add this line
+    status: "Pending"  // Add this line
   };
 
   showLoader();
@@ -92,8 +94,9 @@ function signupUser() {
   .then(res => res.text())
   .then(resp => {
      showPopup('Success', 'Registration complete!');
-    localStorage.setItem("driverId", driverId);
-    localStorage.setItem("driverName", firstName + " " + lastName);
+    document.getElementById("chk").checked = false;
+    document.getElementById("loginForm").reset();
+    document.getElementById("signupForm").reset();
     window.location.href = "./index.html";
   })
   .catch(err => {
@@ -140,8 +143,10 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
     console.log("Parsed data:", data);
     const user = data.find(driver => driver.username === username && driver.password === password);
     if (user) {
-      showPopup('Success', `Welcome ${user.username}!`);
-      const driverData = {
+      // Check user status
+        if (user.status === "Active") {
+          showPopup('Success', `Welcome ${user.username}!`);
+          const driverData = {
         name: user.username, // Replace with actual data
         id: user.DriverID,  // Replace with actual data
         phoneNumber: user.DriverPhone, // Replace with actual data
@@ -151,13 +156,17 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
     handleSuccessfulLogin(driverData);
       
      // Redirect based on user type
-        if (driverData.userType === 'Admin') {
-          window.location.href = "./admin.html";
-        } else {
-          window.location.href = "./dashboard.html";
-        }
-    
-    } else {
+          if (driverData.userType === 'Owner') {
+            window.location.href = "./admin.html";
+          } else {
+            window.location.href = "./dashboard.html";
+          }
+        } 
+        else if (user.status === "Pending") {
+          showPopup('Info', 'Your account is pending approval. Please contact admin.');
+        } 
+        
+        else {
        showPopup('Error', 'Invalid username or password.');
     }
   })
@@ -173,14 +182,13 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
 function handleSuccessfulLogin(driverData) {
     // Store driver data in localStorage
     localStorage.setItem('driverData', JSON.stringify({
-        name: driverData.name,
+      name: driverData.name,
         id: driverData.id,
-        username:driverData.username,
-        phoneNumber: driverData.phoneNumber
+        username: driverData.username,
+        phoneNumber: driverData.phoneNumber,
+        userType: driverData.userType
     }));
-    
-    // Redirect to dashboard
-    window.location.href = './dashboard.html';
+  
 }
 
 
