@@ -57,10 +57,22 @@ function signupUser() {
   const newPassword = document.getElementById("signupPassword").value;
   const confirmPassword = document.getElementById("signupConfirmPassword").value;
 
-  if (!firstName || !lastName || !phone || !username || !newPassword || !confirmPassword) {
-    showPopup('Authentication Error', 'Please fill all fields.');
+  // Validate all fields
+  const isFirstNameValid = validateName(firstName, 'signupFirstName');
+  const isLastNameValid = validateName(lastName, 'signupLastName');
+  const isPhoneValid = validatePhone(phone, 'signupPhone');
+  const isPasswordValid = validatePassword(newPassword, 'signupPassword');
+  const isConfirmPasswordValid = validateConfirmPassword(newPassword, confirmPassword, 'signupConfirmPassword');
+
+  if (!isFirstNameValid || !isLastNameValid || !isPhoneValid || 
+      !isPasswordValid || !isConfirmPasswordValid || !username) {
+    if (!username) {
+      showPopup('Error', 'Please fill all fields.');
+    }
     return;
   }
+
+
 
   if (newPassword !== confirmPassword) {
      showPopup('Authentication Error', 'Passwords do not match.');
