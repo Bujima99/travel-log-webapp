@@ -842,25 +842,33 @@ body {
     <h2>Admin Dashboard</h2>
     <div class="stats-container">
       <div class="stat-card">
-        <span class="material-symbols-outlined">directions_car</span>
+        <a href="#" onclick="event.preventDefault(); showSection('journeys')">
+          <span class="material-symbols-outlined">directions_car</span>
         <h3 id="totalJourneys">0</h3>
         <p>Total Journeys</p>
+        </a>
       </div>
       <div class="stat-card">
+        <a href="#" onclick="event.preventDefault(); showSection('fuel')">
         <span class="material-symbols-outlined">local_gas_station</span>
         <h3 id="totalFuel">0</h3>
         <p>Fuel Entries</p>
+        </a>
       </div>
       <div class="stat-card">
+         <a href="#" onclick="event.preventDefault(); showSection('service')" >
         <span class="material-symbols-outlined">build</span>
         <h3 id="totalServices">0</h3>
         <p>Service Records</p>
+        </a>
       </div>
       <div class="stat-card">
+         <a href="#" onclick="event.preventDefault(); showSection('requests')">
         <span class="material-symbols-outlined">assignment</span>
         <h3 id="pendingRequests">0</h3>
         <p>Pending Requests</p>
         <div id="pendingRequestsBadge" class="notification-badge" style="display: none;"></div>
+        </a>
       </div>
     </div>
     
