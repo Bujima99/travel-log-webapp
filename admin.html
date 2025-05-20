@@ -101,7 +101,18 @@ body {
   font-weight: bold;
 }
 
+.nav-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  padding: 8px;
+  border-radius: 50%;
+}
 
+.nav-toggle:hover {
+  background-color: #f0f0f0;
+}
 
 .nav-menu {
   padding: 8px 0;
@@ -156,7 +167,7 @@ body {
 
 /* ===== Main Content ===== */
 .main-content {
-  /*margin-left: 72px;*/
+  margin-left: 72px;
   padding: 24px;
   flex-grow: 1;
   transition: margin-left 0.3s ease;
@@ -818,7 +829,11 @@ background-color: #2ecc71;
   }
   
 
-
+  
+  /* Hide desktop toggle in mobile */
+  .nav-toggle {
+    display: none;
+  }
     .fl-table{
       min-width:0px !important;
     }
@@ -938,13 +953,12 @@ background-color: #2ecc71;
   color: #FF9800; /* Orange color for pending icon */
 }
 
-
     /* Mobile Nav Styles */
 .mobile-nav {
   display: none;
   position: fixed;
-      bottom: 47px;
-    right: 11px;
+  bottom: 20px;
+  right: 20px;
   z-index: 1000;
 }
 
@@ -1108,6 +1122,8 @@ background-color: #2ecc71;
   </ul>
 </nav>
   
+  <span class="material-symbols-outlined" style="margin-left: -0.75rem;">menu</span>
+</button>
   
 <div class="loader-container" id="loader">
     <div class="loader"></div>
@@ -1121,6 +1137,9 @@ background-color: #2ecc71;
       </div>
       <span id="driverName"></span>
     </div>
+    <button class="nav-toggle" id="navToggle">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
   </div>
   
   <nav class="nav-menu">
@@ -1178,7 +1197,7 @@ background-color: #2ecc71;
   </nav>
 </div>
 
-
+<div class="nav-overlay" id="navOverlay"></div>
 <div class="main-content">
 
   <div id="home" class="section active">
@@ -1469,10 +1488,30 @@ document.addEventListener('DOMContentLoaded', function() {
     window.location.href = './index.html';
   }
   
-
+  // Initialize navigation
+  initNavigation();
 });
 
+// Navigation functions
+function initNavigation() {
+  document.getElementById('navToggle').addEventListener('click', function() {
+    document.querySelector('.nav-rail').classList.toggle('expanded');
+  });
 
+  document.getElementById('navOverlay').addEventListener('click', function() {
+    document.querySelector('.nav-rail').classList.remove('expanded');
+  });
+
+  document.addEventListener('click', function(event) {
+    const rail = document.querySelector('.nav-rail');
+    const isClickInsideRail = rail.contains(event.target);
+    const isClickOnToggle = event.target.closest('#navToggle');
+    
+    if (!isClickInsideRail && !isClickOnToggle && window.innerWidth > 768) {
+      rail.classList.remove('expanded');
+    }
+  });
+}
 
 function showSection(sectionId) {
   // Hide all sections
