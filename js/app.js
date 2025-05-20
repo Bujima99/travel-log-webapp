@@ -140,22 +140,23 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
     return response.json(); // Use .json() instead of .text()
   })
   .then(data => {
-    console.log("Parsed data:", data);
-    const user = data.find(driver => driver.username === username && driver.password === password);
-    if (user) {
-      // Check user status
+      console.log("Parsed data:", data);
+      const user = data.find(driver => driver.username === username && driver.password === password);
+      
+      if (user) {
+        // Check user status
         if (user.status === "Active") {
           showPopup('Success', `Welcome ${user.username}!`);
           const driverData = {
-        name: user.username, // Replace with actual data
-        id: user.DriverID,  // Replace with actual data
-        phoneNumber: user.DriverPhone, // Replace with actual data
-        userType: user.UserType || 'Driver' 
-    };
-    
-    handleSuccessfulLogin(driverData);
-      
-     // Redirect based on user type
+            name: user.username,
+            id: user.DriverID,
+            phoneNumber: user.DriverPhone,
+            userType: user.UserType || 'Driver'
+          };
+          
+          handleSuccessfulLogin(driverData);
+          
+          // Redirect based on user type
           if (driverData.userType === 'Owner') {
             window.location.href = "./admin.html";
           } else {
@@ -165,11 +166,13 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
         else if (user.status === "Pending") {
           showPopup('Info', 'Your account is pending approval. Please contact admin.');
         } 
-        
         else {
-       showPopup('Error', 'Invalid username or password.');
-    }
-  })
+          showPopup('Access Denied', 'Admin has not granted access. Please contact admin for login.');
+        }
+      } else {
+        showPopup('Error', 'Invalid username or password.');
+      }
+    })
   .catch(error => {
     console.error("Error:", error);
     showPopup('Error', 'Could not verify login. Please try again later.');
