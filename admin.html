@@ -1545,8 +1545,10 @@ function submitDriverUpdate() {
   .then(result => {
     console.log("Driver update result:", result);
     showPopup('Success', 'Driver details updated successfully!');
+    loadDashboardStats();
     loadAllDrivers();
     showSection('drivers');
+    
   })
   .catch(error => {
     console.error("Error updating driver:", error);
@@ -1913,6 +1915,7 @@ function submitRequestApproval() {
       .then(result => {
         console.log("Request update result:", result);
         showPopup('Success', 'Request status updated successfully!');
+         loadDashboardStats();
         loadAllRequests();
         showSection('requests');
       })
