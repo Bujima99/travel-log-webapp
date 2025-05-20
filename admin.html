@@ -1559,11 +1559,20 @@ document.addEventListener('DOMContentLoaded', function() {
       
     }
 
-    const overlay = document.querySelector('.mobile-menu-overlay');
-  const checkbox = document.getElementById('mobile-menu-toggle');
+   const checkbox = document.getElementById('mobile-menu-toggle');
+  const overlay = document.querySelector('.mobile-menu-overlay');
+  const menuItems = document.querySelectorAll('.mobile-menu li a');
   
+  // Close menu when overlay is clicked
   overlay.addEventListener('click', function() {
     checkbox.checked = false;
+  });
+  
+  // Close menu when any menu item is clicked
+  menuItems.forEach(item => {
+    item.addEventListener('click', function() {
+      checkbox.checked = false;
+    });
   });
     
     // Load all data
