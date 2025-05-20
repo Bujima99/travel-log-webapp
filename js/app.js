@@ -119,7 +119,11 @@ function checkClassicLogin() {
   const password = document.getElementById("passwordInput").value.trim();
 
   if (!username || !password) {
-    showPopup('Error', 'Please enter both username and password.');
+    if (!username) {
+      showPopup('Error', 'Please enter username.');
+    } else {
+      showPopup('Error', 'Please enter password.');
+    }
     return;
   }
 
