@@ -1433,7 +1433,7 @@ function showSection(sectionId) {
             <td>${driver.DriverName || ''}</td>
             <td>${driver.DriverPhone || ''}</td>
             <td>${driver.UserType}</td>
-            <td>${getStatusBadge(driver.Status || 'Pending')}</td>
+            <td>${getStatusBadge(driver.Status)}</td>
             <td><button class="btn" onclick="viewDriverDetails('${driver.DriverID || ''}')">View/Edit</button></td>
           `;
           tableBody.appendChild(row);
