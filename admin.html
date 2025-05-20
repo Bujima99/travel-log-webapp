@@ -1138,6 +1138,7 @@ function showSection(sectionId) {
       navItems[3].classList.add('active');
       break;
     case 'requests':
+      document.getElementById('approvalForm').style.display = 'none';
       navItems[4].classList.add('active');
       break;
     case 'profile':
@@ -1425,7 +1426,7 @@ function viewRequestDetails(requestId) {
         
         // Set remarks
         document.getElementById('approvalRemarks').value = data.Remarks || '';
-        
+       
         showSection('requestDetails');
       } else {
         showPopup('Error', 'Request details not found');
