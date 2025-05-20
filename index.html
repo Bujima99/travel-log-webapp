@@ -227,29 +227,24 @@ button:hover{
   </style>
 </head>
 <body>
-	<div class="loader-container" id="loader">
-    <div class="loader"></div>
+<div class="loader-container" id="loader">
+<div class="loader"></div>
 </div>
-	
     <div class="main">  	
-		<input type="checkbox" id="chk" aria-hidden="true">
-
-
-			<div class="signup">
-				<form id="loginForm">
-					<label for="chk" aria-hidden="true">Login</label>
-					 <input type="text" id="usernameInput" placeholder="Username" required>
-         <!-- Modified password field with toggle -->
-                     <div class="password-container">
-                        <input type="password" id="passwordInput" placeholder="Password" required>
-                        <span class="toggle-password" onclick="togglePassword('passwordInput')">👁️</span>
-                     </div>
+	<input type="checkbox" id="chk" aria-hidden="true">
+	    <div class="signup">
+		<form id="loginForm">
+			<label for="chk" aria-hidden="true">Login</label>
+			<input type="text" id="usernameInput" placeholder="Username" required>
+			<div id="usernameInputError" class="validation-message"></div>
+                     	<div class="password-container">
+                        	<input type="password" id="passwordInput" placeholder="Password" required>
+                        	<span class="toggle-password" onclick="togglePassword('passwordInput')">👁️</span>
+                     	</div>
 			<div id="passwordInputError" class="validation-message"></div>
-        <button type="button" onclick="checkClassicLogin()">Login</button>
-				</form>
-				
-			</div>
-
+       			 <button type="button" onclick="checkClassicLogin()">Login</button>
+		</form>	
+	</div>
 	    <div class="login">
 				<form  id="signupForm">
 					<label for="chk" aria-hidden="true">Sign up</label>
@@ -260,7 +255,7 @@ button:hover{
           				<input type="text" id="signupPhone" placeholder="Phone Number (+91...)" required>
 					<div id="signupPhoneError" class="validation-message"></div>
 					<input type="text" id="signupUsername" placeholder="Username" required>
-        <!-- Modified password fields with toggles -->
+					<div id="signupUsernameError" class="validation-message"></div>
                      			<div class="password-container">
                         			<input type="password" id="signupPassword" placeholder="Password" required>
                         			<span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
@@ -312,6 +307,14 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('signupPhone').addEventListener('input', function() {
     validatePhone(this.value, 'signupPhone');
   });
+
+document.getElementById('usernameInput').addEventListener('input', function() {
+    validateUsername(this.value, 'usernameInput');
+  });
+
+document.getElementById('signupUsername').addEventListener('input', function() {
+    validateUsername(this.value, 'signupUsername');
+  });
   
   document.getElementById('signupPassword').addEventListener('input', function() {
     validatePassword(this.value, 'signupPassword');
@@ -350,7 +353,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-// Validation functions
+function validateUsername(username, fieldId) {
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  if (!username || username.trim() === '') {
+    showError(fieldId, 'Username is required');
+    return false;
+  }
+  
+  // You can add additional username validation rules here if needed
+  // For example, minimum length or allowed characters
+  if (username.length < 4) {
+    showError(fieldId, 'Username must be at least 4 characters');
+    return false;
+  }
+  
+  showSuccess(fieldId);
+  return true;
+}
+	  
 function validateName(name, fieldId) {
   const nameRegex = /^[A-Za-z]+$/;
   const errorElement = document.getElementById(`${fieldId}Error`);
