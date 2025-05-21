@@ -115,12 +115,7 @@ function signupUser() {
         }
       });
     })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error('Registration failed');
-      }
-      return res.text();
-    })
+    .then(res => res.json())
     .then(resp => {
       showPopup('Success', 'Registration complete! Please wait for admin approval.');
       // Reset forms and switch to login
