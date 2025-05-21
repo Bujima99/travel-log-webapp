@@ -376,13 +376,15 @@
     <input type="hidden" id="travelId">
     
     <div class="form-group">
-      <label>Vehicle Number:</label>
-      <input type="text" id="completeVehicleNumber" required>
+      <label>Vehicle Name:</label>
+       <select id="completeVehicleName" required onchange="updateVehicleNumber()">
+      <option value="">Select Vehicle</option>
+    </select>
     </div>
     
     <div class="form-group">
-      <label>Vehicle Name:</label>
-      <input type="text" id="completeVehicleName" required>
+      <label>Vehicle Number:</label>
+      <input type="text" id="completeVehicleNumber" placeholder="Vehicle Number" readonly required>
     </div>
     
     <div class="form-group">
@@ -887,12 +889,18 @@ function updateVehicleNumber() {
   const selectedName = document.getElementById('vehicleName').value;
   const fuelselectedName = document.getElementById('fuelVehicleName').value;
    const serviceselectedName = document.getElementById('serviceVehicleName').value;
+ const completeselectedName = document.getElementById('completeVehicleName').value;
+
+  
   const vehicle = vehicles.find(v => v.name === selectedName);
    const fuelvehicle = vehicles.find(v => v.name === fuelselectedName);
   const servicevehicle = vehicles.find(v => v.name === serviceselectedName);
+  const completeevehicle = vehicles.find(v => v.name === completeselectedName);
+  
   document.getElementById('vehicleNumber').value = vehicle ? vehicle.number : '';
   document.getElementById('fuelVehicleNumber').value = fuelvehicle ? fuelvehicle.number : '';
    document.getElementById('serviceVehicleNumber').value = servicevehicle ? servicevehicle.number : '';
+  document.getElementById('completeVehicleNumber').value = completeevehicle ? completeevehicle.number : '';
 }
 
 
