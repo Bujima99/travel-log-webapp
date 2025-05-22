@@ -673,6 +673,7 @@ function toggleNextServiceDate() {
 function hideAddServiceForm() {
   document.getElementById('addServiceForm').style.display = 'none';
   document.getElementById('serviceForm').reset();
+   showSection('home');
 }
 
 // Add this function to load service entries
@@ -834,6 +835,7 @@ function showAddFuelForm() {
 function hideAddFuelForm() {
   document.getElementById('addFuelForm').style.display = 'none';
   document.getElementById('fuelForm').reset();
+  showSection('home');
 }
 
 function loadFuelEntries() {
