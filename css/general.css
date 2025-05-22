@@ -83,8 +83,7 @@
 
   /* POP UP CSS END */  
 
-  /* LOADER CSS STARTS */
-
+ /* LOADER CSS STARTS */
 .loader-container {
     position: fixed;
     top: 0;
@@ -100,34 +99,63 @@
 }
 
 .loader {
-    width: 50px;
-    aspect-ratio: 1;
-    display: grid;
-    color: #4285f4; 
-    background:
-        linear-gradient(90deg,currentColor 2px,#0000 0 calc(100% - 2px),currentColor 0) center/100% 14px,
-        linear-gradient(0deg, currentColor 2px,#0000 0 calc(100% - 2px),currentColor 0) center/14px 100%,
-        linear-gradient(currentColor 0 0) center/100% 2px,
-        linear-gradient(currentColor 0 0) center/2px 100%;
-    background-repeat: no-repeat;
-    animation: l6 4s infinite linear;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.loader::before,
-.loader::after {
-    content: "";
-    grid-area: 1/1;
-    background: inherit;
-    transform-origin: inherit;
-    animation: inherit;
+.car__body {
+    animation: shake 0.2s ease-in-out infinite alternate;
 }
 
-.loader::after {
-    animation-duration: 2s;
+.car__line {
+    transform-origin: center right;
+    stroke-dasharray: 22;
+    animation: line 0.8s ease-in-out infinite;
+    animation-fill-mode: both;
 }
 
-@keyframes l6 {
-    100% {transform:rotate(1turn)}
+.car__line--top {
+    animation-delay: 0s;
 }
 
+.car__line--middle {
+    animation-delay: 0.2s;
+}
+
+.car__line--bottom {
+    animation-delay: 0.4s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateY(-1%);
+    }
+    100% {
+        transform: translateY(3%);
+    }
+}
+
+@keyframes line {
+    0% {
+        stroke-dashoffset: 22;
+    }
+    25% {
+        stroke-dashoffset: 22;
+    }
+    50% {
+        stroke-dashoffset: 0;
+    }
+    51% {
+        stroke-dashoffset: 0;
+    }
+    80% {
+        stroke-dashoffset: -22;
+    }
+    100% {
+        stroke-dashoffset: -22;
+    }
+}
 /* LOADER CSS ENDS*/
