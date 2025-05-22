@@ -191,6 +191,9 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
         else if (user.Status === "Pending") {
           showPopup('Info', 'Your account is pending approval. Please contact admin.');
         } 
+        else if (user.Status === "Rejected") {
+          showPopup('Access Denied', 'Your account has been rejected. You no longer have access to this system. Please contact admin for further assistance.');
+        } 
         else {
           showPopup('Access Denied', 'Admin has not granted access. Please contact admin for login.');
         }
