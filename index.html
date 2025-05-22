@@ -152,14 +152,6 @@ body {
   position: relative;
 }
 
-.toggle-password {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #aaa;
-}
 
 /* Ensure validation messages are visible */
 .validation-message {
@@ -215,6 +207,25 @@ body {
   font-weight: bold;
   color: #1161ee;
 }
+
+		password-field {
+  position: relative;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Modern browser support */
+.password-field:has(input[type="text"]) .toggle-btn::after {
+  content: "🙈";
+}
 	
   </style>
 </head>
@@ -252,8 +263,10 @@ body {
           
           <div class="group password-container">
             <label for="passwordInput" class="label">Password</label>
+	<div class="password-field">
             <input id="passwordInput" type="password" class="input" data-type="password" placeholder="Enter your password" required>
-            <span class="toggle-password" onclick="togglePassword('passwordInput')">👁️</span>
+           <button type="button" class="toggle-btn">👁️</button>
+	</div>
             <div id="passwordInputError" class="validation-message"></div>
           </div>
           
@@ -294,15 +307,20 @@ body {
           
           <div class="group password-container">
             <label for="signupPassword" class="label">Password</label>
+		  		  <div class="password-field">
             <input id="signupPassword" type="password" class="input" data-type="password" placeholder="Create a password" required>
-            <span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
+
+            <button type="button" class="toggle-btn">👁️</button>
+</div>
             <div id="signupPasswordError" class="validation-message"></div>
           </div>
           
           <div class="group password-container">
             <label for="signupConfirmPassword" class="label">Confirm Password</label>
+		  		  <div class="password-field">
             <input id="signupConfirmPassword" type="password" class="input" data-type="password" placeholder="Confirm your password" required>
-            <span class="toggle-password" onclick="togglePassword('signupConfirmPassword')">👁️</span>
+            <button type="button" class="toggle-btn">👁️</button>
+</div>
             <div id="signupConfirmPasswordError" class="validation-message"></div>
           </div>
           
@@ -335,6 +353,13 @@ body {
   <script src="./js/app.js"></script>
 	<!-- NEW SCRIPT FOR PASSWORD TOGGLE -->
   <script>
+
+	  document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const input = this.parentElement.querySelector('input');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  });
+});
 
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
