@@ -9,224 +9,219 @@
 	 <link rel="stylesheet" href="css/general.css" />
   	<style>
 
-	  
-    body{
-	margin: 0;
-	padding: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
-	font-family: 'Jost', sans-serif;
-	background: url(./img/travellogimg10.png) no-repeat center center fixed;
-	background-size: cover;
+/* NEW MAIN STYLES */
+body {
+  margin: 0;
+  color: #6a6f8c;
+  background: #c8c8c8;
+  font: 600 16px/18px 'Jost', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url(./img/travellogimg10.png) no-repeat center center fixed;
+  background-size: cover;
 }
 
-		/* NEW CSS FOR PASSWORD TOGGLE */
+*, :after, :before {
+  box-sizing: border-box;
+}
+
+.login-wrap {
+  width: 100%;
+  margin: auto;
+  max-width: 525px;
+  min-height: 670px;
+  position: relative;
+  box-shadow: 0 12px 15px 0 rgba(0,0,0,.24), 0 17px 50px 0 rgba(0,0,0,.19);
+}
+
+.login-html {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding: 90px 70px 50px 70px;
+  background: rgba(40,57,101,.9);
+  border-radius: 10px;
+}
+
+.login-html .sign-in-htm,
+.login-html .sign-up-htm {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  transition: all .4s linear;
+}
+
+.login-html .sign-in,
+.login-html .sign-up,
+.login-form .group .check {
+  display: none;
+}
+
+.login-html .tab,
+.login-form .group .label,
+.login-form .group .button {
+  text-transform: uppercase;
+}
+
+.login-html .tab {
+  font-size: 22px;
+  margin-right: 15px;
+  padding-bottom: 5px;
+  margin: 0 15px 10px 0;
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.login-html .sign-in:checked + .tab,
+.login-html .sign-up:checked + .tab {
+  color: #fff;
+  border-color: #1161ee;
+}
+
+.login-form {
+  min-height: 345px;
+  position: relative;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.login-form .group {
+  margin-bottom: 15px;
+}
+
+.login-form .group .label,
+.login-form .group .input,
+.login-form .group .button {
+  width: 100%;
+  color: #fff;
+  display: block;
+}
+
+.login-form .group .input,
+.login-form .group .button {
+  border: none;
+  padding: 15px 20px;
+  border-radius: 25px;
+  background: rgba(255,255,255,.1);
+}
+
+.login-form .group .label {
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.login-form .group .button {
+  background: #1161ee;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.login-form .group .button:hover {
+  background: #0d50c5;
+}
+
+.hr {
+  height: 2px;
+  margin: 60px 0 50px 0;
+  background: rgba(255,255,255,.2);
+}
+
+.foot-lnk {
+  text-align: center;
+  color: #fff;
+}
+
+.foot-lnk a {
+  color: #aaa;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.foot-lnk a:hover {
+  color: #1161ee;
+}
+
+/* PASSWORD TOGGLE STYLES */
 .password-container {
   position: relative;
-  width: 55%;
-  margin: 10px 60px;
-}
-
-.password-container input {
-  width: 100%;
-  margin: 1px;
-  padding-right: 30px; /* Space for the eye icon */
 }
 
 .toggle-password {
   position: absolute;
-  left: 29vh;
+  right: 15px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #666;
+  color: #aaa;
   user-select: none;
 }
 
-/* END OF NEW CSS */
-
-
-.main{
-	width: 350px;
-   	 height: 570px;
-	background-color: #ADD8E6;
-	overflow: hidden;
-	border-radius: 10px;
-	box-shadow: 5px 20px 50px #000;
-}
-#chk{
-	display: none;
-}
-.signup{
-	position: relative;
-	width:100%;
-	height: 100%;
-}
-label{
-	color: #008ae6;
-	font-size: 2.3em;
-	justify-content: center;
-	display: flex;
-	margin: 5px;
-	font-weight: bold;
-	cursor: pointer;
-	transition: .5s ease-in-out;
-}
-input{
-	width: 60%;
-	height: 10px;
-	background: #e0dede;
-	justify-content: center;
-	display: flex;
-	margin: 10px auto;
-	padding: 12px;
-	border: none;
-	outline: none;
-	border-radius: 5px;
-}
-button{
-	width: 60%;
-	height: 40px;
-	margin: 10px auto;
-	justify-content: center;
-	display: block;
-	color: #fff;
-	background: #008ae6;
-	font-size: 1em;
-	font-weight: bold;
-	margin-top: 15px;
-	outline: none;
-	border: none;
-	border-radius: 5px;
-	transition: .2s ease-in;
-	cursor: pointer;
-}
-button:hover{
-	background: #6d44b8;
-}
-.login{
-	height: 530px;
-	background: white;
-	border-radius: 60% / 10%;
-	transform: translateY(-19vh);
-	transition: .8s ease-in-out;
-}
-.login label{
-	color: #008ae6;
-	transform: scale(.6);
+/* VALIDATION MESSAGE STYLES */
+.validation-message {
+  color: #ff4444;
+  font-size: 0.8em;
+  margin-top: 5px;
+  margin-left: 10px;
+  display: none;
 }
 
-#chk:checked ~ .login{
-	transform: translateY(-84vh);
-}
-#chk:checked ~ .login label{
-	transform: scale(1);	
-}
-#chk:checked ~ .signup label{
-	transform: scale(.6);
+.input.invalid {
+  border: 1px solid #ff4444 !important;
 }
 
-	  /* Mobile responsiveness */
+.input.valid {
+  border: 1px solid #00C851 !important;
+}
+
+/* MOBILE RESPONSIVENESS */
 @media only screen and (max-width: 600px) {
-  .main {
-        width: 100%;
-        max-width: 300px;
-        height: auto;
-        max-height: 630px;
+  .login-html {
+    padding: 60px 30px 30px 30px;
   }
   
-  input {
-    width: 70%;
-    padding: 15px;
-    height: 15px;
+  .login-wrap {
+    min-height: 600px;
+    width: 90%;
   }
   
-  button {
-    width: 80%;
-    padding: 12px;
-    height: 45px;
-    font-size: 1.1em;
+  .login-html .tab {
+    font-size: 18px;
   }
   
-  label {
-    font-size: 2em;
-    margin: 15px 5px;
+  .login-form .group .input,
+  .login-form .group .button {
+    padding: 12px 15px;
   }
   
-  .login {
-    height: 87vh;
-    padding-bottom: 20px;
-	transform: translateY(275px);
-  }
-  
-  #chk:checked ~ .login {
-    transform: translateY(-42%)
-  }
-
-
-
-.password-container {
-          width: 67%;
-        margin: 10px 29px;
-}
-
-
-.toggle-password {
- 
-  left: 30vh;
-}
-}
-
-@media only screen and (max-width: 400px) {
-  input {
-    width: 70%;
-  }
-  
-  button {
-    width: 85%;
-  }
-  
-  label {
-    font-size: 1.8em;
+  .hr {
+    margin: 40px 0 30px 0;
   }
 }
 
 .credit {
   position: fixed;
-  bottom: -9px;
-  right: 5px;
+  bottom: 10px;
+  right: 10px;
   font-size: 0.7rem;
-  color: #008ae6;
+  color: #fff;
 }
+
 .credit span {
   font-weight: bold;
-  color: #008ae6;
+  color: #1161ee;
 }
-
-		/* Add this to your existing CSS */
-.validation-message {
-  color: #ff4444;
-  font-size: 0.8em;
-  margin-top: -8px;
-  margin-bottom: 8px;
-  text-align: center;
-  display: none;
-}
-
-.invalid {
-  border: 1px solid #ff4444 !important;
-}
-
-.valid {
-  border: 1px solid #00C851 !important;
-}
-
-#signupForm{
-margin-top:4rem;
-}
-		
+	
   </style>
 </head>
 <body>
@@ -244,47 +239,97 @@ margin-top:4rem;
         </svg>
     </div>
 </div>
-    <div class="main">  	
-	<input type="checkbox" id="chk" aria-hidden="true">
-	    <div class="signup">
-		<form id="loginForm">
-			<label for="chk" aria-hidden="true">Login</label>
-			<input type="text" id="usernameInput" placeholder="Username" required>
-			<div id="usernameInputError" class="validation-message"></div>
-                     	<div class="password-container">
-                        	<input type="password" id="passwordInput" placeholder="Password" required>
-                        	<span class="toggle-password" onclick="togglePassword('passwordInput')">👁️</span>
-                     	</div>
-			<div id="passwordInputError" class="validation-message"></div>
-       			 <button type="button" onclick="checkClassicLogin()">Login</button>
-		</form>	
-	</div>
-	    <div class="login">
-				<form  id="signupForm">
-					<label for="chk" aria-hidden="true">Sign up</label>
-					<input type="text" id="signupFirstName" placeholder="First Name" required>
-					<div id="signupFirstNameError" class="validation-message"></div>
-					<input type="text" id="signupLastName" placeholder="Last Name" required>
-					<div id="signupLastNameError" class="validation-message"></div>
-          				<input type="text" id="signupPhone" placeholder="Phone Number (+91...)" required>
-					<div id="signupPhoneError" class="validation-message"></div>
-					<input type="text" id="signupUsername" placeholder="Username" required>
-					<div id="signupUsernameError" class="validation-message"></div>
-                     			<div class="password-container">
-                        			<input type="password" id="signupPassword" placeholder="Password" required>
-                        			<span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
-                     			</div>
-					<div id="signupPasswordError" class="validation-message"></div>
-                     			<div class="password-container">
-                        			<input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
-                        			<span class="toggle-password" onclick="togglePassword('signupConfirmPassword')">👁️</span>
-                     			</div>
-					<div id="signupConfirmPasswordError" class="validation-message"></div>
-					<button type="button" onclick="signupUser()">Sign up</button>	
-				</form>
-	    
-			</div>
-	</div>
+
+
+<div class="login-wrap">
+  <div class="login-html">
+    <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+    <label for="tab-1" class="tab">Login</label>
+    <input id="tab-2" type="radio" name="tab" class="sign-up">
+    <label for="tab-2" class="tab">Sign Up</label>
+    
+    <div class="login-form">
+      <!-- LOGIN FORM -->
+      <div class="sign-in-htm">
+        <form id="loginForm">
+          <div class="group">
+            <label for="usernameInput" class="label">Username</label>
+            <input id="usernameInput" type="text" class="input" placeholder="Enter your username" required>
+            <div id="usernameInputError" class="validation-message"></div>
+          </div>
+          
+          <div class="group password-container">
+            <label for="passwordInput" class="label">Password</label>
+            <input id="passwordInput" type="password" class="input" placeholder="Enter your password" required>
+            <span class="toggle-password" onclick="togglePassword('passwordInput')">👁️</span>
+            <div id="passwordInputError" class="validation-message"></div>
+          </div>
+          
+          <div class="group">
+            <button type="button" class="button" onclick="checkClassicLogin()">Login</button>
+          </div>
+        </form>
+        
+        <div class="hr"></div>
+        <div class="foot-lnk">
+          <a href="#forgot">Forgot Password?</a>
+        </div>
+      </div>
+      
+      <!-- SIGNUP FORM -->
+      <div class="sign-up-htm">
+        <form id="signupForm">
+          <div class="group">
+            <label for="signupFirstName" class="label">First Name</label>
+            <input id="signupFirstName" type="text" class="input" placeholder="Enter your first name" required>
+            <div id="signupFirstNameError" class="validation-message"></div>
+          </div>
+          
+          <div class="group">
+            <label for="signupLastName" class="label">Last Name</label>
+            <input id="signupLastName" type="text" class="input" placeholder="Enter your last name" required>
+            <div id="signupLastNameError" class="validation-message"></div>
+          </div>
+          
+          <div class="group">
+            <label for="signupPhone" class="label">Phone Number</label>
+            <input id="signupPhone" type="text" class="input" placeholder="+91..." required>
+            <div id="signupPhoneError" class="validation-message"></div>
+          </div>
+          
+          <div class="group">
+            <label for="signupUsername" class="label">Username</label>
+            <input id="signupUsername" type="text" class="input" placeholder="Choose a username" required>
+            <div id="signupUsernameError" class="validation-message"></div>
+          </div>
+          
+          <div class="group password-container">
+            <label for="signupPassword" class="label">Password</label>
+            <input id="signupPassword" type="password" class="input" placeholder="Create a password" required>
+            <span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
+            <div id="signupPasswordError" class="validation-message"></div>
+          </div>
+          
+          <div class="group password-container">
+            <label for="signupConfirmPassword" class="label">Confirm Password</label>
+            <input id="signupConfirmPassword" type="password" class="input" placeholder="Confirm your password" required>
+            <span class="toggle-password" onclick="togglePassword('signupConfirmPassword')">👁️</span>
+            <div id="signupConfirmPasswordError" class="validation-message"></div>
+          </div>
+          
+          <div class="group">
+            <button type="button" class="button" onclick="signupUser()">Sign Up</button>
+          </div>
+        </form>
+        
+        <div class="hr"></div>
+        <div class="foot-lnk">
+          <label for="tab-1">Already a member?</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   
 
 
