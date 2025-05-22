@@ -2026,12 +2026,12 @@ function viewRequestDetails(requestId) {
     .then(data => {
       if (data) {
         document.getElementById('requestId').value = requestId;
-        if(data.Status  == "Approved"){
+        /*if(data.Status  == "Approved"){
            document.getElementById('approvalForm').style.display = 'none';
         }
         else{
              document.getElementById('approvalForm').style.display = 'block';
-        }
+        }*/
         // Display request details
         const detailsContent = document.getElementById('requestDetailsContent');
         detailsContent.innerHTML = `
