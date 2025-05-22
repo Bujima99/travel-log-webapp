@@ -152,7 +152,16 @@ body {
   color: #1161ee;
 }
 
-/* PASSWORD TOGGLE STYLES */
+/* Add these selectors to maintain the tab switching functionality */
+.login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm {
+  transform: rotateY(0);
+}
+
+.login-html .sign-up:checked + .tab + .login-form .sign-up-htm {
+  transform: rotateY(0);
+}
+
+/* Update the password toggle positioning */
 .password-container {
   position: relative;
 }
@@ -164,10 +173,9 @@ body {
   transform: translateY(-50%);
   cursor: pointer;
   color: #aaa;
-  user-select: none;
 }
 
-/* VALIDATION MESSAGE STYLES */
+/* Ensure validation messages are visible */
 .validation-message {
   color: #ff4444;
   font-size: 0.8em;
@@ -243,10 +251,8 @@ body {
 
 <div class="login-wrap">
   <div class="login-html">
-    <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
-    <label for="tab-1" class="tab">Login</label>
-    <input id="tab-2" type="radio" name="tab" class="sign-up">
-    <label for="tab-2" class="tab">Sign Up</label>
+    <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Login</label>
+    <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
     
     <div class="login-form">
       <!-- LOGIN FORM -->
@@ -260,7 +266,7 @@ body {
           
           <div class="group password-container">
             <label for="passwordInput" class="label">Password</label>
-            <input id="passwordInput" type="password" class="input" placeholder="Enter your password" required>
+            <input id="passwordInput" type="password" class="input" data-type="password" placeholder="Enter your password" required>
             <span class="toggle-password" onclick="togglePassword('passwordInput')">👁️</span>
             <div id="passwordInputError" class="validation-message"></div>
           </div>
@@ -268,12 +274,12 @@ body {
           <div class="group">
             <button type="button" class="button" onclick="checkClassicLogin()">Login</button>
           </div>
+          
+          <div class="hr"></div>
+          <div class="foot-lnk">
+            <a href="#forgot">Forgot Password?</a>
+          </div>
         </form>
-        
-        <div class="hr"></div>
-        <div class="foot-lnk">
-          <a href="#forgot">Forgot Password?</a>
-        </div>
       </div>
       
       <!-- SIGNUP FORM -->
@@ -305,14 +311,14 @@ body {
           
           <div class="group password-container">
             <label for="signupPassword" class="label">Password</label>
-            <input id="signupPassword" type="password" class="input" placeholder="Create a password" required>
+            <input id="signupPassword" type="password" class="input" data-type="password" placeholder="Create a password" required>
             <span class="toggle-password" onclick="togglePassword('signupPassword')">👁️</span>
             <div id="signupPasswordError" class="validation-message"></div>
           </div>
           
           <div class="group password-container">
             <label for="signupConfirmPassword" class="label">Confirm Password</label>
-            <input id="signupConfirmPassword" type="password" class="input" placeholder="Confirm your password" required>
+            <input id="signupConfirmPassword" type="password" class="input" data-type="password" placeholder="Confirm your password" required>
             <span class="toggle-password" onclick="togglePassword('signupConfirmPassword')">👁️</span>
             <div id="signupConfirmPasswordError" class="validation-message"></div>
           </div>
@@ -320,17 +326,16 @@ body {
           <div class="group">
             <button type="button" class="button" onclick="signupUser()">Sign Up</button>
           </div>
+          
+          <div class="hr"></div>
+          <div class="foot-lnk">
+            <label for="tab-1">Already a member?</label>
+          </div>
         </form>
-        
-        <div class="hr"></div>
-        <div class="foot-lnk">
-          <label for="tab-1">Already a member?</label>
-        </div>
       </div>
     </div>
   </div>
 </div>
-  
 
 
 <div class="popup-overlay" id="customPopup">
