@@ -881,6 +881,39 @@ function loadFuelEntries() {
     });
 }
 
+  function populateVehicleDropdowns() {
+  const vehicles = [
+    { name: 'Hycross', number: 'KL02BY3091 ' },
+    { name: 'Ertiga', number: 'KL23Y0927' }
+  ];
+
+  const dropdowns = [
+    'vehicleName',
+    'fuelVehicleName',
+    'serviceVehicleName',
+    'completeVehicleName'
+  ];
+
+  dropdowns.forEach(dropdownId => {
+    const select = document.getElementById(dropdownId);
+    if (select) {
+      // Clear existing options except the first one
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+      
+      // Add vehicle options
+      vehicles.forEach(vehicle => {
+        const option = document.createElement('option');
+        option.value = vehicle.name;
+        option.textContent = vehicle.name;
+        select.appendChild(option);
+      });
+    }
+  });
+}
+
+
 function updateVehicleNumber() {
    const vehicles = [
   { name: 'Hycross', number: 'KL02BY3091 ' },
@@ -909,6 +942,7 @@ async function completeJourney(travelId) {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   const driverId= driverData.id;
   showLoader();
+  populateVehicleDropdowns();
    fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=complete-journey&travelId=${encodeURIComponent(travelId)}&driverId=${encodeURIComponent(driverId)}`)
      .then(response => {
       if (!response.ok) {
@@ -926,8 +960,15 @@ async function completeJourney(travelId) {
     
     // Populate the form fields
       document.getElementById('travelId').value = travelId;
-      document.getElementById('completeVehicleNumber').value = journey.VehicleNumber || '';
-      document.getElementById('completeVehicleName').value = journey.VehicleName || '';
+     // Set the vehicle name in the dropdown
+      const vehicleSelect = document.getElementById('completeVehicleName');
+      if (vehicleSelect) {
+        vehicleSelect.value = journey.VehicleName || '';
+        // Trigger the onchange to update the vehicle number
+        updateVehicleNumber();
+      }
+      //document.getElementById('completeVehicleNumber').value = journey.VehicleNumber || '';
+      //document.getElementById('completeVehicleName').value = journey.VehicleName || '';
       document.getElementById('completeStartPoint').value = journey.StartPoint || '';
       document.getElementById('completeStartKm').value = journey.StartKM || '';
       
