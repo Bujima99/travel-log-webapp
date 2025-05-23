@@ -261,8 +261,7 @@ function showSection(sectionId) {
 const driverId = localStorage.getItem("driverId");
 const driverName = localStorage.getItem("driverName");
 
-// Simulating driver name from login
-document.getElementById('driverName').textContent = driverName;
+
 
 window.onload = function() {
   if (driverId) {
