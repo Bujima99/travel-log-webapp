@@ -210,9 +210,6 @@ function handleSuccessfulLogin(driverData) {
 }
 
 
-
-
-
 function showSection(sectionId) {
   // Hide all sections
   document.querySelectorAll('.section').forEach(section => {
@@ -272,113 +269,10 @@ window.onload = function() {
 };
 
 
-
-// Load pending journeys
-function loadPendingJourneys() {
-  let pending = JSON.parse(localStorage.getItem('pendingJourneys') || '[]');
-  const tbody = document.getElementById('pendingTable').querySelector('tbody');
-  tbody.innerHTML = "";
-  pending.forEach((journey, index) => {
-    let row = tbody.insertRow();
-    row.innerHTML = `
-      <td>${journey.vehicleNumber}</td>
-      <td>${journey.startPoint}</td>
-      <td>${journey.startKm}</td>
-      <td>${journey.startTime}</td>
-      <td><button onclick="editJourney(${index})">Edit</button></td>
-    `;
-  });
-}
-
-function editJourney(index) {
-  let pending = JSON.parse(localStorage.getItem('pendingJourneys'));
-  const journey = pending[index];
-  showSection('addJourney');
-
-  document.getElementById('vehicleNumber').value = journey.vehicleNumber;
-  document.getElementById('vehicleName').value = journey.vehicleName;
-  document.getElementById('startPoint').value = journey.startPoint;
-  document.getElementById('startKm').value = journey.startKm;
-  document.getElementById('startTime').value = journey.startTime;
-
-  pending.splice(index, 1);
-  localStorage.setItem('pendingJourneys', JSON.stringify(pending));
-}
-
 // Logout
 function logout() {
   localStorage.removeItem('driverData');
   window.location.href = "index.html";
-}
-
-// Initial Load
-loadPendingJourneys();
-
-
-
-function getPendingTrips(driverId) {
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?driverId=" + driverId)
-    .then(res => res.json())
-    .then(data => {
-      const pendingTrips = data.filter(j => j.status === "Pending");
-      displayPendingTrips(pendingTrips);  // Function to update UI
-    })
-    .catch(error => console.error("Error fetching pending trips:", error));
-}
-
-function displayPendingTrips(pendingTrips) {
-  const pendingListTable = document.getElementById("pendingTripsTable");  // Assuming you have a table in HTML
-  pendingListTable.innerHTML = "";  // Clear existing rows
-  
-  pendingTrips.forEach(trip => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${trip.travelId}</td>
-      <td>${trip.date}</td>
-      <td>${trip.vehicleNumber}</td>
-      <td>${trip.startPoint}</td>
-      <td><button onclick="viewPendingTrip('${trip.travelId}')">View</button></td>
-    `;
-    pendingListTable.appendChild(row);
-  });
-}
-
-function viewPendingTrip(travelId) {
-  // Redirect to a form or display the form with the selected pending trip details.
-  console.log("Viewing pending trip: ", travelId);
-}
-
-function getCompletedTrips(driverId) {
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?driverId=" + driverId)
-    .then(res => res.json())
-    .then(data => {
-      const completedTrips = data.filter(j => j.status === "Completed");
-      displayCompletedTrips(completedTrips);  // Function to update UI
-    })
-    .catch(error => console.error("Error fetching completed trips:", error));
-}
-
-function displayCompletedTrips(completedTrips) {
-  const completedListTable = document.getElementById("completedTripsTable");  // Assuming you have a table in HTML
-  completedListTable.innerHTML = "";  // Clear existing rows
-  
-  completedTrips.forEach(trip => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${trip.travelId}</td>
-      <td>${trip.date}</td>
-      <td>${trip.vehicleNumber}</td>
-      <td>${trip.startPoint}</td>
-      <td>${trip.endPoint}</td>
-      <td><button onclick="viewCompletedTrip('${trip.travelId}')">View</button></td>
-    `;
-    completedListTable.appendChild(row);
-  });
-}
-
-function viewCompletedTrip(travelId) {
-  // Redirect to a form or display the form with the selected completed trip details.
-  console.log("Viewing completed trip: ", travelId);
 }
 
 // Custom Popup Function
