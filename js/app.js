@@ -105,7 +105,7 @@ function signupUser() {
     .then(resp => {
       showPopup('Success', 'Registration complete! Please wait for admin approval.');
       // Reset forms and switch to login
-      document.getElementById("tab2").checked = false;
+      //document.getElementById("tab2").checked = false;
       document.getElementById("loginForm").reset();
       document.getElementById("signupForm").reset();
     })
