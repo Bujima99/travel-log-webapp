@@ -105,7 +105,7 @@ function signupUser() {
     .then(resp => {
       showPopup('Success', 'Registration complete! Please wait for admin approval.');
       // Reset forms and switch to login
-      document.getElementById("chk").checked = false;
+      document.getElementById("tab2").checked = false;
       document.getElementById("loginForm").reset();
       document.getElementById("signupForm").reset();
     })
@@ -261,7 +261,8 @@ function showSection(sectionId) {
 const driverId = localStorage.getItem("driverId");
 const driverName = localStorage.getItem("driverName");
 
-
+// Simulating driver name from login
+document.getElementById('driverName').textContent = driverName;
 
 window.onload = function() {
   if (driverId) {
