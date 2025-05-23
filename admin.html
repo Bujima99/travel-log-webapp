@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="./js/app.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <style>
 #driverName {
     color: black !important;
@@ -1108,6 +1109,21 @@ background-color: #2ecc71;
     margin-left: 0 !important;
   }
 }    
+
+    .form-control {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 250px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #1976D2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+    
   </style>
 </head>
 <body>
@@ -1306,6 +1322,7 @@ background-color: #2ecc71;
 
   <div id="drivers" class="section">
   <h2>All Drivers</h2>
+    <input class="form-control" id="driverSearch" type="text" placeholder="Search drivers...">
   <div class="table-wrapper">
     <table class="fl-table" id="allDriversTable">
       <thead>
@@ -1362,6 +1379,7 @@ background-color: #2ecc71;
   
   <div id="journeys" class="section">
     <h2>All Journeys</h2>
+    <input class="form-control" id="journeySearch" type="text" placeholder="Search journeys...">
     <div class="table-wrapper">
       <table class="fl-table" id="allJourneysTable">
         <thead>
@@ -1383,6 +1401,7 @@ background-color: #2ecc71;
 
   <div id="fuel" class="section">
     <h2>All Fuel Entries</h2>
+    <input class="form-control" id="fuelSearch" type="text" placeholder="Search fuel entries...">
     <div class="table-wrapper">
       <table class="fl-table" id="allFuelTable">
         <thead>
@@ -1405,6 +1424,7 @@ background-color: #2ecc71;
 
   <div id="service" class="section">
     <h2>All Service Records</h2>
+    <input class="form-control" id="serviceSearch" type="text" placeholder="Search service records...">
     <div class="table-wrapper">
       <table class="fl-table" id="allServiceTable">
         <thead>
@@ -1428,6 +1448,7 @@ background-color: #2ecc71;
 
   <div id="requests" class="section">
     <h2>All Requests</h2>
+     <input class="form-control" id="requestSearch" type="text" placeholder="Search requests...">
     <div class="table-wrapper">
       <table class="fl-table" id="allRequestsTable">
         <thead>
@@ -1548,7 +1569,28 @@ document.addEventListener('DOMContentLoaded', function() {
       checkbox.checked = false;
     });
   });
+
+    function setupSearch(inputId, tableId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
     
+    input.addEventListener('keyup', function() {
+      const value = this.value.toLowerCase();
+      const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+      
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(value) ? '' : 'none';
+      });
+    });
+  }
+
+  // Setup search for each section
+  setupSearch('driverSearch', 'allDriversTable');
+  setupSearch('journeySearch', 'allJourneysTable');
+  setupSearch('fuelSearch', 'allFuelTable');
+  setupSearch('serviceSearch', 'allServiceTable');
+  setupSearch('requestSearch', 'allRequestsTable');
     // Load all data
     loadDashboardStats();
     loadAllJourneys();
