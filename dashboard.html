@@ -1143,7 +1143,7 @@ async function saveAsPending() {
   .then(response =>response.text())
   .then(result => {
     console.log("Save as Pending result:", result);
-    showPopup('Success', 'Journey saved as pending successfully!');
+    showPopup('Success', 'The journey has started!.');
     document.getElementById('journeyForm').reset();
     showSection('home');
    // location.reload();
