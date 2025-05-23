@@ -1110,18 +1110,56 @@ background-color: #2ecc71;
   }
 }    
 
-    .form-control {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 250px;
-  font-size: 14px;
+ /* Search box styles */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
 }
 
-.form-control:focus {
+input[type="search"] {
+  background: rgba(0,0,0,0.1) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQBJREFUeNqslI0RgyAMhdENWIEVWMEVXIGO0BW6Ah2hHcGOoCPYEewINFzBe9IA9id37w4kfEZesHHOCSYUqSPJML+RJlELDwN1pMHxMZNMkr8RTgyz2YPH5LmtwXpIHkOFmKhIlxowDmYAycKnHAHYcTCsSpXOJCie6YWDnXKLGeHLN2stGaqDsXXrX3GFcYcLrfhjtKEhffQ792gYT2nT6pJDjCw4z7ZGdGipOIqNbXIwFUARmCbKpMfYxsWJBmCEDoW7+gYUTAU2s3HJrK3AJvMLkqGHFLgWXTckm+SfSQexs+tLRqwVfgvjgMsvMAT689S5M/sk/I14kO5PAQYAuk6L1q+EdHMAAAAASUVORK5CYII=) no-repeat 14px 14px;
+  text-indent: 1em;
+  display: inline-block;
+  border: 0 none;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
   outline: none;
-  border-color: #1976D2;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  padding: 10px 15px;
+  cursor: pointer;
+  appearance: none;
+  font: inherit;
+  color: #555;
+  vertical-align: baseline;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+input[type="search"]:hover, 
+input[type="search"]:focus {
+  background: #fff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAT5JREFUeNqsVLtOw0AQtIMlRJHCEhUVMg398QEUSZnSfILzCXxDPsFu6XAJHWnTcS1lWsprKdmLxtKwvjVBYaTV7cm+udnX5fPb+yyBSmwhVmK/FfPZLyjUPhI8YtXYi23EOovs7PzyevAbsWeoGg5HNUHsCipX8F9TZDOstVgLPxIsxW6w3sHv6dJ2StkLbh6IPtR/AWRfSIET20H9D2U1hfaAgxY2KMagcBSmg9/rmwy0lBqTzGfHoVfVHxXgXzCjHNRHnnHke4vMGc2q0RBR0GSeCLlpLaJGFWKUszVuib32nih7iTFrjXAPyGnQ48c3Gu5AOVlMtMk6NZuf+FiC+AIhV0T+pBQ5ntXceIJKqKko2duJ2TwoLAz5QTVnagJaXWEO8y/wSMuKH9RTJoCTHyNZFidOUEfNu/8WYAAOXUT04MOtlwAAAABJRU5ErkJggg==) 14px 14px no-repeat;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+input[type="search"]:focus {
+  width: 250px;
+  cursor: text;
+  background-color: #fff;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+/* Adjust h2 margin to prevent overlap */
+.section-header h2 {
+  margin-right: 60px; /* Give space for the expanding search */
 }
     
   </style>
@@ -1321,8 +1359,10 @@ background-color: #2ecc71;
   </div>
 
   <div id="drivers" class="section">
-  <h2>All Drivers</h2>
-    <input class="form-control" id="driverSearch" type="text" placeholder="Search drivers...">
+    <div class="section-header">
+    <h2>All Drivers</h2>
+    <input id="driverSearch" type="search" placeholder="Search drivers...">
+  </div>
   <div class="table-wrapper">
     <table class="fl-table" id="allDriversTable">
       <thead>
@@ -1378,8 +1418,10 @@ background-color: #2ecc71;
 </div>
   
   <div id="journeys" class="section">
+    <div class="section-header">
     <h2>All Journeys</h2>
-    <input class="form-control" id="journeySearch" type="text" placeholder="Search journeys...">
+    <input id="journeySearch" type="search" placeholder="Search journeys...">
+  </div>
     <div class="table-wrapper">
       <table class="fl-table" id="allJourneysTable">
         <thead>
@@ -1400,8 +1442,10 @@ background-color: #2ecc71;
   </div>
 
   <div id="fuel" class="section">
+    <div class="section-header">
     <h2>All Fuel Entries</h2>
-    <input class="form-control" id="fuelSearch" type="text" placeholder="Search fuel entries...">
+    <input id="fuelSearch" type="search" placeholder="Search fuel entries...">
+  </div>
     <div class="table-wrapper">
       <table class="fl-table" id="allFuelTable">
         <thead>
@@ -1423,8 +1467,10 @@ background-color: #2ecc71;
   </div>
 
   <div id="service" class="section">
+      <div class="section-header">
     <h2>All Service Records</h2>
-    <input class="form-control" id="serviceSearch" type="text" placeholder="Search service records...">
+    <input id="serviceSearch" type="search" placeholder="Search service records...">
+  </div>
     <div class="table-wrapper">
       <table class="fl-table" id="allServiceTable">
         <thead>
@@ -1447,8 +1493,10 @@ background-color: #2ecc71;
   </div>
 
   <div id="requests" class="section">
+         <div class="section-header">
     <h2>All Requests</h2>
-     <input class="form-control" id="requestSearch" type="text" placeholder="Search requests...">
+    <input id="requestSearch" type="search" placeholder="Search requests...">
+  </div>
     <div class="table-wrapper">
       <table class="fl-table" id="allRequestsTable">
         <thead>
