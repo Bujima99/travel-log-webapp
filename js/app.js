@@ -240,9 +240,11 @@ function showSection(sectionId) {
       loadCompletedJourneys();
       break;
     case 'service':
+      navItems[3].classList.add('active');
       loadServiceEntries();
       break;
     case 'profile':
+    navItems[4].classList.add('active');
       loadProfileData();
       break;
     // Logout doesn't need active state
