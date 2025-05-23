@@ -284,7 +284,7 @@ function saveAsPending() {
   let pending = JSON.parse(localStorage.getItem('pendingJourneys') || '[]');
   pending.push(journey);
   localStorage.setItem('pendingJourneys', JSON.stringify(pending));
-  showPopup('Sucess', 'Journey saved as pending.');
+  showPopup('Success', 'The journey has started.');
   document.getElementById('journeyForm').reset();
 }
 
