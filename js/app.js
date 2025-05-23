@@ -272,21 +272,6 @@ window.onload = function() {
 };
 
 
-// Save pending journey
-function saveAsPending() {
-  const journey = {
-    vehicleNumber: document.getElementById('vehicleNumber').value,
-    vehicleName: document.getElementById('vehicleName').value,
-    startPoint: document.getElementById('startPoint').value,
-    startKm: document.getElementById('startKm').value,
-    startTime: document.getElementById('startTime').value,
-  };
-  let pending = JSON.parse(localStorage.getItem('pendingJourneys') || '[]');
-  pending.push(journey);
-  localStorage.setItem('pendingJourneys', JSON.stringify(pending));
-  showPopup('Success', 'The journey has started.');
-  document.getElementById('journeyForm').reset();
-}
 
 // Load pending journeys
 function loadPendingJourneys() {
