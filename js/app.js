@@ -247,6 +247,10 @@ function showSection(sectionId) {
     navItems[4].classList.add('active');
       loadProfileData();
       break;
+      case 'addFuelForm':
+           showAddFuelForm();
+          break;
+          
     // Logout doesn't need active state
   }
   
