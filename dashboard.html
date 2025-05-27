@@ -161,6 +161,9 @@
       
       <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" required>
       <div id="passengerPhoneError" class="validation-message"></div>
+
+      <textarea id="purpose" placeholder="Purpose of the journey" required></textarea>
+      <div id="purposeError" class="validation-message"></div>
       
       <button type="button" onclick="validateJourneyForm()">Start Trip</button>
     </form>
@@ -622,6 +625,11 @@ document.addEventListener('DOMContentLoaded', function() {
   
   document.getElementById('passengerPhone').addEventListener('input', function() {
     validatePhone(this.value, 'passengerPhone');
+  });
+
+  // Add validation for purpose field
+  document.getElementById('purpose').addEventListener('input', function() {
+     validateRequired(this.value, 'purpose');
   });
 
 
@@ -1148,6 +1156,7 @@ function validateJourneyForm() {
   isValid &= validateNumber(document.getElementById('passengerCount').value, 'passengerCount');
   isValid &= validateName(document.getElementById('passengerName').value, 'passengerName');
   isValid &= validatePhone(document.getElementById('passengerPhone').value, 'passengerPhone');
+  isValid &= validateRequired(document.getElementById('purpose').value, 'purpose');
   
   // If all valid, proceed with saving
   if (isValid) {
@@ -1172,11 +1181,19 @@ async function saveAsPending() {
   const passengerCount = document.getElementById('passengerCount').value;
   const passengerName = document.getElementById('passengerName').value;
   const passengerPhone = document.getElementById('passengerPhone').value;
+  const purpose = document.getElementById('purpose').value;
 
   // Validate required fields
-  if (!vehicleNumber || !startPoint || !startKm || !startTime) {
+  if (!vehicleNumber || !startPoint || !startKm || !startTime || !purpose) {
    showPopup('Validation Error', 'Please fill in all required fields');
     return;
+  }
+
+   if (!purpose || purpose.trim() === '') {
+    showError('purpose', 'Purpose is required');
+    return;
+  } else {
+    showSuccess('purpose');
   }
 
   // Create journey data object
@@ -1192,7 +1209,8 @@ async function saveAsPending() {
     startTime: startTime,
     passengerCount: passengerCount,
     passengerName: passengerName,
-    passengerPhone: passengerPhone
+    passengerPhone: passengerPhone,
+     purpose: purpose
   };
 
   showLoader();
