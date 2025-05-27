@@ -444,6 +444,11 @@
       <label>Passenger Phone:</label>
       <input type="tel" id="completePassengerPhone" pattern="[0-9]{10}" required>
     </div>
+
+    <div class="form-group">
+      <label>Purpose:</label>
+      <textarea rows="4" id="completePurpose"  required></textarea>
+    </div>
     
     <!-- Additional fields for completion -->
     <div class="form-group">
@@ -459,6 +464,15 @@
     <div class="form-group">
       <label>End Time:</label>
       <input type="time" id="completeEndTime" required>
+    </div>
+
+    <div class="form-group">
+      <label>Fuel Filled:</label>
+      <select id="completeFuelFilled" required>
+        <option value="">Select Option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
     </div>
     
     <button type="button" onclick="submitCompletedJourney()">Complete Journey</button>
@@ -1042,7 +1056,8 @@ async function completeJourney(travelId) {
       document.getElementById('completePassengerCount').value = journey.PassengerCount || '';
       document.getElementById('completePassengerName').value = journey.PassengerName || '';
       document.getElementById('completePassengerPhone').value = journey.PassengerPhone || '';
-      
+       document.getElementById('completePurpose').value = journey.Purpose || '';
+
       // Clear the completion fields
       document.getElementById('completeEndPoint').value = '';
       document.getElementById('completeEndKm').value = '';
@@ -1085,12 +1100,15 @@ async function submitCompletedJourney() {
   const passengerCount = document.getElementById('completePassengerCount').value;
   const passengerName = document.getElementById('completePassengerName').value;
   const passengerPhone = document.getElementById('completePassengerPhone').value;
+  const purpose = document.getElementById('completePurpose').value;
   const endPoint = document.getElementById('completeEndPoint').value;
   const endKm = document.getElementById('completeEndKm').value;
   const endTime = document.getElementById('completeEndTime').value;
+  const fuelFilled = document.getElementById('completeFuelFilled').value;
+  const totalKM=endKm-startKm;
 
   // Validate required fields
-  if (!endPoint || !endKm || !endTime) {
+  if (!endPoint || !endKm || !endTime || !fuelFilled) {
     showPopup('Validation Error', 'Please fill in all completion details');
     return;
   }
@@ -1108,9 +1126,13 @@ async function submitCompletedJourney() {
     passengerCount: passengerCount,
     passengerName: passengerName,
     passengerPhone: passengerPhone,
+    purpose:purpose,
     endPoint: endPoint,
     endKm: endKm,
-    endTime: endTime
+    endTime: endTime,
+    totalKM:totalKM,
+    fuelFilled:fuelFilled
+    
   };
 
   // Show loading state
