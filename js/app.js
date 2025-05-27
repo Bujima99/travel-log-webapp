@@ -259,6 +259,9 @@ function showSection(sectionId) {
       case 'addServiceForm':
            showAddServiceForm();
           break;
+      case 'addJourney' :
+          populateVehicleDropdowns();
+          break;
           
     // Logout doesn't need active state
   }
