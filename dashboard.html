@@ -964,7 +964,7 @@ function showAddFuelForm() {
   document.querySelectorAll('.section').forEach(section => {
     section.classList.remove('active');
   });
-  
+  populateVehicleDropdowns();
   // Show the form (if you're keeping it separate)
   document.getElementById('addFuelForm').style.display = 'block';
   // Scroll to form
@@ -976,6 +976,7 @@ function showAddFuelForm() {
   document.querySelectorAll('.section').forEach(section => {
     section.classList.remove('active');
   });
+    populateVehicleDropdowns();
   // Show the form (if you're keeping it separate)
   document.getElementById('addServiceForm').style.display = 'block';
   // Scroll to form
