@@ -162,7 +162,7 @@
       <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" required>
       <div id="passengerPhoneError" class="validation-message"></div>
       
-      <button type="button" onclick="saveAsPending()">Start Trip</button>
+      <button type="button" onclick="validateJourneyForm()">Start Trip</button>
     </form>
   </div>
 
@@ -1133,6 +1133,28 @@ async function submitCompletedJourney() {
   .finally(() => {
         hideLoader(); // Now this will only run after everything is complete
     });
+}
+
+  // Form validation function called when submitting
+function validateJourneyForm() {
+  let isValid = true;
+  
+  // Validate all fields
+  isValid &= validateRequired(document.getElementById('vehicleName').value, 'vehicleName');
+  isValid &= validateRequired(document.getElementById('vehicleNumber').value, 'vehicleNumber');
+  isValid &= validateName(document.getElementById('startPoint').value, 'startPoint');
+  isValid &= validateNumber(document.getElementById('startKm').value, 'startKm');
+  isValid &= validateRequired(document.getElementById('startTime').value, 'startTime');
+  isValid &= validateNumber(document.getElementById('passengerCount').value, 'passengerCount');
+  isValid &= validateName(document.getElementById('passengerName').value, 'passengerName');
+  isValid &= validatePhone(document.getElementById('passengerPhone').value, 'passengerPhone');
+  
+  // If all valid, proceed with saving
+  if (isValid) {
+    saveAsPending();
+  } else {
+    showPopup('Validation Error', 'Please fix all errors before submitting');
+  }
 }
 
 // Function to save journey as pending
