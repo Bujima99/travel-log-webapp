@@ -217,8 +217,8 @@ function showSection(sectionId) {
     section.classList.remove('active');
   });
 
-    hideAddFuelForm();
-    hideAddServiceForm();
+   document.getElementById('addFuelForm').style.display = 'none';
+    document.getElementById('addServiceForm').style.display = 'none';
   
   // Show the selected section
   document.getElementById(sectionId).classList.add('active');
