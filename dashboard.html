@@ -139,17 +139,32 @@
       <select id="vehicleName" required onchange="updateVehicleNumber()">
         <option value="">Select Vehicle</option>
       </select>
-     <input type="text" id="vehicleNumber" placeholder="Vehicle Number" readonly required>
+      <div id="vehicleNameError" class="validation-message"></div>
+      
+      <input type="text" id="vehicleNumber" placeholder="Vehicle Number" readonly required>
+      <div id="vehicleNumberError" class="validation-message"></div>
+      
       <input type="text" id="startPoint" placeholder="Starting Point" required>
+      <div id="startPointError" class="validation-message"></div>
+      
       <input type="number" id="startKm" placeholder="Starting KM" required>
+      <div id="startKmError" class="validation-message"></div>
+      
       <input type="time" id="startTime" required>
+      <div id="startTimeError" class="validation-message"></div>
+      
       <input type="number" id="passengerCount" placeholder="No. of Passengers" required>
+      <div id="passengerCountError" class="validation-message"></div>
+      
       <input type="text" id="passengerName" placeholder="One Passenger Name" required>
-      <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" pattern="[0-9]{10}" required>
+      <div id="passengerNameError" class="validation-message"></div>
+      
+      <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" required>
+      <div id="passengerPhoneError" class="validation-message"></div>
+      
       <button type="button" onclick="saveAsPending()">Start Trip</button>
     </form>
   </div>
-
 
  <div id="fuel" class="section">
   <h2>Fuel Tracker</h2>
@@ -581,6 +596,33 @@ document.addEventListener('DOMContentLoaded', function() {
   serviceVehicleNameSelect.appendChild(option3);
   });
 
+  document.getElementById('vehicleName').addEventListener('change', function() {
+    validateRequired(this.value, 'vehicleName');
+  });
+  
+  document.getElementById('startPoint').addEventListener('input', function() {
+    validateName(this.value, 'startPoint');
+  });
+  
+  document.getElementById('startKm').addEventListener('input', function() {
+    validateNumber(this.value, 'startKm');
+  });
+  
+  document.getElementById('startTime').addEventListener('change', function() {
+    validateRequired(this.value, 'startTime');
+  });
+  
+  document.getElementById('passengerCount').addEventListener('input', function() {
+    validateNumber(this.value, 'passengerCount');
+  });
+  
+  document.getElementById('passengerName').addEventListener('input', function() {
+    validateName(this.value, 'passengerName');
+  });
+  
+  document.getElementById('passengerPhone').addEventListener('input', function() {
+    validatePhone(this.value, 'passengerPhone');
+  });
 
 
     if (menuToggle && sidebar) {
@@ -1446,6 +1488,82 @@ function saveProfileChanges() {
   .finally(() => {
     hideLoader();
   });
+}
+
+  // Validation functions (similar to your index.html but with some additions)
+function validateRequired(value, fieldId) {
+  if (!value || value.trim() === '') {
+    showError(fieldId, 'This field is required');
+    return false;
+  }
+  showSuccess(fieldId);
+  return true;
+}
+
+function validateName(name, fieldId) {
+  const nameRegex = /^[A-Za-z\s]+$/; // Allows spaces between names
+  
+  if (!validateRequired(name, fieldId)) {
+    return false;
+  }
+  
+  if (!nameRegex.test(name)) {
+    showError(fieldId, 'Only alphabets and spaces are allowed');
+    return false;
+  }
+  
+  showSuccess(fieldId);
+  return true;
+}
+
+function validateNumber(number, fieldId) {
+  if (!validateRequired(number, fieldId)) {
+    return false;
+  }
+  
+  if (isNaN(number) || number <= 0) {
+    showError(fieldId, 'Please enter a valid positive number');
+    return false;
+  }
+  
+  showSuccess(fieldId);
+  return true;
+}
+
+function validatePhone(phone, fieldId) {
+  const phoneRegex = /^[0-9]{10}$/;
+  
+  if (!validateRequired(phone, fieldId)) {
+    return false;
+  }
+  
+  if (!phoneRegex.test(phone)) {
+    showError(fieldId, 'Please enter a valid 10-digit phone number');
+    return false;
+  }
+  
+  showSuccess(fieldId);
+  return true;
+}
+
+// Show error/success messages (same as in index.html)
+function showError(fieldId, message) {
+  const input = document.getElementById(fieldId);
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  input.classList.remove('valid');
+  input.classList.add('invalid');
+  errorElement.textContent = message;
+  errorElement.style.display = 'block';
+}
+
+function showSuccess(fieldId) {
+  const input = document.getElementById(fieldId);
+  const errorElement = document.getElementById(`${fieldId}Error`);
+  
+  input.classList.remove('invalid');
+  input.classList.add('valid');
+  errorElement.style.display = 'none';
 }
 
 
