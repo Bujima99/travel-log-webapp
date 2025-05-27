@@ -1041,3 +1041,12 @@ input.detail-input {
   border-radius: 4px;
   font-family: inherit;
 }
+
+.profile-badge{
+    background-color: #ff5722;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-left: 8px;
+}
