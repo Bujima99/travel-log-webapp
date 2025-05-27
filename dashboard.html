@@ -405,65 +405,77 @@
     
     <div class="form-group">
       <label>Vehicle Name:</label>
-       <select id="completeVehicleName" required onchange="updateVehicleNumber()">
-      <option value="">Select Vehicle</option>
-    </select>
+      <select id="completeVehicleName" required onchange="updateVehicleNumber()">
+        <option value="">Select Vehicle</option>
+      </select>
+      <div id="completeVehicleNameError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>Vehicle Number:</label>
       <input type="text" id="completeVehicleNumber" placeholder="Vehicle Number" readonly required>
+      <div id="completeVehicleNumberError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>Start Point:</label>
       <input type="text" id="completeStartPoint" required>
+      <div id="completeStartPointError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>Start KM:</label>
       <input type="number" id="completeStartKm" required>
+      <div id="completeStartKmError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>Start Time:</label>
       <input type="time" id="completeStartTime" required>
+      <div id="completeStartTimeError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>Passenger Count:</label>
       <input type="number" id="completePassengerCount" required>
+      <div id="completePassengerCountError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>Passenger Name:</label>
       <input type="text" id="completePassengerName" required>
+      <div id="completePassengerNameError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>Passenger Phone:</label>
-      <input type="tel" id="completePassengerPhone" pattern="[0-9]{10}" required>
+      <input type="tel" id="completePassengerPhone" required>
+      <div id="completePassengerPhoneError" class="validation-message"></div>
     </div>
 
     <div class="form-group">
       <label>Purpose:</label>
-      <textarea rows="4" id="completePurpose"  required></textarea>
+      <textarea rows="4" id="completePurpose" required></textarea>
+      <div id="completePurposeError" class="validation-message"></div>
     </div>
     
     <!-- Additional fields for completion -->
     <div class="form-group">
       <label>End Point:</label>
       <input type="text" id="completeEndPoint" required>
+      <div id="completeEndPointError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>End KM:</label>
       <input type="number" id="completeEndKm" required>
+      <div id="completeEndKmError" class="validation-message"></div>
     </div>
     
     <div class="form-group">
       <label>End Time:</label>
       <input type="time" id="completeEndTime" required>
+      <div id="completeEndTimeError" class="validation-message"></div>
     </div>
 
     <div class="form-group">
@@ -473,9 +485,10 @@
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
+      <div id="completeFuelFilledError" class="validation-message"></div>
     </div>
     
-    <button type="button" onclick="submitCompletedJourney()">Complete Journey</button>
+    <button type="button" onclick="validateCompleteJourneyForm()">Complete Journey</button>
     <button type="button" class="cancel-btn" onclick="showSection('home')">Cancel</button>
   </form>
 </div>
@@ -643,6 +656,66 @@ document.addEventListener('DOMContentLoaded', function() {
   // Add validation for purpose field
   document.getElementById('purpose').addEventListener('input', function() {
      validateRequired(this.value, 'purpose');
+  });
+
+  // Vehicle selection validation
+  document.getElementById('completeVehicleName').addEventListener('change', function() {
+    validateRequired(this.value, 'completeVehicleName');
+  });
+  
+  // Start point validation (alphabets only)
+  document.getElementById('completeStartPoint').addEventListener('input', function() {
+    validateName(this.value, 'completeStartPoint');
+  });
+  
+  // Start KM validation (positive number)
+  document.getElementById('completeStartKm').addEventListener('input', function() {
+    validateNumber(this.value, 'completeStartKm');
+  });
+  
+  // Start time validation
+  document.getElementById('completeStartTime').addEventListener('change', function() {
+    validateRequired(this.value, 'completeStartTime');
+  });
+  
+  // Passenger count validation (positive number)
+  document.getElementById('completePassengerCount').addEventListener('input', function() {
+    validateNumber(this.value, 'completePassengerCount');
+  });
+  
+  // Passenger name validation (alphabets only)
+  document.getElementById('completePassengerName').addEventListener('input', function() {
+    validateName(this.value, 'completePassengerName');
+  });
+  
+  // Passenger phone validation (10 digits)
+  document.getElementById('completePassengerPhone').addEventListener('input', function() {
+    validatePhone(this.value, 'completePassengerPhone');
+  });
+  
+  // Purpose validation
+  document.getElementById('completePurpose').addEventListener('input', function() {
+    validateRequired(this.value, 'completePurpose');
+  });
+  
+  // End point validation (alphabets only)
+  document.getElementById('completeEndPoint').addEventListener('input', function() {
+    validateName(this.value, 'completeEndPoint');
+  });
+  
+  // End KM validation (positive number)
+  document.getElementById('completeEndKm').addEventListener('input', function() {
+    validateNumber(this.value, 'completeEndKm');
+  });
+  
+  // End time validation
+  document.getElementById('completeEndTime').addEventListener('change', function() {
+    validateRequired(this.value, 'completeEndTime');
+  });
+  
+  // Fuel filled validation
+  document.getElementById('completeFuelFilled').addEventListener('change', function() {
+    validateRequired(this.value, 'completeFuelFilled');
   });
 
 
@@ -1082,6 +1155,33 @@ function closeModal() {
   const modal = document.getElementById('completeJourneyModal');
   if (modal) {
     modal.remove();
+  }
+}
+
+  // Master validation function for complete journey form
+function validateCompleteJourneyForm() {
+  let isValid = true;
+  
+  // Validate all fields
+  isValid &= validateRequired(document.getElementById('completeVehicleName').value, 'completeVehicleName');
+  isValid &= validateRequired(document.getElementById('completeVehicleNumber').value, 'completeVehicleNumber');
+  isValid &= validateName(document.getElementById('completeStartPoint').value, 'completeStartPoint');
+  isValid &= validateNumber(document.getElementById('completeStartKm').value, 'completeStartKm');
+  isValid &= validateRequired(document.getElementById('completeStartTime').value, 'completeStartTime');
+  isValid &= validateNumber(document.getElementById('completePassengerCount').value, 'completePassengerCount');
+  isValid &= validateName(document.getElementById('completePassengerName').value, 'completePassengerName');
+  isValid &= validatePhone(document.getElementById('completePassengerPhone').value, 'completePassengerPhone');
+  isValid &= validateRequired(document.getElementById('completePurpose').value, 'completePurpose');
+  isValid &= validateName(document.getElementById('completeEndPoint').value, 'completeEndPoint');
+  isValid &= validateNumber(document.getElementById('completeEndKm').value, 'completeEndKm');
+  isValid &= validateRequired(document.getElementById('completeEndTime').value, 'completeEndTime');
+  isValid &= validateRequired(document.getElementById('completeFuelFilled').value, 'completeFuelFilled');
+  
+  // If all valid, proceed with submission
+  if (isValid) {
+    submitCompletedJourney();
+  } else {
+    showPopup('Validation Error', 'Please correct the highlighted fields');
   }
 }
 
