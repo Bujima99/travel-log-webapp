@@ -250,6 +250,9 @@ function showSection(sectionId) {
       case 'addFuelForm':
            showAddFuelForm();
           break;
+      case 'addServiceForm':
+           showAddServiceForm();
+          break;
           
     // Logout doesn't need active state
   }
