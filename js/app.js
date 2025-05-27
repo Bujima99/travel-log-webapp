@@ -211,10 +211,14 @@ function handleSuccessfulLogin(driverData) {
 
 
 function showSection(sectionId) {
+    
   // Hide all sections
   document.querySelectorAll('.section').forEach(section => {
     section.classList.remove('active');
   });
+
+    hideAddFuelForm();
+    hideAddServiceForm();
   
   // Show the selected section
   document.getElementById(sectionId).classList.add('active');
@@ -223,6 +227,8 @@ function showSection(sectionId) {
   document.querySelectorAll('.nav-item').forEach(item => {
     item.classList.remove('active');
   });
+
+
   
   // Add active class to the clicked nav item
   const navItems = document.querySelectorAll('.nav-item');
