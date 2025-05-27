@@ -160,3 +160,23 @@
 }
 
 /* LOADER CSS ENDS*/
+
+
+/*VALIDATION CSS STARTS*/
+.validation-message {
+  color: #ff4444;
+  font-size: 0.8em;
+  margin-top: 5px;
+  margin-left: 10px;
+  display: none;
+}
+
+.input.invalid {
+  border: 1px solid #ff4444 !important;
+}
+
+.input.valid {
+  border: 1px solid #00C851 !important;
+}
+
+/*VALIDATION CSS ENDS*/
