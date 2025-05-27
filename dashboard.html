@@ -963,10 +963,19 @@ function showAddFuelForm() {
     section.classList.remove('active');
   });
   
-  
   // Show the form (if you're keeping it separate)
   document.getElementById('addFuelForm').style.display = 'block';
-  
+  // Scroll to form
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+  function showAddServiceForm() {
+// Hide all sections first
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
+  // Show the form (if you're keeping it separate)
+  document.getElementById('addServiceForm').style.display = 'block';
   // Scroll to form
   window.scrollTo(0, document.body.scrollHeight);
 }
