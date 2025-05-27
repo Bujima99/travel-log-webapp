@@ -370,6 +370,7 @@
         <span class="material-symbols-outlined">account_circle</span>
       </div>
       <h3 id="profileDriverName"></h3>
+      <span class="admin-badge" id="profileBadge"></span>
     </div>
     
     <div class="profile-details">
@@ -1553,6 +1554,8 @@ function loadProfileData() {
       if (data) {
         document.getElementById('profileDriverId').textContent = data.DriverID || '';
         document.getElementById('profileDriverName').textContent = data.DriverName || '';
+        document.getElementById('profileBadge').textContent = data.UserType || '';
+        
         document.getElementById('profileUsername').textContent = data.username || '';
         document.getElementById('profilePassword').textContent = '••••••••';
         document.getElementById('profilePhone').textContent = data.DriverPhone || '';
