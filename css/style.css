@@ -600,7 +600,7 @@ form {
   gap: 10px;
 }
 
-form input, form button {
+form input, form button, form textarea {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
