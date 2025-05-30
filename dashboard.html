@@ -96,25 +96,19 @@
     <!-- Add this inside the #home section, right after the <h2>Active Journeys</h2> -->
 <div id="guestTimerContainer" class="guest-timer-container" style="display: none;">
   <div class="timer">
+    <div id="hour">
+      <span id="hour_1">0</span>
+      <span id="hour_0">0</span>
+    </div>
+    <div class="colon">:</div>
     <div id="min">
       <span id="min_1">0</span>
       <span id="min_0">0</span>
     </div>
-    <div id="colon">:</div>
-    <div id="sectens">
-      <span id="sectens_6">0</span>
-      <span id="sectens_5">0</span>
-      <span id="sectens_4">0</span>
-      <span id="sectens_3">0</span>
-      <span id="sectens_2">0</span>
-      <span id="sectens_1">0</span>
-      <span id="sectens_0">0</span>
-    </div>
-    <div id="secones">
-      <span id="secones_60">0</span>
-      <span id="secones_59">9</span>
-      <!-- Continue with all seconds from 58 to 0 -->
-      <span id="secones_0">0</span>
+    <div class="colon">:</div>
+    <div id="sec">
+      <span id="sec_1">0</span>
+      <span id="sec_0">0</span>
     </div>
   </div>
   <div class="timer-label">Guest Access Expires In</div>
@@ -1849,15 +1843,26 @@ class CountdownTimer {
     const formattedMinutes = String(minutes).padStart(2, '0');
     const formattedSeconds = String(seconds).padStart(2, '0');
     
+   // Update hour digits
+    document.getElementById('hour_1').textContent = formattedHours[0];
+    document.getElementById('hour_0').textContent = formattedHours[1];
+    
+    // Update minute digits
     document.getElementById('min_1').textContent = formattedMinutes[0];
     document.getElementById('min_0').textContent = formattedMinutes[1];
-    document.getElementById('sectens_6').textContent = formattedSeconds[0];
-    document.getElementById('secones_60').textContent = formattedSeconds[1];
     
+    // Update second digits
+    document.getElementById('sec_1').textContent = formattedSeconds[0];
+    document.getElementById('sec_0').textContent = formattedSeconds[1];
+    
+    // Add animations
+    this.animateTimerDigit('hour_1', formattedHours[0]);
+    this.animateTimerDigit('hour_0', formattedHours[1]);
     this.animateTimerDigit('min_1', formattedMinutes[0]);
     this.animateTimerDigit('min_0', formattedMinutes[1]);
-    this.animateTimerDigit('sectens_6', formattedSeconds[0]);
-    this.animateTimerDigit('secones_60', formattedSeconds[1]);
+    this.animateTimerDigit('sec_1', formattedSeconds[0]);
+    this.animateTimerDigit('sec_0', formattedSeconds[1]);
+    
   }
 
   animateTimerDigit(elementId, newValue) {
