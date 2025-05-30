@@ -561,6 +561,23 @@ h2:hover::after {
     opacity: 1;
     visibility: visible;
   }
+
+.guestTimerContainer{
+      height: 3rem;
+}
+
+  .timer{
+        font-size: 25px;
+  }
+
+  .timer-label{
+    margin-top: -1rem;
+  }
+
+  .activeJourney{
+    margin-top: 4rem;
+  }
+  
 }
 
 @keyframes pulse {
