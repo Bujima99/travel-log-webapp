@@ -1791,7 +1791,8 @@ function checkGuestTimer() {
     .then(response => response.json())
     .then(data => {
       if (data.activeTimestamp) {
-        startCountdownTimer(data.activeTimestamp);
+        //startCountdownTimer(data.activeTimestamp);
+        const timer = new CountdownTimer(data.activeTimestamp);
         document.getElementById('guestTimerContainer').style.display = 'block';
       }
     })
@@ -1803,76 +1804,72 @@ function checkGuestTimer() {
     });
 }
 
+class CountdownTimer {
+  constructor(activeTimestamp) {
+    this.expiryTime = new Date(activeTimestamp).getTime() + (24 * 60 * 60 * 1000);
+    this.timerInterval = null;
+    this.initializeTimer();
+  }
 
-    
- 
+  initializeTimer() {
+    this.updateTimer();
+    this.timerInterval = setInterval(() => this.updateTimer(), 1000);
+  }
 
-// Add this function to start the countdown
-function startCountdownTimer(activeTimestamp) {
-  const expiryTime = new Date(activeTimestamp).getTime() + (24 * 60 * 60 * 1000);
-
-  function updateTimer() {
+  updateTimer() {
     const now = new Date().getTime();
-    const remainingTime = expiryTime - now;
+    const remainingTime = this.expiryTime - now;
     
     if (remainingTime <= 0) {
-      clearInterval(timerInterval);
+      this.clearTimer();
       document.getElementById('guestTimerContainer').innerHTML = `
         <div class="timer-expired">Guest access expired</div>
       `;
       return;
     }
-    // Calculate hours, minutes, seconds
+    
     const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
     
-    // Update the timer display
-    updateTimerDisplay(hours, minutes, seconds);
+    this.updateTimerDisplay(hours, minutes, seconds);
   }
- 
-  
-  // Update immediately and then every second
-  updateTimer();
-  const timerInterval = setInterval(updateTimer, 1000);
+
+  clearTimer() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  }
+
+  updateTimerDisplay(hours, minutes, seconds) {
+    const formattedHours = String(Math.floor(hours)).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(seconds).padStart(2, '0');
+    
+    document.getElementById('min_1').textContent = formattedMinutes[0];
+    document.getElementById('min_0').textContent = formattedMinutes[1];
+    document.getElementById('sectens_6').textContent = formattedSeconds[0];
+    document.getElementById('secones_60').textContent = formattedSeconds[1];
+    
+    this.animateTimerDigit('min_1', formattedMinutes[0]);
+    this.animateTimerDigit('min_0', formattedMinutes[1]);
+    this.animateTimerDigit('sectens_6', formattedSeconds[0]);
+    this.animateTimerDigit('secones_60', formattedSeconds[1]);
+  }
+
+  animateTimerDigit(elementId, newValue) {
+    const element = document.getElementById(elementId);
+    element.classList.add('animate');
+    setTimeout(() => {
+      element.textContent = newValue;
+      element.classList.remove('animate');
+    }, 100);
+  }
 }
 
-// Add this function to update the timer display
-function updateTimerDisplay(hours, minutes, seconds) {
-  // Format to always show 2 digits
-  const formattedHours = String(Math.floor(hours)).padStart(2, '0');
-  const formattedMinutes = String(minutes).padStart(2, '0');
-  const formattedSeconds = String(seconds).padStart(2, '0');
-  
-  // For the animated timer, we need to handle each digit separately
-  const minTens = formattedMinutes[0];
-  const minOnes = formattedMinutes[1];
-  const secTens = formattedSeconds[0];
-  const secOnes = formattedSeconds[1];
-  
-  // Update the timer elements
-  document.getElementById('min_1').textContent = minTens;
-  document.getElementById('min_0').textContent = minOnes;
-  document.getElementById('sectens_6').textContent = secTens;
-  document.getElementById('secones_60').textContent = secOnes;
-  
-  // Add animation classes (simplified version)
-  animateTimerDigit('min_1', minTens);
-  animateTimerDigit('min_0', minOnes);
-  animateTimerDigit('sectens_6', secTens);
-  animateTimerDigit('secones_60', secOnes);
-}
-
-// Add this helper function for digit animation
-function animateTimerDigit(elementId, newValue) {
-  const element = document.getElementById(elementId);
-  element.classList.add('animate');
-  setTimeout(() => {
-    element.textContent = newValue;
-    element.classList.remove('animate');
-  }, 100);
-}
-
+// Usage:
+// const timer = new CountdownTimer(activeTimestamp);
   
 </script>
 
