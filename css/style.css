@@ -1081,7 +1081,7 @@ input.detail-input {
   text-align: center;
   position: relative;
   display: flex;
-  flex-direction: column;
+  /*flex-direction: column;*/
 }
 
 .timer div span:not(:first-child) {
