@@ -1804,7 +1804,14 @@ function checkGuestTimer() {
 }
 
 
-    function updateTimer() {
+    
+ 
+
+// Add this function to start the countdown
+function startCountdownTimer(activeTimestamp) {
+  const expiryTime = new Date(activeTimestamp).getTime() + (24 * 60 * 60 * 1000);
+
+  function updateTimer() {
     const now = new Date().getTime();
     const remainingTime = expiryTime - now;
     
@@ -1823,12 +1830,6 @@ function checkGuestTimer() {
     // Update the timer display
     updateTimerDisplay(hours, minutes, seconds);
   }
- 
-
-// Add this function to start the countdown
-function startCountdownTimer(activeTimestamp) {
-  const expiryTime = new Date(activeTimestamp).getTime() + (24 * 60 * 60 * 1000);
-
  
   
   // Update immediately and then every second
