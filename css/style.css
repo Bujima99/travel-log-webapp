@@ -238,6 +238,22 @@ select:disabled {
 
 /* Responsive Styles */
 @media (max-width: 767px) {
+
+  .guestTimerContainer{
+      height: 3rem;
+}
+
+  .timer{
+        font-size: 25px;
+  }
+
+  .timer-label{
+    margin-top: -1rem;
+  }
+
+  .activeJourney{
+    margin-top: 4rem;
+  }
     .table-wrapper {
          margin: 0px -15px;
     }
