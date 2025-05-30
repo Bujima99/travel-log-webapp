@@ -1825,13 +1825,17 @@ function submitDriverUpdate() {
     showPopup('Authentication Error', 'Please login again');
     return;
   }
+
+  // Add timestamp if setting Guest to Active
+  const timestamp = (userType === 'Guest' && status === 'Active') ? new Date().toISOString() : '';
   
   const updateData = {
     type: 'update-driver-details',
     driverId: driverId,
     userType: userType,
     status: status,
-    updatedBy: driverData.name
+    updatedBy: driverData.name,
+    timestamp: timestamp  // Add this new field
   };
   
   showLoader();
