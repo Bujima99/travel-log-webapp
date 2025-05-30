@@ -240,15 +240,15 @@ select:disabled {
 @media (max-width: 767px) {
 
   .guestTimerContainer{
-      height: 3rem;
+      height: 3rem !important;
 }
 
   .timer{
-        font-size: 25px;
+        font-size: 25px !important;
   }
 
   .timer-label{
-    margin-top: -1rem;
+    margin-top: -1rem !important;
   }
 
   .activeJourney{
@@ -579,15 +579,15 @@ h2:hover::after {
   }
 
 .guestTimerContainer{
-      height: 3rem;
+      height: 3rem !important;
 }
 
   .timer{
-        font-size: 25px;
+        font-size: 25px !important;
   }
 
   .timer-label{
-    margin-top: -1rem;
+    margin-top: -1rem !important;
   }
 
   .activeJourney{
