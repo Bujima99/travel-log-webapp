@@ -1776,6 +1776,96 @@ function showSuccess(fieldId) {
 }
 
 
+// Add this function to check and start the timer
+function checkGuestTimer() {
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (!driverData || driverData.userType !== 'Guest') {
+    return; // Only show for Guest drivers
+  }
+
+  showLoader();
+  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-guest-timer&driverId=${encodeURIComponent(driverData.id)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.activeTimestamp) {
+        startCountdownTimer(data.activeTimestamp);
+        document.getElementById('guestTimerContainer').style.display = 'block';
+      }
+    })
+    .catch(error => {
+      console.error("Error checking guest timer:", error);
+    })
+    .finally(() => {
+      hideLoader();
+    });
+}
+
+// Add this function to start the countdown
+function startCountdownTimer(activeTimestamp) {
+  const expiryTime = new Date(activeTimestamp).getTime() + (24 * 60 * 60 * 1000);
+  
+  function updateTimer() {
+    const now = new Date().getTime();
+    const remainingTime = expiryTime - now;
+    
+    if (remainingTime <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('guestTimerContainer').innerHTML = `
+        <div class="timer-expired">Guest access expired</div>
+      `;
+      return;
+    }
+    
+    // Calculate hours, minutes, seconds
+    const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+    
+    // Update the timer display
+    updateTimerDisplay(hours, minutes, seconds);
+  }
+  
+  // Update immediately and then every second
+  updateTimer();
+  const timerInterval = setInterval(updateTimer, 1000);
+}
+
+// Add this function to update the timer display
+function updateTimerDisplay(hours, minutes, seconds) {
+  // Format to always show 2 digits
+  const formattedHours = String(Math.floor(hours)).padStart(2, '0');
+  const formattedMinutes = String(minutes).padStart(2, '0');
+  const formattedSeconds = String(seconds).padStart(2, '0');
+  
+  // For the animated timer, we need to handle each digit separately
+  const minTens = formattedMinutes[0];
+  const minOnes = formattedMinutes[1];
+  const secTens = formattedSeconds[0];
+  const secOnes = formattedSeconds[1];
+  
+  // Update the timer elements
+  document.getElementById('min_1').textContent = minTens;
+  document.getElementById('min_0').textContent = minOnes;
+  document.getElementById('sectens_6').textContent = secTens;
+  document.getElementById('secones_60').textContent = secOnes;
+  
+  // Add animation classes (simplified version)
+  animateTimerDigit('min_1', minTens);
+  animateTimerDigit('min_0', minOnes);
+  animateTimerDigit('sectens_6', secTens);
+  animateTimerDigit('secones_60', secOnes);
+}
+
+// Add this helper function for digit animation
+function animateTimerDigit(elementId, newValue) {
+  const element = document.getElementById(elementId);
+  element.classList.add('animate');
+  setTimeout(() => {
+    element.textContent = newValue;
+    element.classList.remove('animate');
+  }, 100);
+}
+
   
 </script>
 
