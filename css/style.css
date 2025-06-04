@@ -1133,3 +1133,20 @@ input.detail-input {
 #colon {
   width: 10px;
 }
+
+/* Add this to your CSS */
+#serviceTable td:nth-child(9) { /* Remarks column */
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#serviceTable td:nth-child(9):hover {
+  white-space: normal;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
