@@ -259,7 +259,7 @@
       <input type="number" id="fuelAmount" placeholder="Amount" step="0.01" required>
       <div id="fuelAmountError" class="validation-message"></div>
       
-      <input type="number" id="fuelLiters" placeholder="Liters" step="0.01" required>
+      <input type="number" id="fuelQuantity" placeholder="Liters" step="0.01" required>
       <div id="fuelQuantityError" class="validation-message"></div>
       
       <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
@@ -1849,7 +1849,7 @@ async function submitFuelEntry() {
   const invoiceNumber = document.getElementById('fuelInvoiceNumber').value;
   const fuelType = document.getElementById('fuelType').value;
   const amount = document.getElementById('fuelAmount').value;
-  const liters = document.getElementById('fuelLiters').value;
+  const liters = document.getElementById('fuelQuantity').value;
   const currentKm = document.getElementById('fuelCurrentKm').value;
   const billImageFile  = document.getElementById('fuelBillImage').files[0];
 
