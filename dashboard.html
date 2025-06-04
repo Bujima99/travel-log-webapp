@@ -825,6 +825,68 @@ document.getElementById('serviceRemarks').addEventListener('input', function() {
   validateRequired(this.value, 'serviceRemarks');
 });
 
+// Vehicle Name (select) - validate on change
+  document.getElementById('fuelVehicleName').addEventListener('change', function() {
+    validateRequired(this.value, 'fuelVehicleName');
+  });
+
+  // Vehicle Number - validate on change (readonly but just in case)
+  document.getElementById('fuelVehicleNumber').addEventListener('change', function() {
+    validateRequired(this.value, 'fuelVehicleNumber');
+  });
+
+  // Date - validate on change
+  document.getElementById('fuelDate').addEventListener('change', function() {
+    validateRequired(this.value, 'fuelDate');
+  });
+
+  // Amount - validate on input
+  document.getElementById('fuelAmount').addEventListener('input', function() {
+    const value = this.value;
+    if (!value) {
+      document.getElementById('fuelAmountError').textContent = 'Amount is required';
+    } else if (isNaN(value) || Number(value) <= 0) {
+      document.getElementById('fuelAmountError').textContent = 'Please enter a valid positive amount';
+    } else {
+      document.getElementById('fuelAmountError').textContent = '';
+    }
+  });
+
+  // Quantity - validate on input
+  document.getElementById('fuelQuantity').addEventListener('input', function() {
+    const value = this.value;
+    if (!value) {
+      document.getElementById('fuelQuantityError').textContent = 'Quantity is required';
+    } else if (isNaN(value) || Number(value) <= 0) {
+      document.getElementById('fuelQuantityError').textContent = 'Please enter a valid positive quantity';
+    } else {
+      document.getElementById('fuelQuantityError').textContent = '';
+    }
+  });
+
+  // Current KM - validate on input
+  document.getElementById('fuelCurrentKm').addEventListener('input', function() {
+    const value = this.value;
+    if (!value) {
+      document.getElementById('fuelCurrentKmError').textContent = 'Current KM is required';
+    } else if (isNaN(value) || Number(value) <= 0) {
+      document.getElementById('fuelCurrentKmError').textContent = 'Please enter a valid positive number';
+    } else {
+      document.getElementById('fuelCurrentKmError').textContent = '';
+    }
+  });
+
+  // Fuel Type (select) - validate on change
+  document.getElementById('fuelType').addEventListener('change', function() {
+    validateRequired(this.value, 'fuelType');
+  });
+
+  // Bill Image - validate on change
+  document.getElementById('fuelBillImage').addEventListener('change', function() {
+    validateRequired(this.value, 'fuelBillImage');
+  });
+
+
     if (menuToggle && sidebar) {
         menuToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
