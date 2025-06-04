@@ -238,8 +238,14 @@
       <select id="fuelVehicleName" required onchange="updateVehicleNumber()">
         <option value="">Select Vehicle</option>
       </select>
+      <div id="fuelVehicleNameError" class="validation-message"></div>
+      
       <input type="text" id="fuelVehicleNumber" placeholder="Vehicle Number" readonly required>
+      <div id="fuelVehicleNumberError" class="validation-message"></div>
+      
       <input type="date" id="fuelDate" required>
+      <div id="fuelDateError" class="validation-message"></div>
+      
       <input type="text" id="fuelInvoiceNumber" placeholder="Invoice Number" required>
       <select id="fuelType" required>
         <option value="">Select Fuel Type</option>
@@ -248,10 +254,20 @@
         <option value="CNG">CNG</option>
         <option value="Electric">Electric</option>
       </select>
+       <div id="fuelTypeError" class="validation-message"></div>
+      
       <input type="number" id="fuelAmount" placeholder="Amount" step="0.01" required>
+      <div id="fuelAmountError" class="validation-message"></div>
+      
       <input type="number" id="fuelLiters" placeholder="Liters" step="0.01" required>
+      <div id="fuelQuantityError" class="validation-message"></div>
+      
       <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
+       <div id="fuelCurrentKmError" class="validation-message"></div>
+      
       <input type="file" id="fuelBillImage" accept="image/*" required>
+       <div id="fuelBillImageError" class="validation-message"></div>
+      
       <div class="form-buttons">
         <button type="button" onclick="submitFuelEntry()">Submit</button>
         <button type="button" class="cancel-btn" onclick="hideAddFuelForm()">Cancel</button>
@@ -1666,10 +1682,100 @@ function formatTime(timeString) {
   return timeString;
 }
 
+  function validateFuelForm() {
+  let isValid = true;
+  
+  // Clear all previous error messages
+  document.querySelectorAll('.validation-message').forEach(el => el.textContent = '');
+  
+  // Validate each field
+  if (!document.getElementById('fuelVehicleName').value) {
+    document.getElementById('fuelVehicleNameError').textContent = 'Please select a vehicle';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('fuelVehicleNumber').value) {
+    document.getElementById('fuelVehicleNumberError').textContent = 'Vehicle number is required';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('fuelDate').value) {
+    document.getElementById('fuelDateError').textContent = 'Please select a date';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('fuelAmount').value) {
+    document.getElementById('fuelAmountError').textContent = 'Amount is required';
+    isValid = false;
+  } else if (isNaN(document.getElementById('fuelAmount').value) || Number(document.getElementById('fuelAmount').value) <= 0) {
+    document.getElementById('fuelAmountError').textContent = 'Please enter a valid positive amount';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('fuelQuantity').value) {
+    document.getElementById('fuelQuantityError').textContent = 'Quantity is required';
+    isValid = false;
+  } else if (isNaN(document.getElementById('fuelQuantity').value) || Number(document.getElementById('fuelQuantity').value) <= 0) {
+    document.getElementById('fuelQuantityError').textContent = 'Please enter a valid positive quantity';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('fuelCurrentKm').value) {
+    document.getElementById('fuelCurrentKmError').textContent = 'Current KM is required';
+    isValid = false;
+  } else if (isNaN(document.getElementById('fuelCurrentKm').value) || Number(document.getElementById('fuelCurrentKm').value) <= 0) {
+    document.getElementById('fuelCurrentKmError').textContent = 'Please enter a valid positive number';
+    isValid = false;
+  }
+  
+
+  
+  if (!document.getElementById('fuelType').value) {
+    document.getElementById('fuelTypeError').textContent = 'Please select fuel type';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('fuelBillImage').value) {
+    document.getElementById('fuelBillImageError').textContent = 'Please upload a bill image';
+    isValid = false;
+  }
+  
+  // Remarks is optional, so no validation needed
+  
+  return isValid;
+}
+  
 async function submitFuelEntry() {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   if (!driverData) {
     showPopup('Authentication Error', 'Please login again');
+    return;
+  }
+
+   if (!validateFuelForm()) {
+    showPopup('Validation Error', 'Please correct the highlighted fields');
+    return;
+  }
+  // Master validation for fuel form
+  let isValid = true;
+  
+  // Clear previous errors
+  document.querySelectorAll('.validation-message').forEach(el => el.textContent = '');
+  
+  // Validate all fields
+  isValid &= validateRequired(document.getElementById('fuelVehicleName').value, 'fuelVehicleName');
+  isValid &= validateRequired(document.getElementById('fuelVehicleNumber').value, 'fuelVehicleNumber');
+  isValid &= validateRequired(document.getElementById('fuelDate').value, 'fuelDate');
+  isValid &= validateNumber(document.getElementById('fuelAmount').value, 'fuelAmount');
+  isValid &= validateNumber(document.getElementById('fuelQuantity').value, 'fuelQuantity');
+  isValid &= validateNumber(document.getElementById('fuelCurrentKm').value, 'fuelCurrentKm');
+  isValid &= validateRequired(document.getElementById('fuelType').value, 'fuelType');
+  isValid &= validateRequired(document.getElementById('fuelBillImage').value, 'fuelBillImage');
+  
+  // Remarks is optional, so no validation needed
+
+  if (!isValid) {
+    showPopup('Validation Error', 'Please correct the highlighted fields');
     return;
   }
 
