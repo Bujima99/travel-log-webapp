@@ -1603,6 +1603,27 @@ input[type="search"]::-webkit-search-cancel-button {
   
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+
+  // Check session on page load
+    const sessionDriverData = checkSession();
+    
+    if (!sessionDriverData) {
+        window.location.href = "index.html";
+        return;
+    }
+    
+    // Session is valid, continue loading the page
+    // You can also update the UI with the user's data
+    document.getElementById('driverName').textContent = sessionDriverData.name;
+    
+    // Set up a timer to check session periodically
+    setInterval(() => {
+        if (!checkSession()) {
+            alert('Your session has expired. Please log in again.');
+            window.location.href = "index.html";
+        }
+    }, 60000); // Check every minute
+  
   const driverData = JSON.parse(localStorage.getItem('driverData'));
     
   if (driverData) {
