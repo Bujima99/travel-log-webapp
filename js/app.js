@@ -156,6 +156,23 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
       
       if (user) {
         // Check user status
+
+          if (user.UserType === "Guest") {
+          const activeTimestamp = new Date(user.ActiveTimeStamp).getTime();
+          const now = new Date().getTime();
+          const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+          
+          if (now - activeTimestamp >= twentyFourHours) {
+            // Update user status to "Hold" in the backend
+            return fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=updateStatus&driverId=" + user.DriverID + "&status=Hold")
+              .then(() => {
+                showPopup('Access Expired', 'Sorry, your Guest access has expired. Please contact admin to get the access.');
+                hideLoader();
+                return Promise.reject(new Error('Guest access expired'));
+              });
+          }
+        }
+          
         if (user.Status === "Active" || user.Status === "Owner") {
           showPopup('Success', `Welcome ${user.username}!`);
           const driverData = {
