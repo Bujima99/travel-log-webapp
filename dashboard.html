@@ -1216,6 +1216,13 @@ function validateCompleteJourneyForm() {
   isValid &= validateNumber(document.getElementById('completeEndKm').value, 'completeEndKm');
   isValid &= validateRequired(document.getElementById('completeEndTime').value, 'completeEndTime');
   isValid &= validateRequired(document.getElementById('completeFuelFilled').value, 'completeFuelFilled');
+
+  const startKm = parseFloat(document.getElementById('completeStartKm').value);
+  const endKm = parseFloat(document.getElementById('completeEndKm').value);
+  if (!isNaN(startKm) && !isNaN(endKm) && startKm >= endKm) {
+    showError('completeEndKm', 'End KM must be greater than Start KM');
+    isValid = false;
+  }
   
   // If all valid, proceed with submission
   if (isValid) {
