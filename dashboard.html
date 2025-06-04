@@ -844,13 +844,13 @@ document.getElementById('serviceRemarks').addEventListener('input', function() {
   document.getElementById('fuelAmount').addEventListener('input', function() {
     const value = this.value;
     if (!value) {
-      showError('fuelAmountError','Amount is required');
+      showError('fuelAmount','Amount is required');
       //document.getElementById('fuelAmountError').textContent = 'Amount is required';
     } else if (isNaN(value) || Number(value) <= 0) {
-       showError('fuelAmountError','Please enter a valid positive amount');
+       showError('fuelAmount','Please enter a valid positive amount');
       //document.getElementById('fuelAmountError').textContent = 'Please enter a valid positive amount';
     } else {
-      showError('fuelAmountError','');
+      showError('fuelAmount','');
      // document.getElementById('fuelAmountError').textContent = '';
     }
   });
@@ -859,13 +859,13 @@ document.getElementById('serviceRemarks').addEventListener('input', function() {
   document.getElementById('fuelQuantity').addEventListener('input', function() {
     const value = this.value;
     if (!value) {
-      showError('fuelQuantityError','Quantity is required');
+      showError('fuelQuantity','Quantity is required');
      // document.getElementById('fuelQuantityError').textContent = 'Quantity is required';
     } else if (isNaN(value) || Number(value) <= 0) {
-      showError('fuelQuantityError','Please enter a valid positive quantity');
+      showError('fuelQuantity','Please enter a valid positive quantity');
      // document.getElementById('fuelQuantityError').textContent = 'Please enter a valid positive quantity';
     } else {
-       showError('fuelQuantityError','');
+       showError('fuelQuantity','');
      // document.getElementById('fuelQuantityError').textContent = '';
     }
   });
@@ -874,13 +874,13 @@ document.getElementById('serviceRemarks').addEventListener('input', function() {
   document.getElementById('fuelCurrentKm').addEventListener('input', function() {
     const value = this.value;
     if (!value) {
-      showError('fuelCurrentKmError','Current KM is required');
+      showError('fuelCurrentKm','Current KM is required');
      // document.getElementById('fuelCurrentKmError').textContent = 'Current KM is required';
     } else if (isNaN(value) || Number(value) <= 0) {
-      showError('fuelCurrentKmError','Please enter a valid positive number');
+      showError('fuelCurrentKm','Please enter a valid positive number');
      // document.getElementById('fuelCurrentKmError').textContent = 'Please enter a valid positive number';
     } else {
-      showError('fuelCurrentKmError','');
+      showError('fuelCurrentKm','');
       //document.getElementById('fuelCurrentKmError').textContent = '';
     }
   });
@@ -2137,13 +2137,10 @@ function showError(fieldId, message) {
   
   input.classList.remove('valid');
   input.classList.add('invalid');
-  if(message != ''){
-     errorElement.textContent = message;
-    errorElement.style.display = 'block';
-    return;
-  }
-  
-  errorElement.style.display = 'none';
+
+  errorElement.textContent = message;
+  errorElement.style.display = 'block';
+ 
 }
 
 function showSuccess(fieldId) {
