@@ -921,10 +921,10 @@ async function submitServiceEntry() {
   const nextServiceDate = serviceType === 'Service' ? document.getElementById('nextServiceDate').value : '-';
   const workshop = document.getElementById('serviceWorkshop').value;
   const workshopLocation = document.getElementById('serviceWorkshopLocation').value;
-  const billImage = document.getElementById('serviceBillImage').files[0];
+  const billImageFile  = document.getElementById('serviceBillImage').files[0];
 
   // Validate required fields
-  if (!vehicleNumber || !date || !invoiceNumber || !serviceType || !amount || !currentKm || !workshop || !workshopLocation || !billImage) {
+  if (!vehicleNumber || !date || !invoiceNumber || !serviceType || !amount || !currentKm || !workshop || !workshopLocation || !billImageFile) {
     showPopup('Validation Error', 'Please fill in all required fields');
     return;
   }
@@ -933,6 +933,20 @@ async function submitServiceEntry() {
   const submitBtn = document.querySelector('#serviceForm button[type="button"]');
   submitBtn.disabled = true;
   submitBtn.textContent = 'Submitting...';
+
+   // Convert image to base64
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(',')[1]); // Remove the data:image/*;base64, prefix
+      reader.onerror = error => reject(error);
+    });
+  };
+
+   try {
+    const billImageBase64 = await getBase64(billImageFile);
+
 
   // Create FormData for proper file upload
   const formData = {
@@ -950,7 +964,7 @@ async function submitServiceEntry() {
     nextServiceDate: nextServiceDate,
     workshop: workshop,
     workshopLocation: workshopLocation,
-    billImage: billImage
+    billImage: billImageBase64
   };
 
   showLoader();
@@ -975,6 +989,12 @@ async function submitServiceEntry() {
   }).finally(() => {
     hideLoader();
   });
+      } catch (error) {
+    console.error("Error converting image:", error);
+    showPopup('Error', 'Error processing the bill image. Please try again.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit';
+  }
 }
 
 // Add this function to generate service ID
@@ -1534,8 +1554,6 @@ async function submitFuelEntry() {
 
    try {
     const billImageBase64 = await getBase64(billImageFile);
-    const fileName = billImageFile.name;
-    const fileType = billImageFile.type;
 
   
     // Create FormData for proper file upload
