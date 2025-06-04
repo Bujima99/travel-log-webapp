@@ -323,6 +323,7 @@
           <th>KM Reading</th>
           <th>Next Service</th>
           <th>Workshop</th>
+           <th>Remarks</th>
           <th>Bill</th>
         </tr>
       </thead>
@@ -375,6 +376,8 @@
     </div>
     <input type="text" id="serviceWorkshop" placeholder="Workshop Name" required>
     <input type="text" id="serviceWorkshopLocation" placeholder="Workshop Location" required>
+    <textarea rows="4" id="serviceRemarks" placeholder="Remarks (if any)" required></textarea>
+    <div id="serviceRemarksError" class="validation-message"></div>
     <input type="file" id="serviceBillImage" accept="image/*" required>
     <div class="form-buttons">
       <button type="button" onclick="submitServiceEntry()">Submit</button>
@@ -749,6 +752,42 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 
+  document.getElementById('serviceVehicleName').addEventListener('change', function() {
+  validateRequired(this.value, 'serviceVehicleName');
+});
+
+document.getElementById('serviceDate').addEventListener('change', function() {
+  validateRequired(this.value, 'serviceDate');
+});
+
+document.getElementById('serviceInvoiceNumber').addEventListener('input', function() {
+  validateRequired(this.value, 'serviceInvoiceNumber');
+});
+
+document.getElementById('serviceType').addEventListener('change', function() {
+  validateRequired(this.value, 'serviceType');
+});
+
+document.getElementById('serviceAmount').addEventListener('input', function() {
+  validateNumber(this.value, 'serviceAmount');
+});
+
+document.getElementById('serviceCurrentKm').addEventListener('input', function() {
+  validateNumber(this.value, 'serviceCurrentKm');
+});
+
+document.getElementById('serviceWorkshop').addEventListener('input', function() {
+  validateName(this.value, 'serviceWorkshop');
+});
+
+document.getElementById('serviceWorkshopLocation').addEventListener('input', function() {
+  validateName(this.value, 'serviceWorkshopLocation');
+});
+
+document.getElementById('serviceRemarks').addEventListener('input', function() {
+  validateRequired(this.value, 'serviceRemarks');
+});
+
     if (menuToggle && sidebar) {
         menuToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
@@ -880,6 +919,7 @@ function loadServiceEntries() {
           <td>${entry.CurrentKM || ''}</td>
           <td>${entry.NextServiceDate || '-'}</td>
           <td>${entry.Workshop || ''}</td>
+          <td>${entry.Remarks || '-'}</td>
           <td>
             ${entry.BillImage ? 
               `<a href="${entry.BillImage}" target="_blank" class="view-bill-link">View</a>` : 
@@ -909,6 +949,28 @@ async function submitServiceEntry() {
     return;
   }
 
+  // Master validation for service form
+  let isValid = true;
+  
+  isValid &= validateRequired(document.getElementById('serviceVehicleName').value, 'serviceVehicleName');
+  isValid &= validateRequired(document.getElementById('serviceDate').value, 'serviceDate');
+  isValid &= validateRequired(document.getElementById('serviceInvoiceNumber').value, 'serviceInvoiceNumber');
+  isValid &= validateRequired(document.getElementById('serviceType').value, 'serviceType');
+  isValid &= validateNumber(document.getElementById('serviceAmount').value, 'serviceAmount');
+  isValid &= validateNumber(document.getElementById('serviceCurrentKm').value, 'serviceCurrentKm');
+  isValid &= validateName(document.getElementById('serviceWorkshop').value, 'serviceWorkshop');
+  isValid &= validateName(document.getElementById('serviceWorkshopLocation').value, 'serviceWorkshopLocation');
+  isValid &= validateRequired(document.getElementById('serviceRemarks').value, 'serviceRemarks');
+  
+  if (document.getElementById('serviceType').value === 'Service') {
+    isValid &= validateRequired(document.getElementById('nextServiceDate').value, 'nextServiceDate');
+  }
+
+  if (!isValid) {
+    showPopup('Validation Error', 'Please correct the highlighted fields');
+    return;
+  }
+
   // Get form values
   const serviceId = generateServiceId();
   const vehicleNumber = document.getElementById('serviceVehicleNumber').value;
@@ -921,13 +983,16 @@ async function submitServiceEntry() {
   const nextServiceDate = serviceType === 'Service' ? document.getElementById('nextServiceDate').value : '-';
   const workshop = document.getElementById('serviceWorkshop').value;
   const workshopLocation = document.getElementById('serviceWorkshopLocation').value;
+  const serviceRemarks = document.getElementById('serviceRemarks').value;
   const billImageFile  = document.getElementById('serviceBillImage').files[0];
 
   // Validate required fields
-  if (!vehicleNumber || !date || !invoiceNumber || !serviceType || !amount || !currentKm || !workshop || !workshopLocation || !billImageFile) {
+  if (!vehicleNumber || !date || !invoiceNumber || !serviceType || !amount || !currentKm || !workshop || !workshopLocation || !serviceRemarks || !billImageFile) {
     showPopup('Validation Error', 'Please fill in all required fields');
     return;
   }
+
+  
 
   // Show loading state
   const submitBtn = document.querySelector('#serviceForm button[type="button"]');
@@ -964,6 +1029,7 @@ async function submitServiceEntry() {
     nextServiceDate: nextServiceDate,
     workshop: workshop,
     workshopLocation: workshopLocation,
+    serviceRemarks:serviceRemarks,
     billImage: billImageBase64
   };
 
