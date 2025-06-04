@@ -158,7 +158,7 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
         // Check user status
 
           if (user.UserType === "Guest") {
-          const activeTimestamp = new Date(user.ActiveTimeStamp).getTime();
+          const activeTimestamp = new Date(user.ActiveTimestamp).getTime();
           const now = new Date().getTime();
           const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
           
