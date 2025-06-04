@@ -32,3 +32,20 @@ function endSession() {
     sessionStorage.removeItem('travelLogSession');
     localStorage.removeItem('driverData');
 }
+
+function isSessionActive() {
+    return checkSession() !== null;
+}
+
+function getSessionData() {
+    return checkSession();
+}
+
+function refreshSession() {
+    const data = checkSession();
+    if (data) {
+        startSession(data.driverData);
+        return true;
+    }
+    return false;
+}
