@@ -306,10 +306,24 @@ window.onload = function() {
 
 
 // Logout
-function logout() {
-endSession();
-  localStorage.removeItem('driverData');
-  window.location.href = "index.html";
+//function logout() {
+//endSession();
+  //localStorage.removeItem('driverData');
+  //window.location.href = "index.html";
+//}
+
+// Enhanced logout function
+function logout(redirectUrl = "index.html") {
+    endSession();
+    
+    // Clear all relevant storage
+    localStorage.removeItem('driverData');
+    sessionStorage.clear();
+    
+    // Redirect after a brief delay
+    setTimeout(() => {
+        window.location.href = redirectUrl;
+    }, 500);
 }
 
 // Custom Popup Function
