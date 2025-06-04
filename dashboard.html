@@ -361,24 +361,45 @@
     <select id="serviceVehicleName" required onchange="updateVehicleNumber()">
       <option value="">Select Vehicle</option>
     </select>
+    <div id="serviceVehicleNameError" class="validation-message"></div>
     <input type="text" id="serviceVehicleNumber" placeholder="Vehicle Number" readonly required>
+     <div id="serviceVehicleNumberError" class="validation-message"></div>
+    
     <input type="date" id="serviceDate" required>
+     <div id="serviceDateError" class="validation-message"></div>
+    
     <input type="text" id="serviceInvoiceNumber" placeholder="Invoice Number" required>
+    <div id="serviceInvoiceNumberError" class="validation-message"></div>
+    
     <select id="serviceType" required onchange="toggleNextServiceDate()">
       <option value="">Select Service Type</option>
       <option value="Service">Service</option>
       <option value="Maintainance">Maintainance</option>
     </select>
+    <div id="serviceTypeError" class="validation-message"></div>
+    
     <input type="number" id="serviceAmount" placeholder="Amount" step="0.01" required>
+    <div id="serviceAmountError" class="validation-message"></div>
+    
     <input type="number" id="serviceCurrentKm" placeholder="Current KM" required>
+     <div id="serviceCurrentKmError" class="validation-message"></div>
+    
     <div id="nextServiceDateContainer" style="display:none;">
       <input type="text" id="nextServiceDate" placeholder="Next Service KM">
     </div>
+    
     <input type="text" id="serviceWorkshop" placeholder="Workshop Name" required>
+     <div id="serviceWorkshopError" class="validation-message"></div>
+    
     <input type="text" id="serviceWorkshopLocation" placeholder="Workshop Location" required>
+     <div id="serviceWorkshopLocationError" class="validation-message"></div>
+    
     <textarea rows="4" id="serviceRemarks" placeholder="Remarks (if any)" required></textarea>
     <div id="serviceRemarksError" class="validation-message"></div>
+    
     <input type="file" id="serviceBillImage" accept="image/*" required>
+     <div id="serviceBillImageError" class="validation-message"></div>
+    
     <div class="form-buttons">
       <button type="button" onclick="submitServiceEntry()">Submit</button>
       <button type="button" class="cancel-btn" onclick="hideAddServiceForm()">Cancel</button>
@@ -941,8 +962,74 @@ function loadServiceEntries() {
     });
 }
 
+  function validateServiceForm() {
+  let isValid = true;
+  
+  // Clear all previous error messages
+  document.querySelectorAll('.validation-message').forEach(el => el.textContent = '');
+  
+  // Validate each field
+  if (!document.getElementById('serviceVehicleName').value) {
+    document.getElementById('serviceVehicleNameError').textContent = 'Please select a vehicle';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceVehicleNumber').value) {
+    document.getElementById('serviceVehicleNumberError').textContent = 'Vehicle number is required';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceDate').value) {
+    document.getElementById('serviceDateError').textContent = 'Please select a date';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceInvoiceNumber').value) {
+    document.getElementById('serviceInvoiceNumberError').textContent = 'Invoice number is required';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceType').value) {
+    document.getElementById('serviceTypeError').textContent = 'Please select service type';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceAmount').value) {
+    document.getElementById('serviceAmountError').textContent = 'Amount is required';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceCurrentKm').value) {
+    document.getElementById('serviceCurrentKmError').textContent = 'Current KM is required';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceWorkshop').value) {
+    document.getElementById('serviceWorkshopError').textContent = 'Workshop name is required';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceWorkshopLocation').value) {
+    document.getElementById('serviceWorkshopLocationError').textContent = 'Workshop location is required';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceRemarks').value) {
+    document.getElementById('serviceRemarksError').textContent = 'Remarks are required';
+    isValid = false;
+  }
+  
+  if (!document.getElementById('serviceBillImage').value) {
+    document.getElementById('serviceBillImageError').textContent = 'Please upload a bill image';
+    isValid = false;
+  }
+  
+  return isValid;
+}
+
 // Add this function to submit service entry
 async function submitServiceEntry() {
+   if (validateServiceForm()) {
   const driverData = JSON.parse(localStorage.getItem('driverData'));
   if (!driverData) {
     showPopup('Authentication Error', 'Please login again');
@@ -1061,6 +1148,7 @@ async function submitServiceEntry() {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit';
   }
+}
 }
 
 // Add this function to generate service ID
