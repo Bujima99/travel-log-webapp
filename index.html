@@ -387,34 +387,7 @@ width: 100%;
   <script src="./js/app.js"></script>
 	<!-- NEW SCRIPT FOR PASSWORD TOGGLE -->
   <script>
-	  window.onload = function() {
-    // Check for existing session
-    const sessionDriverData = checkSession();
-    
-    if (sessionDriverData) {
-        // If there's an active session, redirect to dashboard
-        if (window.location.pathname.endsWith('index.html')) {
-            if (sessionDriverData.userType === 'Admin') {
-                window.location.href = "./admin.html";
-            } else {
-                window.location.href = "./dashboard.html";
-            }
-        }
-    } else if (!window.location.pathname.endsWith('index.html')) {
-        // If no session and not on login page, redirect to login
-        window.location.href = "index.html";
-    }
 
-    // Existing code...
-    const driverId = localStorage.getItem("driverId");
-    const driverName = localStorage.getItem("driverName");
-    document.getElementById('driverName').textContent = driverName;
-
-    if (driverId) {
-        getPendingTrips(driverId);
-        getCompletedTrips(driverId);
-    }
-};
 
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
