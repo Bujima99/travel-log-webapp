@@ -49,3 +49,32 @@ function refreshSession() {
     }
     return false;
 }
+
+// Add warning before session expires
+function setupSessionWarning() {
+    const warningTime = 5 * 60 * 1000; // 5 minutes before expiry
+    const sessionData = checkSession();
+    
+    if (sessionData) {
+        const timeLeft = sessionData.expiresAt - Date.now();
+        if (timeLeft <= warningTime) {
+            setTimeout(() => {
+                showPopup('Session Warning', 'Your session will expire soon. Please save your work.');
+            }, timeLeft - warningTime);
+        }
+    }
+}
+
+// Call this periodically to keep session alive during activity
+function sessionHeartbeat() {
+    if (checkSession()) {
+        // Session is valid, refresh it
+        const sessionData = checkSession();
+        startSession(sessionData.driverData);
+        return true;
+    }
+    return false;
+}
+
+// Call this every 5 minutes
+setInterval(sessionHeartbeat, 5 * 60 * 1000);
