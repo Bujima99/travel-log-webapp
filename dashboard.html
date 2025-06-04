@@ -1509,10 +1509,10 @@ async function submitFuelEntry() {
   const amount = document.getElementById('fuelAmount').value;
   const liters = document.getElementById('fuelLiters').value;
   const currentKm = document.getElementById('fuelCurrentKm').value;
-  const billImage = document.getElementById('fuelBillImage').files[0];
+  const billImageFile  = document.getElementById('fuelBillImage').files[0];
 
   // Validate required fields
-  if (!vehicleNumber || !date || !invoiceNumber || !fuelType || !amount || !liters || !currentKm || !billImage) {
+  if (!vehicleNumber || !date || !invoiceNumber || !fuelType || !amount || !liters || !currentKm || !billImageFile) {
     showPopup('Validation Error', 'Please fill in all required fields');
     return;
   }
@@ -1521,6 +1521,21 @@ async function submitFuelEntry() {
   const submitBtn = document.querySelector('#fuelForm button');
   submitBtn.disabled = true;
   submitBtn.textContent = 'Submitting...';
+
+  // Convert image to base64
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(',')[1]); // Remove the data:image/*;base64, prefix
+      reader.onerror = error => reject(error);
+    });
+  };
+
+   try {
+    const billImageBase64 = await getBase64(billImageFile);
+    const fileName = billImageFile.name;
+    const fileType = billImageFile.type;
 
   
     // Create FormData for proper file upload
@@ -1537,7 +1552,7 @@ async function submitFuelEntry() {
     amount: amount,
     liters: liters,
     currentKm: currentKm,
-    billImage: billImage
+    billImage: billImageBase64 
   };
 
   showLoader();
@@ -1564,6 +1579,13 @@ async function submitFuelEntry() {
   }).finally(() => {
         hideLoader(); // Now this will only run after everything is complete
     });
+
+     } catch (error) {
+    console.error("Error converting image:", error);
+    showPopup('Error', 'Error processing the bill image. Please try again.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit';
+  }
 }
 
   
