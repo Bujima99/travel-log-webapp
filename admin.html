@@ -2387,6 +2387,7 @@ function loadProfileData() {
 
 // Logout function
 function logout() {
+  endSession();
   localStorage.removeItem('driverData');
   window.location.href = "index.html";
 }
