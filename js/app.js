@@ -222,6 +222,8 @@ function handleSuccessfulLogin(driverData) {
         phoneNumber: driverData.phoneNumber,
         userType: driverData.userType
     }));
+
+     startSession(driverData);
   
 }
 
@@ -305,6 +307,7 @@ window.onload = function() {
 
 // Logout
 function logout() {
+endSession();
   localStorage.removeItem('driverData');
   window.location.href = "index.html";
 }
