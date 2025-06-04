@@ -326,7 +326,7 @@ function showPopup(title, message) {
        console.log("Popup closed by user action");
       popup.classList.remove('active');
       resolve(); // Resolve the promise when popup is closed
-      showSection('home');
+      //showSection('home');
       
       // Remove event listeners to prevent memory leaks
       document.getElementById('popupOk').removeEventListener('click', closePopup);
