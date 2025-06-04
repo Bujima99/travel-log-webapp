@@ -168,7 +168,6 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
               .then(() => {
                 showPopup('Access Expired', 'Sorry, your Guest access has expired. Please contact admin to get the access.');
                 hideLoader();
-                return Promise.reject(new Error('Guest access expired'));
               });
           }
         }
