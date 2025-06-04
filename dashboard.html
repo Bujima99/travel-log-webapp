@@ -2137,8 +2137,13 @@ function showError(fieldId, message) {
   
   input.classList.remove('valid');
   input.classList.add('invalid');
-  errorElement.textContent = message;
-  errorElement.style.display = 'block';
+  if(message != ''){
+     errorElement.textContent = message;
+    errorElement.style.display = 'block';
+    return;
+  }
+  
+  errorElement.style.display = 'none';
 }
 
 function showSuccess(fieldId) {
