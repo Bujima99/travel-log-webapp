@@ -392,7 +392,7 @@ width: 100%;
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
 
-	
+checkRedirect();	
 const toggles = document.querySelectorAll('.password-toggle');
   
   toggles.forEach(toggle => {
@@ -587,6 +587,14 @@ function showSuccess(fieldId) {
   input.classList.remove('invalid');
   input.classList.add('valid');
   errorElement.style.display = 'none';
+}
+
+	  function checkRedirect() {
+    const redirectUrl = localStorage.getItem('redirectUrl');
+    if (redirectUrl) {
+        localStorage.removeItem('redirectUrl');
+        window.location.href = redirectUrl;
+    }
 }
   </script>
   <!-- END OF NEW SCRIPT -->
