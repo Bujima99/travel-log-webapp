@@ -183,6 +183,17 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
           };
           
           handleSuccessfulLogin(driverData);
+
+                 startSession(driverData);
+    
+    // Clear any logout flags
+    const sessionString = sessionStorage.getItem('travelLogSession');
+    if (sessionString) {
+        const sessionData = JSON.parse(sessionString);
+        delete sessionData.isLoggedOut;
+        sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
+    }
+    
           
           // Redirect based on user type
           if (driverData.userType === 'Admin') {
@@ -224,6 +235,7 @@ function handleSuccessfulLogin(driverData) {
     }));
 
      startSession(driverData);
+
   
 }
 
