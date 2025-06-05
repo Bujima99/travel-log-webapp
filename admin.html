@@ -1601,19 +1601,17 @@ input[type="search"]::-webkit-search-cancel-button {
   
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-
-// Enhanced session check
+// Check session with additional verification
     const sessionDriverData = checkSession();
+    const urlParams = new URLSearchParams(window.location.search);
     
-    if (!sessionDriverData) {
-        // Store current URL to redirect back after login
-        localStorage.setItem('redirectUrl', window.location.pathname);
-        window.location.href = "index.html";
+    if (!sessionDriverData || urlParams.has('logout')) {
+        // Ensure we're not already on the login page
+        if (!window.location.pathname.endsWith('index.html')) {
+            window.location.href = "index.html";
+        }
         return;
     }
-    
-    // Set up session warning
-    setupSessionWarning();
   
   const driverData = JSON.parse(localStorage.getItem('driverData'));
     
