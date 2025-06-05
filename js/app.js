@@ -1,4 +1,5 @@
 
+
 let loaderMinimumTime = 500; // 500ms minimum show time
     let loaderShownTime;
  // Loader
