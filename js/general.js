@@ -1,11 +1,11 @@
 // Session management functions
-const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
-
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
 
 function startSession(driverData) {
     const sessionData = {
         driverData: driverData,
-        expiresAt: Date.now() + SESSION_TIMEOUT
+        expiresAt: Date.now() + SESSION_TIMEOUT,
+        isLoggedOut: false // Add this flag
     };
     sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
 }
@@ -15,6 +15,12 @@ function checkSession() {
     if (!sessionString) return null;
     
     const sessionData = JSON.parse(sessionString);
+    
+    // Check if session was explicitly logged out
+    if (sessionData.isLoggedOut) {
+        endSession();
+        return null;
+    }
     
     // Check if session is expired
     if (Date.now() > sessionData.expiresAt) {
@@ -30,8 +36,19 @@ function checkSession() {
 }
 
 function endSession() {
-    sessionStorage.removeItem('travelLogSession');
-    localStorage.removeItem('driverData');
+    // Mark session as logged out before clearing
+    const sessionString = sessionStorage.getItem('travelLogSession');
+    if (sessionString) {
+        const sessionData = JSON.parse(sessionString);
+        sessionData.isLoggedOut = true;
+        sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
+    }
+    
+    // Clear storage after a short delay
+    setTimeout(() => {
+        sessionStorage.removeItem('travelLogSession');
+        localStorage.removeItem('driverData');
+    }, 100);
 }
 
 function isSessionActive() {
