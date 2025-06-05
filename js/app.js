@@ -312,18 +312,14 @@ window.onload = function() {
   //window.location.href = "index.html";
 //}
 
-// Enhanced logout function
-function logout(redirectUrl = "index.html") {
+function logout() {
     endSession();
     
-    // Clear all relevant storage
-    localStorage.removeItem('driverData');
-    sessionStorage.clear();
+    // Add a query parameter to prevent loop
+    window.location.href = "index.html?logout=true";
     
-    // Redirect after a brief delay
-    setTimeout(() => {
-        window.location.href = redirectUrl;
-    }, 500);
+    // Prevent any further execution
+    throw new Error("Logging out");
 }
 
 // Custom Popup Function
