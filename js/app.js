@@ -1,6 +1,7 @@
 let loaderMinimumTime = 500; // 500ms minimum show time
 let loaderShownTime;
- // Loader
+
+// Loader
     window.showLoader = function() {
         loaderShownTime = Date.now();
         document.getElementById('loader').style.display = 'flex';
