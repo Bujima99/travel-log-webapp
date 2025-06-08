@@ -613,17 +613,36 @@ document.addEventListener('click', function(event) {
 document.addEventListener('DOMContentLoaded', function() {
 
 
-  // Check session with additional verification
-    const sessionDriverData = checkSession();
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if (!sessionDriverData || urlParams.has('logout')) {
-        // Ensure we're not already on the login page
-        if (!window.location.pathname.endsWith('index.html')) {
-            window.location.href = "index.html";
-        }
+  // Check session first
+    const sessionData = checkSession();
+    if (!sessionData) {
+        window.location.replace('index.html?sessionExpired=true');
         return;
     }
+
+    // Store current page as last active
+    localStorage.setItem('lastActivePage', window.location.href);
+
+    // Set up history manipulation
+    if (window.history && window.history.pushState) {
+        window.history.pushState(null, null, window.location.href);
+        window.addEventListener('popstate', function(event) {
+            if (checkSession()) {
+                // If session is active, stay on current page
+                window.history.pushState(null, null, window.location.href);
+            } else {
+                // If session expired, allow going to login page
+                window.location.replace('index.html?sessionExpired=true');
+            }
+        });
+    }
+
+    // Periodic session check
+    setInterval(() => {
+        if (!checkSession()) {
+            window.location.replace('index.html?sessionExpired=true');
+        }
+    }, 60000); // Check every minute
   
   // Fetch pending journeys from Google Sheets web app endpoint
   const driverData = JSON.parse(localStorage.getItem('driverData'));
