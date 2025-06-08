@@ -2390,10 +2390,8 @@ function loadProfileData() {
 
   // Enhanced logout function
 function logout() {
-    endSession();
-    // Clear the last active page
-    localStorage.removeItem('lastActivePage');
-    window.location.replace('index.html?logout=true');
+   endSession();
+    window.location.href = 'index.html?logout=true';
 }
 
 // Loader functions
