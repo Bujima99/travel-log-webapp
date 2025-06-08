@@ -20,6 +20,7 @@ let loaderShownTime;
     }
     };
 
+
 // Sign Up User
 function signupUser() {
   const firstName = document.getElementById("signupFirstName").value.trim();
