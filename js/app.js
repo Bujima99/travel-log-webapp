@@ -347,30 +347,35 @@ function showPopup(title, message) {
     hideLoader();
     popup.classList.add('active');
     
-    // Create a function to handle closing
-    const closePopup = () => {
-       console.log("Popup closed by user action");
+     // Create a function to handle closing
+    const closePopup = (confirmed) => {
       popup.classList.remove('active');
-      resolve(); // Resolve the promise when popup is closed
-      showSection('home');
+      if (confirmed) {
+        resolve();
+      } else {
+        reject();
+      }
       
-      // Remove event listeners to prevent memory leaks
-      document.getElementById('popupOk').removeEventListener('click', closePopup);
-      document.getElementById('popupClose').removeEventListener('click', closePopup);
+      // Remove event listeners
+      document.getElementById('popupOk').removeEventListener('click', confirmHandler);
+      document.getElementById('popupClose').removeEventListener('click', cancelHandler);
       popup.removeEventListener('click', outsideClick);
-      location.reload();
     };
+
+    
+    const confirmHandler = () => closePopup(true);
+    const cancelHandler = () => closePopup(false);
     
     // Handle outside clicks
     const outsideClick = (e) => {
-     if (e.target === popup && !e.target.closest('.popup-container')) {
-        closePopup();
+      if (e.target === popup && !e.target.closest('.popup-container')) {
+        cancelHandler();
       }
     };
     
     // Add event listeners
-    document.getElementById('popupOk').addEventListener('click', closePopup);
-    document.getElementById('popupClose').addEventListener('click', closePopup);
+    document.getElementById('popupOk').addEventListener('click', confirmHandler);
+    document.getElementById('popupClose').addEventListener('click', cancelHandler);
     popup.addEventListener('click', outsideClick);
   });
 }
