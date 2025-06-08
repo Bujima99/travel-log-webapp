@@ -183,7 +183,7 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
           
           handleSuccessfulLogin(driverData);
 
-                 startSession(driverData);
+             
     
     // Clear any logout flags
     const sessionString = sessionStorage.getItem('travelLogSession');
@@ -233,7 +233,7 @@ function handleSuccessfulLogin(driverData) {
         userType: driverData.userType
     }));
 
-    startSession(driverData);
+  
 
     // Redirect based on user type
     if (driverData.userType === 'Admin') {
@@ -332,7 +332,6 @@ window.onload = function() {
 //}
 
 function logout() {
-    endSession();
     window.location.href = 'index.html?logout=true';
 }
 
