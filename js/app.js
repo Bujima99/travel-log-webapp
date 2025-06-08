@@ -5,7 +5,6 @@ let loaderShownTime;
         loaderShownTime = Date.now();
         document.getElementById('loader').style.display = 'flex';
     };
-
     window.hideLoader = function() {
         const elapsed = Date.now() - loaderShownTime;
        //const elapsed = 0;
