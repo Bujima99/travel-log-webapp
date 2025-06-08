@@ -237,9 +237,11 @@ function handleSuccessfulLogin(driverData) {
 
     // Redirect based on user type
     if (driverData.userType === 'Admin') {
-        window.location.href = "./admin.html";
+        //window.location.href = "./admin.html";
+        window.location.replace('index.html');
     } else {
-        window.location.href = "./dashboard.html";
+        //window.location.href = "./dashboard.html";
+        window.location.replace('dashboard.html');
     }
 
   
