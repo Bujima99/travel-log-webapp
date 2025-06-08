@@ -386,44 +386,11 @@ width: 100%;
   <script src="./js/app.js"></script>
 	<!-- NEW SCRIPT FOR PASSWORD TOGGLE -->
   <script>
-// Check for logout parameter
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.has('logout')) {
-    // Clear any residual session data
-    endSession();
-    
-    // Remove the logout parameter from URL
-    window.history.replaceState({}, document.title, window.location.pathname);
-    
-    // Show logout message if you want
-    showPopup('Logged Out', 'You have been successfully logged out.');
-}
 
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
 
-// Check for logout parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('logout')) {
-        // Clear any residual session data
-        endSession();
-        
-        // Remove the logout parameter from URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-        
-        // Show logout message if you want
-        showPopup('Logged Out', 'You have been successfully logged out.');
-    }
-
-    // Check for active session
-    if (checkSession()) {
-        // Redirect to last active page or dashboard
-        const lastPage = localStorage.getItem('lastActivePage') || 'dashboard.html';
-        window.location.replace(lastPage);
-        return;
-    }
-
-    // Clear any session flags when arriving at login page
+// Clear any session flags when arriving at login page
     localStorage.removeItem('sessionActive');
     endSession();
     
