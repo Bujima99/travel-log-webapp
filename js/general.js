@@ -49,10 +49,12 @@ function endSession() {
 
 function initBackButtonHandler() {
     if (window.history && window.history.pushState) {
-        // Add a fake history entry so back button does nothing by default
-        window.history.pushState(null, null, window.location.href);
+        // Add two history entries to ensure popstate fires
+        window.history.pushState({ backButton: true }, null, window.location.href);
+        window.history.pushState({ backButton: true }, null, window.location.href);
         
-        window.addEventListener('popstate', function(event) {
+        // Store the callback reference so we can remove it later if needed
+        const popstateHandler = function(event) {
             if (checkSession()) {
                 // Show confirmation dialog
                 const confirmLogout = confirm("Do you really want to logout?");
@@ -60,10 +62,20 @@ function initBackButtonHandler() {
                     endSession();
                     window.location.href = 'index.html';
                 } else {
-                    // Re-add the history entry if user cancels
-                    window.history.pushState(null, null, window.location.href);
+                    // Re-add two history entries to maintain the trap
+                    window.history.pushState({ backButton: true }, null, window.location.href);
+                    window.history.pushState({ backButton: true }, null, window.location.href);
                 }
             }
-        });
+        };
+        
+        // Add the event listener
+        window.addEventListener('popstate', popstateHandler);
+        
+        // Return cleanup function
+        return function() {
+            window.removeEventListener('popstate', popstateHandler);
+        };
     }
+    return function() {}; // Empty cleanup function
 }
