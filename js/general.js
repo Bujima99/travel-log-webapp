@@ -4,95 +4,73 @@ const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
 function startSession(driverData) {
     const sessionData = {
         driverData: driverData,
-        expiresAt: Date.now() + SESSION_TIMEOUT,
-        isLoggedOut: false // Add this flag
+        expiresAt: Date.now() + SESSION_TIMEOUT
     };
     sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
-    localStorage.setItem('sessionActive', 'true');
-    localStorage.setItem('lastActivePage', window.location.href); // Store current page
+    localStorage.setItem('lastActivePage', window.location.href);
 }
 
 function checkSession() {
-    // Check if session was explicitly logged out
-    if (localStorage.getItem('sessionActive') === 'false') {
-        endSession();
-        return null;
-    }
-
     const sessionString = sessionStorage.getItem('travelLogSession');
     if (!sessionString) return null;
 
     const sessionData = JSON.parse(sessionString);
     
-    if (sessionData.isLoggedOut || Date.now() > sessionData.expiresAt) {
+    // Check if session expired
+    if (Date.now() > sessionData.expiresAt) {
         endSession();
         return null;
     }
 
-    // Update expiration and last active page
+    // Update expiration
     sessionData.expiresAt = Date.now() + SESSION_TIMEOUT;
     sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
-    localStorage.setItem('lastActivePage', window.location.href);
-
+    
     return sessionData.driverData;
 }
 
 function endSession() {
-    localStorage.setItem('sessionActive', 'false');
-    const sessionString = sessionStorage.getItem('travelLogSession');
-    if (sessionString) {
-        const sessionData = JSON.parse(sessionString);
-        sessionData.isLoggedOut = true;
-        sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
+    sessionStorage.removeItem('travelLogSession');
+    localStorage.removeItem('lastActivePage');
+}
+
+// Add this new function to handle back/forward navigation
+function handleNavigation() {
+    if (!checkSession() && !window.location.pathname.endsWith('index.html')) {
+        window.location.replace('index.html?sessionExpired=true');
     }
-    setTimeout(() => {
-        sessionStorage.clear();
-        localStorage.removeItem('driverData');
-    }, 100);
 }
 
-function isSessionActive() {
-    return checkSession() !== null;
-}
-
-function getSessionData() {
-    return checkSession();
-}
-
-function refreshSession() {
-    const data = checkSession();
-    if (data) {
-        startSession(data.driverData);
-        return true;
-    }
-    return false;
-}
-
-// Add warning before session expires
-function setupSessionWarning() {
-    const warningTime = 5 * 60 * 1000; // 5 minutes before expiry
+// Initialize session check on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Check session first
     const sessionData = checkSession();
-    
-    if (sessionData) {
-        const timeLeft = sessionData.expiresAt - Date.now();
-        if (timeLeft <= warningTime) {
-            setTimeout(() => {
-                showPopup('Session Warning', 'Your session will expire soon. Please save your work.');
-            }, timeLeft - warningTime);
+    if (!sessionData) {
+        window.location.replace('index.html?sessionExpired=true');
+        return;
+    }
+
+    // Store current page as last active
+    localStorage.setItem('lastActivePage', window.location.href);
+
+    // Set up history manipulation
+    if (window.history && window.history.pushState) {
+        window.history.pushState(null, null, window.location.href);
+        window.addEventListener('popstate', function(event) {
+            if (checkSession()) {
+                // If session is active, stay on current page
+                window.history.pushState(null, null, window.location.href);
+            } else {
+                // If session expired, allow going to login page
+                window.location.replace('index.html?sessionExpired=true');
+            }
+        });
+    }
+
+    // Periodic session check
+    setInterval(() => {
+        if (!checkSession()) {
+            window.location.replace('index.html?sessionExpired=true');
         }
-    }
-}
-
-// Call this periodically to keep session alive during activity
-function sessionHeartbeat() {
-    if (checkSession()) {
-        // Session is valid, refresh it
-        const sessionData = checkSession();
-        startSession(sessionData.driverData);
-        return true;
-    }
-    return false;
-}
-
-// Call this every 5 minutes
-setInterval(sessionHeartbeat, 5 * 60 * 1000);
+    }, 60000); // Check every minute
+});
