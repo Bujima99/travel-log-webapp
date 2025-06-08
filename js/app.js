@@ -226,14 +226,21 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
 function handleSuccessfulLogin(driverData) {
     // Store driver data in localStorage
     localStorage.setItem('driverData', JSON.stringify({
-      name: driverData.name,
+        name: driverData.name,
         id: driverData.id,
         username: driverData.username,
         phoneNumber: driverData.phoneNumber,
         userType: driverData.userType
     }));
 
-     startSession(driverData);
+    startSession(driverData);
+
+    // Redirect based on user type
+    if (driverData.userType === 'Admin') {
+        window.location.href = "./admin.html";
+    } else {
+        window.location.href = "./dashboard.html";
+    }
 
   
 }
@@ -325,6 +332,7 @@ window.onload = function() {
 
 function logout() {
     endSession();
+    localStorage.removeItem('driverData');
     // Clear the last active page
     localStorage.removeItem('lastActivePage');
     window.location.replace('index.html?logout=true');
