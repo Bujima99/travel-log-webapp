@@ -1606,14 +1606,14 @@ input[type="search"]::-webkit-search-cancel-button {
   
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-// First check session
+// Initialize session check
     if (!checkSession()) {
-        window.location.href = 'index.html?sessionExpired=true';
+        window.location.href = 'index.html';
         return;
     }
-
-    // Initialize back button handler
-    initBackButtonHandler();
+    
+    // Initialize back button handler and store cleanup function
+    const cleanupBackButtonHandler = initBackButtonHandler();
 
     // Periodic session check
     setInterval(() => {
