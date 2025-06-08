@@ -41,36 +41,3 @@ function handleNavigation() {
     }
 }
 
-// Initialize session check on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Check session first
-    const sessionData = checkSession();
-    if (!sessionData) {
-        window.location.replace('index.html?sessionExpired=true');
-        return;
-    }
-
-    // Store current page as last active
-    localStorage.setItem('lastActivePage', window.location.href);
-
-    // Set up history manipulation
-    if (window.history && window.history.pushState) {
-        window.history.pushState(null, null, window.location.href);
-        window.addEventListener('popstate', function(event) {
-            if (checkSession()) {
-                // If session is active, stay on current page
-                window.history.pushState(null, null, window.location.href);
-            } else {
-                // If session expired, allow going to login page
-                window.location.replace('index.html?sessionExpired=true');
-            }
-        });
-    }
-
-    // Periodic session check
-    setInterval(() => {
-        if (!checkSession()) {
-            window.location.replace('index.html?sessionExpired=true');
-        }
-    }, 60000); // Check every minute
-});
