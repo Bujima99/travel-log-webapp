@@ -9,6 +9,7 @@ function startSession(driverData) {
     localStorage.setItem('sessionActive', 'true');
 }
 
+
 function checkSession() {
     if (localStorage.getItem('sessionActive') === 'false') {
         endSession();
