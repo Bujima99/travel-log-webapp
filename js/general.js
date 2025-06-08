@@ -1,5 +1,4 @@
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
-
 function startSession(driverData) {
     const sessionData = {
         driverData: driverData,
