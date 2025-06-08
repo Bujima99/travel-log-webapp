@@ -611,16 +611,9 @@ document.addEventListener('click', function(event) {
 });
 // Function to load pending journeys when the page loads
 document.addEventListener('DOMContentLoaded', function() {
-/ Check session with additional verification
-    const sessionDriverData = checkSession();
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if (!sessionDriverData || urlParams.has('logout')) {
-        // Ensure we're not already on the login page
-        if (!window.location.pathname.endsWith('index.html')) {
-            window.location.href = "index.html";
-        }
-        return;
+// Initialize session protection only on protected pages
+    if (!initSessionProtection()) {
+        return; // Redirect will happen inside initSessionProtection
     }
   
   // Fetch pending journeys from Google Sheets web app endpoint
