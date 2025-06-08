@@ -326,12 +326,9 @@ window.onload = function() {
 
 function logout() {
     endSession();
-    
-    // Add a query parameter to prevent loop
-    window.location.href = "index.html?logout=true";
-    
-    // Prevent any further execution
-    throw new Error("Logging out");
+    // Clear the last active page
+    localStorage.removeItem('lastActivePage');
+    window.location.replace('index.html?logout=true');
 }
 
 // Custom Popup Function
