@@ -1608,21 +1608,6 @@ window.addEventListener('popstate', function() {
   
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-// Initialize session check
-    if (!checkSession()) {
-        window.location.href = 'index.html';
-        return;
-    }
-    
-    // Initialize back button handler and store cleanup function
-    const cleanupBackButtonHandler = initBackButtonHandler();
-
-    // Periodic session check
-    setInterval(() => {
-        if (!checkSession()) {
-            window.location.href = 'index.html?sessionExpired=true';
-        }
-    }, 60000); // Check every minute
   
   const driverData = JSON.parse(localStorage.getItem('driverData'));
     
@@ -2394,7 +2379,6 @@ function loadProfileData() {
 
   // Enhanced logout function
 function logout() {
-   endSession();
     window.location.href = 'index.html?logout=true';
 }
 
