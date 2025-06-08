@@ -8,45 +8,45 @@ function startSession(driverData) {
         isLoggedOut: false // Add this flag
     };
     sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
+    localStorage.setItem('sessionActive', 'true');
+    localStorage.setItem('lastActivePage', window.location.href); // Store current page
 }
 
 function checkSession() {
+    // Check if session was explicitly logged out
+    if (localStorage.getItem('sessionActive') === 'false') {
+        endSession();
+        return null;
+    }
+
     const sessionString = sessionStorage.getItem('travelLogSession');
     if (!sessionString) return null;
-    
+
     const sessionData = JSON.parse(sessionString);
     
-    // Check if session was explicitly logged out
-    if (sessionData.isLoggedOut) {
+    if (sessionData.isLoggedOut || Date.now() > sessionData.expiresAt) {
         endSession();
         return null;
     }
-    
-    // Check if session is expired
-    if (Date.now() > sessionData.expiresAt) {
-        endSession();
-        return null;
-    }
-    
-    // Update expiration time on activity
+
+    // Update expiration and last active page
     sessionData.expiresAt = Date.now() + SESSION_TIMEOUT;
     sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
-    
+    localStorage.setItem('lastActivePage', window.location.href);
+
     return sessionData.driverData;
 }
 
 function endSession() {
-    // Mark session as logged out before clearing
+    localStorage.setItem('sessionActive', 'false');
     const sessionString = sessionStorage.getItem('travelLogSession');
     if (sessionString) {
         const sessionData = JSON.parse(sessionString);
         sessionData.isLoggedOut = true;
         sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
     }
-    
-    // Clear storage after a short delay
     setTimeout(() => {
-        sessionStorage.removeItem('travelLogSession');
+        sessionStorage.clear();
         localStorage.removeItem('driverData');
     }, 100);
 }
