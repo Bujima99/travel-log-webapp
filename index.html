@@ -402,8 +402,20 @@ if (urlParams.has('logout')) {
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
 
-//checkRedirect();	
- // Check for active session
+// Check for logout parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('logout')) {
+        // Clear any residual session data
+        endSession();
+        
+        // Remove the logout parameter from URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        // Show logout message if you want
+        showPopup('Logged Out', 'You have been successfully logged out.');
+    }
+
+    // Check for active session
     if (checkSession()) {
         // Redirect to last active page or dashboard
         const lastPage = localStorage.getItem('lastActivePage') || 'dashboard.html';
@@ -414,6 +426,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Clear any session flags when arriving at login page
     localStorage.removeItem('sessionActive');
     endSession();
+    
 const toggles = document.querySelectorAll('.password-toggle');
   
   toggles.forEach(toggle => {
@@ -610,13 +623,7 @@ function showSuccess(fieldId) {
   errorElement.style.display = 'none';
 }
 
-	  function checkRedirect() {
-    const redirectUrl = localStorage.getItem('redirectUrl');
-    if (redirectUrl) {
-        localStorage.removeItem('redirectUrl');
-        window.location.href = redirectUrl;
-    }
-}
+	
   </script>
   <!-- END OF NEW SCRIPT -->
 </body>
