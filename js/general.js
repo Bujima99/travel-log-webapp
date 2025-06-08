@@ -8,11 +8,9 @@ function startSession(driverData) {
     };
     sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
     localStorage.setItem('sessionActive', 'true');
-    localStorage.setItem('lastActivePage', window.location.href);
 }
 
 function checkSession() {
-    // Check if session was explicitly logged out
     if (localStorage.getItem('sessionActive') === 'false') {
         endSession();
         return null;
@@ -28,10 +26,9 @@ function checkSession() {
         return null;
     }
 
-    // Update expiration and last active page
+    // Update expiration
     sessionData.expiresAt = Date.now() + SESSION_TIMEOUT;
     sessionStorage.setItem('travelLogSession', JSON.stringify(sessionData));
-    localStorage.setItem('lastActivePage', window.location.href);
 
     return sessionData.driverData;
 }
@@ -50,36 +47,23 @@ function endSession() {
     }, 100);
 }
 
-// Only initialize session protection on protected pages
-function initSessionProtection() {
-    // Check session first
-    const sessionData = checkSession();
-    if (!sessionData) {
-        window.location.replace('index.html?sessionExpired=true');
-        return false;
-    }
-
-    // Store current page as last active
-    localStorage.setItem('lastActivePage', window.location.href);
-
-    // Set up history manipulation
+function initBackButtonHandler() {
     if (window.history && window.history.pushState) {
+        // Add a fake history entry so back button does nothing by default
         window.history.pushState(null, null, window.location.href);
+        
         window.addEventListener('popstate', function(event) {
             if (checkSession()) {
-                window.history.pushState(null, null, window.location.href);
-            } else {
-                window.location.replace('index.html?sessionExpired=true');
+                // Show confirmation dialog
+                const confirmLogout = confirm("Do you really want to logout?");
+                if (confirmLogout) {
+                    endSession();
+                    window.location.href = 'index.html';
+                } else {
+                    // Re-add the history entry if user cancels
+                    window.history.pushState(null, null, window.location.href);
+                }
             }
         });
     }
-
-    // Periodic session check
-    setInterval(() => {
-        if (!checkSession()) {
-            window.location.replace('index.html?sessionExpired=true');
-        }
-    }, 60000); // Check every minute
-    
-    return true;
 }
