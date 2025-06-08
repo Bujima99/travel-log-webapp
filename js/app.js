@@ -394,7 +394,7 @@ function setupBackButtonConfirmation() {
         showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
           // User confirmed - proceed with logout
           localStorage.removeItem('driverData');
-         // window.location.href = "index.html";
+          window.location.href = "index.html";
         }).catch(() => {
           // User cancelled - do nothing
           popupShown = false;
@@ -418,7 +418,7 @@ function setupBackButtonConfirmation() {
         showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
           // User confirmed - proceed with logout
           localStorage.removeItem('driverData');
-         // window.location.href = "index.html";
+          window.location.href = "index.html";
         }).catch(() => {
           // User cancelled - do nothing
           popupShown = false;
