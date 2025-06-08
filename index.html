@@ -402,7 +402,18 @@ if (urlParams.has('logout')) {
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
 
-checkRedirect();	
+//checkRedirect();	
+ // Check for active session
+    if (checkSession()) {
+        // Redirect to last active page or dashboard
+        const lastPage = localStorage.getItem('lastActivePage') || 'dashboard.html';
+        window.location.replace(lastPage);
+        return;
+    }
+
+    // Clear any session flags when arriving at login page
+    localStorage.removeItem('sessionActive');
+    endSession();
 const toggles = document.querySelectorAll('.password-toggle');
   
   toggles.forEach(toggle => {
