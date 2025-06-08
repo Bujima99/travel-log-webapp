@@ -237,11 +237,10 @@ function handleSuccessfulLogin(driverData) {
 
     // Redirect based on user type
     if (driverData.userType === 'Admin') {
-        //window.location.href = "./admin.html";
-        window.location.replace('index.html');
+        window.location.href = "./admin.html";
+        
     } else {
-        //window.location.href = "./dashboard.html";
-        window.location.replace('dashboard.html');
+        window.location.href = "./dashboard.html";
     }
 
   
@@ -334,10 +333,7 @@ window.onload = function() {
 
 function logout() {
     endSession();
-    localStorage.removeItem('driverData');
-    // Clear the last active page
-    localStorage.removeItem('lastActivePage');
-    window.location.replace('index.html?logout=true');
+    window.location.href = 'index.html?logout=true';
 }
 
 // Custom Popup Function
