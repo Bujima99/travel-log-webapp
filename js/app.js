@@ -377,60 +377,41 @@ function showPopup(title, message) {
   });
 }
 
-// Handle back button with confirmation
+// Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // Store if we've shown the popup to prevent duplicate popups
-  let popupShown = false;
-  
   window.onbeforeunload = function(e) {
-    // Only trigger for admin and dashboard pages
-    if (window.location.pathname.includes('admin.html') || 
-        window.location.pathname.includes('dashboard.html')) {
-      
-      if (!popupShown) {
-        e.preventDefault();
-        e.returnValue = ''; // Required for Chrome
-        
-        showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
-          // User confirmed - proceed with logout
-          localStorage.removeItem('driverData');
-         // window.location.href = "index.html";
-        }).catch(() => {
-          // User cancelled - do nothing
-          popupShown = false;
-        });
-        
-        popupShown = true;
-      }
-      
-      return ''; // Required for some browsers
+    const driverData = JSON.parse(localStorage.getItem('driverData'));
+    if (driverData && (window.location.pathname.includes('admin.html') || 
+        window.location.pathname.includes('dashboard.html'))) {
+      e.preventDefault();
+      // Show confirmation only if there's active session
+      showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
+        localStorage.removeItem('driverData');
+        window.location.href = "index.html";
+      }).catch(() => {
+        // Stay on the page if user cancels
+        history.pushState(null, null, window.location.href);
+      });
+      return '';
     }
   };
 
-  // Also handle the back button specifically
+  // Handle back button specifically
   window.addEventListener('popstate', function(event) {
-    if (window.location.pathname.includes('admin.html') || 
-        window.location.pathname.includes('dashboard.html')) {
-      
-      if (!popupShown) {
-        event.preventDefault();
-        
-        showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
-          // User confirmed - proceed with logout
-          localStorage.removeItem('driverData');
-         // window.location.href = "index.html";
-        }).catch(() => {
-          // User cancelled - do nothing
-          popupShown = false;
-          // Push state again to keep user on page
-          history.pushState(null, null, window.location.pathname);
-        });
-        
-        popupShown = true;
-      }
+    const driverData = JSON.parse(localStorage.getItem('driverData'));
+    if (driverData && (window.location.pathname.includes('admin.html') || 
+        window.location.pathname.includes('dashboard.html'))) {
+      event.preventDefault();
+      showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
+        localStorage.removeItem('driverData');
+        window.location.href = "index.html";
+      }).catch(() => {
+        // Stay on the page if user cancels
+        history.pushState(null, null, window.location.href);
+      });
     }
   });
 
   // Initialize the history state
-  history.pushState(null, null, window.location.pathname);
+  history.pushState(null, null, window.location.href);
 }
