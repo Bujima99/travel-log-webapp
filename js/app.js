@@ -411,9 +411,8 @@ function setupBackButtonConfirmation() {
   window.addEventListener('beforeunload', (e) => {
     if (!shouldConfirmNavigation) return;
     
-    e.preventDefault();
-    // Chrome requires returnValue to be set
-     showLogoutConfirmation();
+   e.preventDefault();
+    e.returnValue = 'Are you sure you want to leave?';
     
   });
 
