@@ -611,10 +611,21 @@ document.addEventListener('click', function(event) {
 // Function to load pending journeys when the page loads
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Add back button confirmation
-  setupBackButtonConfirmation();
-  // Fetch pending journeys from Google Sheets web app endpoint
+  // Initialize back button handling for protected pages
   const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (driverData && (window.location.pathname.includes('admin.html') || 
+      window.location.pathname.includes('dashboard.html'))) {
+    shouldConfirmNavigation = true;
+    setupBackButtonConfirmation();
+  }
+
+  // Handle post-logout cleanup
+  if (sessionStorage.getItem('justLoggedOut')) {
+    sessionStorage.removeItem('justLoggedOut');
+    resetLoginForms();
+  }
+
+  
     
     if (driverData) {
         // Display driver name
