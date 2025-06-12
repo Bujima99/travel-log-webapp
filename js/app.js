@@ -414,7 +414,7 @@ function setupBackButtonConfirmation() {
     e.preventDefault();
     // Chrome requires returnValue to be set
      showLogoutConfirmation();
-     window.location.href = "admin.html";
+    
   });
 
   window.addEventListener('popstate', (e) => {
