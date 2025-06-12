@@ -356,7 +356,7 @@ window.onload = function() {
 
 // Custom Popup Function
 function showPopup(title, message) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const popup = document.getElementById('customPopup');
     const popupTitle = document.getElementById('popupTitle');
     const popupMessage = document.getElementById('popupMessage');
