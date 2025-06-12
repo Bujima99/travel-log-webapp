@@ -1,26 +1,5 @@
 let shouldConfirmNavigation = false;
-// Clear forms and prevent welcome message on page load
-document.addEventListener('DOMContentLoaded', function() {
-  // Check if we just logged out
-  if (sessionStorage.getItem('justLoggedOut')) {
-    sessionStorage.removeItem('justLoggedOut');
-    
-    // Reset forms
-    document.getElementById('loginForm').reset();
-    document.getElementById('signupForm').reset();
-    
-    // Clear validation messages
-    document.querySelectorAll('.validation-message').forEach(el => {
-      el.textContent = '';
-    });
-    document.querySelectorAll('.input').forEach(input => {
-      input.classList.remove('invalid', 'valid');
-    });
-    
-    // Switch to login tab
-    document.getElementById('tab-1').checked = true;
-  }
-});
+
 
 
 let loaderMinimumTime = 500; // 500ms minimum show time
@@ -406,46 +385,43 @@ function setupBackButtonConfirmation() {
   if (driverData && (window.location.pathname.includes('admin.html') || 
       window.location.pathname.includes('dashboard.html'))) {
     shouldConfirmNavigation = true;
+    
     // Add initial state to trap navigation
     history.pushState(null, null, window.location.href);
-  }
-
-  window.addEventListener('beforeunload', (e) => {
-    if (!shouldConfirmNavigation) return;
-   e.preventDefault();  
-  e.returnValue = 'Are you sure you want to leave?'; // Required for the popup
-  return 'Are you sure you want to leave?';          // Also for compatibility
-  });
-
-  window.addEventListener('popstate', (e) => {
-    if (!shouldConfirmNavigation) return;
     
-    e.preventDefault();
-    showLogoutConfirmation()
-      .catch(() => {
-        // User cancelled — push state back
-        history.pushState(null, null, location.href);
-      });
-  });
+    window.addEventListener('popstate', function(event) {
+      if (shouldConfirmNavigation) {
+        // Show confirmation popup
+        showPopup('Confirm Navigation', 'Are you sure you want to leave? You will be logged out.')
+          .then((result) => {
+            if (result === 'ok') {
+              logout();
+            } else {
+              // Push state back if user cancels
+              history.pushState(null, null, window.location.href);
+            }
+          })
+          .catch(() => {
+            history.pushState(null, null, window.location.href);
+          });
+      }
+    });
+  }
 }
 
-function showLogoutConfirmation() {
-  showPopup('Confirm Logout', 'Are you sure you want to logout?')
-  .then((result) => {
-    console.log(result);
-    if (result === 'ok') {
-      logout();
-    }
-  })
-  .catch(() => {
-    history.pushState(null, null, window.location.href);
-  });
-}
+// Replace your existing beforeunload handler with this:
+window.addEventListener('beforeunload', function(e) {
+  if (shouldConfirmNavigation) {
+    e.preventDefault();
+    e.returnValue = 'Are you sure you want to leave? You will be logged out.';
+    return e.returnValue;
+  }
+});
 
 
 // Update your logout function
 function logout() {
-  shouldConfirmNavigation = false; // Disable confirmation for intentional logout
+ shouldConfirmNavigation = false; // Disable confirmation for intentional logout
   localStorage.removeItem('driverData');
   sessionStorage.setItem('justLoggedOut', 'true');
   window.location.href = "index.html";
