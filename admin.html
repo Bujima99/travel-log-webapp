@@ -1603,9 +1603,19 @@ input[type="search"]::-webkit-search-cancel-button {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Add back button confirmation
-  setupBackButtonConfirmation();
+  // Initialize back button handling for protected pages
   const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (driverData && (window.location.pathname.includes('admin.html') || 
+      window.location.pathname.includes('dashboard.html'))) {
+    shouldConfirmNavigation = true;
+    setupBackButtonConfirmation();
+  }
+
+  // Handle post-logout cleanup
+  if (sessionStorage.getItem('justLoggedOut')) {
+    sessionStorage.removeItem('justLoggedOut');
+    resetLoginForms();
+  }
     
   if (driverData) {
     // Display admin name
