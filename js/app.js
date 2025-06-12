@@ -394,42 +394,43 @@ function showPopup(title, message) {
 }
 
 
+// Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-   const driverData = JSON.parse(localStorage.getItem('driverData'));
-  if (driverData) {
-    shouldConfirmNavigation = true;
-    
-    // Add initial state to trap navigation
-    history.pushState(null, null, window.location.href);
+  window.onbeforeunload = function(e) {
+    const driverData = JSON.parse(localStorage.getItem('driverData'));
+    if (driverData && (window.location.pathname.includes('admin.html') || 
+        window.location.pathname.includes('dashboard.html'))) {
+      e.preventDefault();
+      // Show confirmation only if there's active session
+      showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
+        localStorage.removeItem('driverData');
+        window.location.href = "index.html";
+      }).catch(() => {
+        // Stay on the page if user cancels
+        history.pushState(null, null, window.location.href);
+      });
+      return '';
+    }
+  };
 
-      // Replace your existing beforeunload handler with this:
-window.addEventListener('beforeunload', function(e) {
-  if (shouldConfirmNavigation) {
-    e.preventDefault();
-    e.returnValue = 'Are you sure you want to leave? You will be logged out.';
-    return e.returnValue;
-  }
-});
+  // Handle back button specifically
+  window.addEventListener('popstate', function(event) {
+    const driverData = JSON.parse(localStorage.getItem('driverData'));
+    if (driverData && (window.location.pathname.includes('admin.html') || 
+        window.location.pathname.includes('dashboard.html'))) {
+      event.preventDefault();
+      showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
+        localStorage.removeItem('driverData');
+        window.location.href = "index.html";
+      }).catch(() => {
+        // Stay on the page if user cancels
+        history.pushState(null, null, window.location.href);
+      });
+    }
+  });
 
-      
-    window.addEventListener('popstate', function(event) {
-     if (shouldConfirmNavigation) {
-        // Prevent default back behavior
-        event.preventDefault();
-        
-        // Show our custom popup
-        showPopup('Confirm Logout', 'Are you sure you want to logout?')
-          .then(() => {
-            // User confirmed - proceed with logout
-            logout();
-          })
-          .catch(() => {
-            // User cancelled - push state back
-            history.pushState(null, null, window.location.href);
-          });
-      }
-    });
-  }
+  // Initialize the history state
+  history.pushState(null, null, window.location.href);
 }
 
 
