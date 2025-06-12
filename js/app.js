@@ -1,3 +1,27 @@
+// Clear forms and prevent welcome message on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if we just logged out
+  if (sessionStorage.getItem('justLoggedOut')) {
+    sessionStorage.removeItem('justLoggedOut');
+    
+    // Reset forms
+    document.getElementById('loginForm').reset();
+    document.getElementById('signupForm').reset();
+    
+    // Clear validation messages
+    document.querySelectorAll('.validation-message').forEach(el => {
+      el.textContent = '';
+    });
+    document.querySelectorAll('.input').forEach(input => {
+      input.classList.remove('invalid', 'valid');
+    });
+    
+    // Switch to login tab
+    document.getElementById('tab-1').checked = true;
+  }
+});
+
+
 let loaderMinimumTime = 500; // 500ms minimum show time
 let loaderShownTime;
 
