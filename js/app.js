@@ -414,6 +414,7 @@ function setupBackButtonConfirmation() {
     e.preventDefault();
     // Chrome requires returnValue to be set
      showLogoutConfirmation();
+    e.preventDefault();
   });
 
   window.addEventListener('popstate', (e) => {
@@ -424,16 +425,17 @@ function setupBackButtonConfirmation() {
   });
 }
 
-async function showLogoutConfirmation() {
-  try {
-    const result = await showPopup('Confirm Logout', 'Are you sure you want to logout?');
+function showLogoutConfirmation() {
+  showPopup('Confirm Logout', 'Are you sure you want to logout?')
+  .then((result) => {
     console.log(result);
     if (result === 'ok') {
       logout();
     }
-  } catch {
+  })
+  .catch(() => {
     history.pushState(null, null, window.location.href);
-  }
+  });
 }
 
 
