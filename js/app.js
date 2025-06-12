@@ -425,9 +425,12 @@ function setupBackButtonConfirmation() {
   window.addEventListener('beforeunload', (e) => {
     if (!shouldConfirmNavigation || isPopupShowing) return;
     
-    const confirmationMessage = 'Are you sure you want to leave?';
-    e.returnValue = confirmationMessage; // Standard for most browsers
-    return confirmationMessage; // For older browsers
+   e.preventDefault();
+    isPopupShowing = true;
+    showLogoutConfirmation().finally(() => {
+      isPopupShowing = false;
+    });
+    history.pushState(null, null, window.location.href);
   });
 }
 
