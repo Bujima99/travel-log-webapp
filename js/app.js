@@ -413,8 +413,10 @@ function setupBackButtonConfirmation() {
   window.addEventListener('beforeunload', (e) => {
     if (!shouldConfirmNavigation) return;
     
-   e.preventDefault();
+ e.preventDefault();
+    // Chrome requires returnValue to be set
     e.returnValue = '';
+    return '';
   });
 
   window.addEventListener('popstate', (e) => {
