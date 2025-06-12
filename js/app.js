@@ -329,7 +329,14 @@ window.onload = function() {
 //}
 
 function logout() {
-    window.location.href = 'index.html?logout=true';
+  // Clear session data
+  localStorage.removeItem('driverData');
+  
+  // Add a flag to indicate logout
+  sessionStorage.setItem('justLoggedOut', 'true');
+  
+  // Redirect to index.html
+  window.location.href = "index.html";
 }
 
 // Custom Popup Function
