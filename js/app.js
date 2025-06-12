@@ -414,8 +414,7 @@ function setupBackButtonConfirmation() {
     if (!shouldConfirmNavigation) return;
     
    e.preventDefault();
-    e.returnValue = 'Are you sure you want to leave?';
-    return e.returnValue;
+    e.returnValue = '';
   });
 
   window.addEventListener('popstate', (e) => {
