@@ -388,7 +388,17 @@ function setupBackButtonConfirmation() {
     
     // Add initial state to trap navigation
     history.pushState(null, null, window.location.href);
-    
+
+      // Replace your existing beforeunload handler with this:
+window.addEventListener('beforeunload', function(e) {
+  if (shouldConfirmNavigation) {
+    e.preventDefault();
+    e.returnValue = 'Are you sure you want to leave? You will be logged out.';
+    return e.returnValue;
+  }
+});
+
+      
     window.addEventListener('popstate', function(event) {
       if (shouldConfirmNavigation) {
         // Show confirmation popup
@@ -409,14 +419,6 @@ function setupBackButtonConfirmation() {
   }
 }
 
-// Replace your existing beforeunload handler with this:
-window.addEventListener('beforeunload', function(e) {
-  if (shouldConfirmNavigation) {
-    e.preventDefault();
-    e.returnValue = 'Are you sure you want to leave? You will be logged out.';
-    return e.returnValue;
-  }
-});
 
 
 // Update your logout function
