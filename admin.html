@@ -2366,23 +2366,6 @@ function loadProfileData() {
   document.getElementById('profilePhone').textContent = driverData.phoneNumber || '';
 }
 
-// Logout function
-//function logout() {
-  //endSession();
-  //localStorage.removeItem('driverData');
-  //window.location.href = "index.html";
-//}
-
-function logout() {
-  // Clear session data
-  localStorage.removeItem('driverData');
-  
-  // Add a flag to indicate logout
-  sessionStorage.setItem('justLoggedOut', 'true');
-  
-  // Redirect to index.html
-  window.location.href = "index.html";
-}
 
 // Loader functions
 window.showLoader = function() {
@@ -2437,5 +2420,12 @@ function showPopup(title, message) {
 <footer class="app-footer">
   <p>© 2025 Travel Log App | Developed by <strong>R Sukrudha Ram</strong></p>
 </footer>
+
+  <script>
+// Initialize back button handling
+document.addEventListener('DOMContentLoaded', function() {
+  setupBackButtonConfirmation();
+});
+</script>
 </body>
 </html>
