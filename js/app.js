@@ -434,17 +434,17 @@ function setupBackButtonConfirmation() {
 }
 
 function showLogoutConfirmation() {
-  showPopup('Confirm Logout', 'Are you sure you want to logout?')
-    .then(() => {
+  showPopup('Confirm Logout', 'Are you sure you want to logout?');
+    //.then(() => {
       // User confirmed logout
       shouldConfirmNavigation = false;
       localStorage.removeItem('driverData');
       window.location.href = "index.html";
-    })
-    .catch(() => {
+    //})
+    //.catch(() => {
       // User cancelled - stay on page
       history.pushState(null, null, window.location.href);
-    });
+    //});
 }
 
 function resetLoginForms() {
