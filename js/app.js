@@ -406,6 +406,8 @@ function setupBackButtonConfirmation() {
   if (driverData && (window.location.pathname.includes('admin.html') || 
       window.location.pathname.includes('dashboard.html'))) {
     shouldConfirmNavigation = true;
+    // Add initial state to trap navigation
+    history.pushState(null, null, window.location.href);
   }
 
   window.addEventListener('beforeunload', (e) => {
