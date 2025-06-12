@@ -424,18 +424,16 @@ function setupBackButtonConfirmation() {
   });
 }
 
-function showLogoutConfirmation() {
-  showPopup('Confirm Logout', 'Are you sure you want to logout?')
- .then((result) => {
-   console.log(result);
-     if (result === 'ok') {
-        logout();
-      }
-    })
-    .catch(() => {
-      // User cancelled - stay on page
-      history.pushState(null, null, window.location.href);
-  });
+async function showLogoutConfirmation() {
+  try {
+    const result = await showPopup('Confirm Logout', 'Are you sure you want to logout?');
+    console.log(result);
+    if (result === 'ok') {
+      logout();
+    }
+  } catch {
+    history.pushState(null, null, window.location.href);
+  }
 }
 
 
