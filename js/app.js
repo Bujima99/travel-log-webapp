@@ -370,9 +370,9 @@ function showPopup(title, message) {
     const closePopup = (confirmed) => {
       popup.classList.remove('active');
       if (confirmed) {
-        resolve();
+          resolve('ok');
       } else {
-        reject();
+        reject('cancel');
       }
       
       // Remove event listeners
@@ -428,9 +428,10 @@ function setupBackButtonConfirmation() {
 
 function showLogoutConfirmation() {
   showPopup('Confirm Logout', 'Are you sure you want to logout?')
-    .then(() => {
-      // User confirmed logout
-      logout();
+    .then((result) => {
+      if (result === 'ok') {
+        logout();
+      }
     })
     .catch(() => {
       // User cancelled - stay on page
