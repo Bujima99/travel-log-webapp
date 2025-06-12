@@ -389,17 +389,6 @@ width: 100%;
 
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-	 // Check if we just logged out
-  if (sessionStorage.getItem('justLoggedOut')) {
-    sessionStorage.removeItem('justLoggedOut');
-    resetLoginForms();
-  }
-
-  // Set up back button confirmation if on protected page
-  if (window.location.pathname.includes('admin.html') || 
-      window.location.pathname.includes('dashboard.html')) {
-    setupBackButtonConfirmation();
-  }
     
 const toggles = document.querySelectorAll('.password-toggle');
   
@@ -597,18 +586,7 @@ function showSuccess(fieldId) {
   errorElement.style.display = 'none';
 }
 
-	  // Keep your existing resetLoginForms function:
-function resetLoginForms() {
-  document.getElementById('loginForm').reset();
-  document.getElementById('signupForm').reset();
-  document.querySelectorAll('.validation-message').forEach(el => {
-    el.textContent = '';
-  });
-  document.querySelectorAll('.input').forEach(input => {
-    input.classList.remove('invalid', 'valid');
-  });
-  document.getElementById('tab-1').checked = true;
-}
+
 	
   </script>
   <!-- END OF NEW SCRIPT -->
