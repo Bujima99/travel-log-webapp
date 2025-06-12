@@ -414,8 +414,6 @@ function setupBackButtonConfirmation() {
     e.preventDefault();
     // Chrome requires returnValue to be set
      showLogoutConfirmation();
-    e.returnValue = '';
-    return '';
   });
 
   window.addEventListener('popstate', (e) => {
@@ -431,12 +429,12 @@ function showLogoutConfirmation() {
  .then((result) => {
    console.log(result);
      if (result === 'ok') {
-        //logout();
+        logout();
       }
     })
     .catch(() => {
       // User cancelled - stay on page
-     // history.pushState(null, null, window.location.href);
+      history.pushState(null, null, window.location.href);
   });
 }
 
