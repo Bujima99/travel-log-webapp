@@ -353,13 +353,9 @@ window.onload = function() {
 //}
 
 function logout() {
-  // Clear session data
+  shouldConfirmNavigation = false; // Disable confirmation for intentional logout
   localStorage.removeItem('driverData');
-  
-  // Add a flag to indicate logout
   sessionStorage.setItem('justLoggedOut', 'true');
-  
-  // Redirect to index.html
   window.location.href = "index.html";
 }
 
@@ -408,41 +404,55 @@ function showPopup(title, message) {
   });
 }
 
-// Replace the existing setupBackButtonConfirmation function with this:
-function setupBackButtonConfirmation() {
-  window.onbeforeunload = function(e) {
-    const driverData = JSON.parse(localStorage.getItem('driverData'));
-    if (driverData && (window.location.pathname.includes('admin.html') || 
-        window.location.pathname.includes('dashboard.html'))) {
-      e.preventDefault();
-      // Show confirmation only if there's active session
-      showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
-        localStorage.removeItem('driverData');
-        window.location.href = "index.html";
-      }).catch(() => {
-        // Stay on the page if user cancels
-        history.pushState(null, null, window.location.href);
-      });
-      return '';
-    }
-  };
+let shouldConfirmNavigation = false;
 
-  // Handle back button specifically
-  window.addEventListener('popstate', function(event) {
-    const driverData = JSON.parse(localStorage.getItem('driverData'));
-    if (driverData && (window.location.pathname.includes('admin.html') || 
-        window.location.pathname.includes('dashboard.html'))) {
-      event.preventDefault();
-      showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
-        localStorage.removeItem('driverData');
-        window.location.href = "index.html";
-      }).catch(() => {
-        // Stay on the page if user cancels
-        history.pushState(null, null, window.location.href);
-      });
-    }
+function setupBackButtonConfirmation() {
+  // Check if we're on a protected page
+  const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (driverData && (window.location.pathname.includes('admin.html') || 
+      window.location.pathname.includes('dashboard.html'))) {
+    shouldConfirmNavigation = true;
+  }
+
+  window.addEventListener('beforeunload', (e) => {
+    if (!shouldConfirmNavigation) return;
+    
+    e.preventDefault();
+    // Chrome requires returnValue to be set
+    e.returnValue = '';
+    return '';
   });
 
-  // Initialize the history state
-  history.pushState(null, null, window.location.href);
+  window.addEventListener('popstate', (e) => {
+    if (!shouldConfirmNavigation) return;
+    
+    e.preventDefault();
+    showLogoutConfirmation();
+  });
+}
+
+function showLogoutConfirmation() {
+  showPopup('Confirm Logout', 'Are you sure you want to logout?')
+    .then(() => {
+      // User confirmed logout
+      shouldConfirmNavigation = false;
+      localStorage.removeItem('driverData');
+      window.location.href = "index.html";
+    })
+    .catch(() => {
+      // User cancelled - stay on page
+      history.pushState(null, null, window.location.href);
+    });
+}
+
+function resetLoginForms() {
+  document.getElementById('loginForm').reset();
+  document.getElementById('signupForm').reset();
+  document.querySelectorAll('.validation-message').forEach(el => {
+    el.textContent = '';
+  });
+  document.querySelectorAll('.input').forEach(input => {
+    input.classList.remove('invalid', 'valid');
+  });
+  document.getElementById('tab-1').checked = true;
 }
