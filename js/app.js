@@ -1,3 +1,4 @@
+let shouldConfirmNavigation = false;
 // Clear forms and prevent welcome message on page load
 document.addEventListener('DOMContentLoaded', function() {
   // Check if we just logged out
@@ -404,7 +405,7 @@ function showPopup(title, message) {
   });
 }
 
-let shouldConfirmNavigation = false;
+
 
 function setupBackButtonConfirmation() {
   // Check if we're on a protected page
