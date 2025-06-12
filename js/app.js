@@ -1,4 +1,5 @@
 let shouldConfirmNavigation = false;
+let isPopupShowing = false;
 // Clear forms and prevent welcome message on page load
 document.addEventListener('DOMContentLoaded', function() {
   // Check if we just logged out
@@ -353,12 +354,6 @@ window.onload = function() {
   //window.location.href = "index.html";
 //}
 
-function logout() {
-  shouldConfirmNavigation = false; // Disable confirmation for intentional logout
-  localStorage.removeItem('driverData');
-  sessionStorage.setItem('justLoggedOut', 'true');
-  window.location.href = "index.html";
-}
 
 // Custom Popup Function
 function showPopup(title, message) {
@@ -406,7 +401,6 @@ function showPopup(title, message) {
 }
 
 
-
 function setupBackButtonConfirmation() {
   // Check if we're on a protected page
   const driverData = JSON.parse(localStorage.getItem('driverData'));
@@ -415,36 +409,103 @@ function setupBackButtonConfirmation() {
     shouldConfirmNavigation = true;
   }
 
-  window.addEventListener('beforeunload', (e) => {
-    if (!shouldConfirmNavigation) return;
+  // Handle browser back/forward button
+  window.addEventListener('popstate', (e) => {
+    if (!shouldConfirmNavigation || isPopupShowing) return;
     
     e.preventDefault();
-    // Chrome requires returnValue to be set
-     showLogoutConfirmation();
-    e.returnValue = '';
-    return '';
+    isPopupShowing = true;
+    showLogoutConfirmation().finally(() => {
+      isPopupShowing = false;
+    });
+    history.pushState(null, null, window.location.href);
   });
 
-  window.addEventListener('popstate', (e) => {
-    if (!shouldConfirmNavigation) return;
+  // Handle page refresh or tab close
+  window.addEventListener('beforeunload', (e) => {
+    if (!shouldConfirmNavigation || isPopupShowing) return;
     
-    e.preventDefault();
-    showLogoutConfirmation();
+    const confirmationMessage = 'Are you sure you want to leave?';
+    e.returnValue = confirmationMessage; // Standard for most browsers
+    return confirmationMessage; // For older browsers
   });
 }
 
+// Modified showPopup function to properly handle OK/Cancel
 function showLogoutConfirmation() {
-  showPopup('Confirm Logout', 'Are you sure you want to logout?');
-    //.then(() => {
-      // User confirmed logout
+  return new Promise((resolve) => {
+    const popup = document.getElementById('customPopup');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupMessage = document.getElementById('popupMessage');
+    const popupOk = document.getElementById('popupOk');
+    const popupClose = document.getElementById('popupClose');
+    
+    popupTitle.textContent = 'Confirm Logout';
+    popupMessage.textContent = 'Are you sure you want to logout?';
+    popup.classList.add('active');
+    
+    // Create new buttons container if it doesn't exist
+    let buttonsContainer = popup.querySelector('.popup-buttons');
+    if (!buttonsContainer) {
+      buttonsContainer = document.createElement('div');
+      buttonsContainer.className = 'popup-buttons';
+      popup.querySelector('.popup-container').appendChild(buttonsContainer);
+    }
+    
+    // Clear existing buttons
+    buttonsContainer.innerHTML = '';
+    
+    // Add OK button
+    const okButton = document.createElement('button');
+    okButton.className = 'popup-button';
+    okButton.textContent = 'OK';
+    buttonsContainer.appendChild(okButton);
+    
+    // Add Cancel button
+    const cancelButton = document.createElement('button');
+    cancelButton.className = 'popup-button cancel-btn';
+    cancelButton.textContent = 'Cancel';
+    buttonsContainer.appendChild(cancelButton);
+    
+    // Remove previous event listeners
+    const cleanUp = () => {
+      okButton.removeEventListener('click', onOk);
+      cancelButton.removeEventListener('click', onCancel);
+      popup.removeEventListener('click', onOutsideClick);
+      popup.classList.remove('active');
+    };
+    
+    const onOk = () => {
+      cleanUp();
       shouldConfirmNavigation = false;
       localStorage.removeItem('driverData');
       window.location.href = "index.html";
-    //})
-    //.catch(() => {
-      // User cancelled - stay on page
-      history.pushState(null, null, window.location.href);
-    //});
+      resolve(true);
+    };
+    
+    const onCancel = () => {
+      cleanUp();
+      resolve(false);
+    };
+    
+    const onOutsideClick = (e) => {
+      if (e.target === popup && !e.target.closest('.popup-container')) {
+        onCancel();
+      }
+    };
+    
+    okButton.addEventListener('click', onOk);
+    cancelButton.addEventListener('click', onCancel);
+    popup.addEventListener('click', onOutsideClick);
+  });
+}
+
+// Update your logout function
+function logout() {
+  shouldConfirmNavigation = false; // Disable confirmation for intentional logout
+  localStorage.removeItem('driverData');
+  sessionStorage.setItem('justLoggedOut', 'true');
+  window.location.href = "index.html";
 }
 
 function resetLoginForms() {
