@@ -1,5 +1,4 @@
 let shouldConfirmNavigation = false;
-let isPopupShowing = false;
 // Clear forms and prevent welcome message on page load
 document.addEventListener('DOMContentLoaded', function() {
   // Check if we just logged out
@@ -409,99 +408,36 @@ function setupBackButtonConfirmation() {
     shouldConfirmNavigation = true;
   }
 
-  // Handle browser back/forward button
-  window.addEventListener('popstate', (e) => {
-    if (!shouldConfirmNavigation || isPopupShowing) return;
+  window.addEventListener('beforeunload', (e) => {
+    if (!shouldConfirmNavigation) return;
     
     e.preventDefault();
-    isPopupShowing = true;
-    showLogoutConfirmation().finally(() => {
-      isPopupShowing = false;
-    });
-    history.pushState(null, null, window.location.href);
+    // Chrome requires returnValue to be set
+     showLogoutConfirmation();
+    e.returnValue = '';
+    return '';
   });
 
-  // Handle page refresh or tab close
-  window.addEventListener('beforeunload', (e) => {
-    if (!shouldConfirmNavigation || isPopupShowing) return;
+  window.addEventListener('popstate', (e) => {
+    if (!shouldConfirmNavigation) return;
     
-   e.preventDefault();
-    isPopupShowing = true;
-    showLogoutConfirmation().finally(() => {
-      isPopupShowing = false;
-    });
-    history.pushState(null, null, window.location.href);
+    e.preventDefault();
+    showLogoutConfirmation();
   });
 }
 
-// Modified showPopup function to properly handle OK/Cancel
 function showLogoutConfirmation() {
-  return new Promise((resolve) => {
-    const popup = document.getElementById('customPopup');
-    const popupTitle = document.getElementById('popupTitle');
-    const popupMessage = document.getElementById('popupMessage');
-    const popupOk = document.getElementById('popupOk');
-    const popupClose = document.getElementById('popupClose');
-    
-    popupTitle.textContent = 'Confirm Logout';
-    popupMessage.textContent = 'Are you sure you want to logout?';
-    popup.classList.add('active');
-    
-    // Create new buttons container if it doesn't exist
-    let buttonsContainer = popup.querySelector('.popup-buttons');
-    if (!buttonsContainer) {
-      buttonsContainer = document.createElement('div');
-      buttonsContainer.className = 'popup-buttons';
-      popup.querySelector('.popup-container').appendChild(buttonsContainer);
-    }
-    
-    // Clear existing buttons
-    buttonsContainer.innerHTML = '';
-    
-    // Add OK button
-    const okButton = document.createElement('button');
-    okButton.className = 'popup-button';
-    okButton.textContent = 'OK';
-    buttonsContainer.appendChild(okButton);
-    
-    // Add Cancel button
-    const cancelButton = document.createElement('button');
-    cancelButton.className = 'popup-button cancel-btn';
-    cancelButton.textContent = 'Cancel';
-    buttonsContainer.appendChild(cancelButton);
-    
-    // Remove previous event listeners
-    const cleanUp = () => {
-      okButton.removeEventListener('click', onOk);
-      cancelButton.removeEventListener('click', onCancel);
-      popup.removeEventListener('click', onOutsideClick);
-      popup.classList.remove('active');
-    };
-    
-    const onOk = () => {
-      cleanUp();
-      shouldConfirmNavigation = false;
-      localStorage.removeItem('driverData');
-      window.location.href = "index.html";
-      resolve(true);
-    };
-    
-    const onCancel = () => {
-      cleanUp();
-      resolve(false);
-    };
-    
-    const onOutsideClick = (e) => {
-      if (e.target === popup && !e.target.closest('.popup-container')) {
-        onCancel();
-      }
-    };
-    
-    okButton.addEventListener('click', onOk);
-    cancelButton.addEventListener('click', onCancel);
-    popup.addEventListener('click', onOutsideClick);
-  });
+  showPopup('Confirm Logout', 'Are you sure you want to logout?')
+    .then(() => {
+      // User confirmed logout
+      logout();
+    })
+    .catch(() => {
+      // User cancelled - stay on page
+      history.pushState(null, null, window.location.href);
+    });
 }
+
 
 // Update your logout function
 function logout() {
