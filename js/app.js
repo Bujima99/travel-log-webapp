@@ -401,31 +401,27 @@ function setupBackButtonConfirmation() {
     if (driverData && (window.location.pathname.includes('admin.html') || 
         window.location.pathname.includes('dashboard.html'))) {
       e.preventDefault();
-      // Show confirmation only if there's active session
-      showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
-        localStorage.removeItem('driverData');
-        window.location.href = "index.html";
-      }).catch(() => {
-        // Stay on the page if user cancels
-        history.pushState(null, null, window.location.href);
-      });
-      return '';
+       // This is the only part that works with onbeforeunload
+      e.preventDefault();
+      // The return message is mostly ignored by modern browsers but required
+      return 'Are you sure you want to leave? You may have unsaved changes.';
     }
   };
 
-  // Handle back button specifically
-  window.addEventListener('popstate', function(event) {
+ // Handle actual navigation programmatically
+  window.addEventListener('beforeunload', async (e) => {
     const driverData = JSON.parse(localStorage.getItem('driverData'));
     if (driverData && (window.location.pathname.includes('admin.html') || 
         window.location.pathname.includes('dashboard.html'))) {
-      event.preventDefault();
-      showPopup('Confirm Logout', 'Are you sure you want to logout?').then(() => {
+      e.preventDefault();
+      try {
+        await showPopup('Confirm Logout', 'Are you sure you want to logout?');
         localStorage.removeItem('driverData');
         window.location.href = "index.html";
-      }).catch(() => {
-        // Stay on the page if user cancels
+      } catch {
+        // User cancelled
         history.pushState(null, null, window.location.href);
-      });
+      }
     }
   });
 
