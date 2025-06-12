@@ -1,5 +1,20 @@
+// Add this at the top of your app.js
 let shouldConfirmNavigation = false;
 
+// Modify your DOMContentLoaded event listener to this:
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if we just logged out
+  if (sessionStorage.getItem('justLoggedOut')) {
+    sessionStorage.removeItem('justLoggedOut');
+    resetLoginForms();
+  }
+
+  // Set up back button confirmation if on protected page
+  if (window.location.pathname.includes('admin.html') || 
+      window.location.pathname.includes('dashboard.html')) {
+    setupBackButtonConfirmation();
+  }
+});
 
 
 let loaderMinimumTime = 500; // 500ms minimum show time
@@ -380,10 +395,8 @@ function showPopup(title, message) {
 
 
 function setupBackButtonConfirmation() {
-  // Check if we're on a protected page
-  const driverData = JSON.parse(localStorage.getItem('driverData'));
-  if (driverData && (window.location.pathname.includes('admin.html') || 
-      window.location.pathname.includes('dashboard.html'))) {
+   const driverData = JSON.parse(localStorage.getItem('driverData'));
+  if (driverData) {
     shouldConfirmNavigation = true;
     
     // Add initial state to trap navigation
@@ -400,18 +413,18 @@ window.addEventListener('beforeunload', function(e) {
 
       
     window.addEventListener('popstate', function(event) {
-      if (shouldConfirmNavigation) {
-        // Show confirmation popup
-        showPopup('Confirm Navigation', 'Are you sure you want to leave? You will be logged out.')
-          .then((result) => {
-            if (result === 'ok') {
-              logout();
-            } else {
-              // Push state back if user cancels
-              history.pushState(null, null, window.location.href);
-            }
+     if (shouldConfirmNavigation) {
+        // Prevent default back behavior
+        event.preventDefault();
+        
+        // Show our custom popup
+        showPopup('Confirm Logout', 'Are you sure you want to logout?')
+          .then(() => {
+            // User confirmed - proceed with logout
+            logout();
           })
           .catch(() => {
+            // User cancelled - push state back
             history.pushState(null, null, window.location.href);
           });
       }
