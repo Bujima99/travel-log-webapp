@@ -2386,33 +2386,7 @@ window.hideLoader = function() {
   document.getElementById('loader').style.display = 'none';
 };
 
-// Show popup function
-function showPopup(title, message) {
-  const popup = document.getElementById('customPopup');
-  const popupTitle = document.getElementById('popupTitle');
-  const popupMessage = document.getElementById('popupMessage');
-  
-  popupTitle.textContent = title;
-  popupMessage.textContent = message;
-  popup.classList.add('active');
-  
-  const closePopup = () => {
-    popup.classList.remove('active');
-    document.getElementById('popupOk').removeEventListener('click', closePopup);
-    document.getElementById('popupClose').removeEventListener('click', closePopup);
-    popup.removeEventListener('click', outsideClick);
-  };
-  
-  const outsideClick = (e) => {
-    if (e.target === popup && !e.target.closest('.popup-container')) {
-      closePopup();
-    }
-  };
-  
-  document.getElementById('popupOk').addEventListener('click', closePopup);
-  document.getElementById('popupClose').addEventListener('click', closePopup);
-  popup.addEventListener('click', outsideClick);
-}
+
 </script>
 
 <!-- Custom Popup Structure -->
