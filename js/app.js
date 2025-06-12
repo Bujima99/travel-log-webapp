@@ -420,6 +420,7 @@ function setupBackButtonConfirmation() {
     
     e.preventDefault();
     // Chrome requires returnValue to be set
+     showLogoutConfirmation();
     e.returnValue = '';
     return '';
   });
