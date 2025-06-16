@@ -396,37 +396,36 @@ function showPopup(title, message) {
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  window.onbeforeunload = function(e) {
-    const driverData = JSON.parse(localStorage.getItem('driverData'));
-    if (driverData && (window.location.pathname.includes('admin.html') || 
-        window.location.pathname.includes('dashboard.html'))) {
-      e.preventDefault();
-       // This is the only part that works with onbeforeunload
-      e.preventDefault();
-      // The return message is mostly ignored by modern browsers but required
-      return 'Are you sure you want to leave? You may have unsaved changes.';
-    }
-  };
+  // 1. Add a hidden iframe to control navigation
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = 'about:blank';
+  document.body.appendChild(iframe);
 
- // Handle actual navigation programmatically
-  window.addEventListener('beforeunload', async (e) => {
-    const driverData = JSON.parse(localStorage.getItem('driverData'));
-    if (driverData && (window.location.pathname.includes('admin.html') || 
-        window.location.pathname.includes('dashboard.html'))) {
-      e.preventDefault();
-      try {
-        console.log("beforeunload fired");
-      e.preventDefault();
-      e.returnValue = 'Are you sure you want to leave? You may have unsaved changes.';
-      } catch {
-        // User cancelled
-        history.pushState(null, null, window.location.href);
-      }
+  // 2. Replace current history entry
+  history.replaceState({ confirmed: false }, '');
+  history.pushState({ confirmed: true }, '');
+
+  // 3. Handle back button press
+  window.addEventListener('popstate', async (event) => {
+    if (isBackButtonHandled || !event.state || event.state.confirmed) return;
+    
+    isBackButtonHandled = true;
+    event.preventDefault();
+    
+    try {
+      // Show your custom popup
+      await showPopup('Confirm Logout', 'Are you sure you want to logout?');
+      
+      // User confirmed - proceed with logout
+      localStorage.removeItem('driverData');
+      iframe.contentWindow.location.replace('index.html');
+    } catch {
+      // User cancelled - stay on page
+      history.pushState({ confirmed: true }, '');
+      isBackButtonHandled = false;
     }
   });
-
-  // Initialize the history state
-  history.pushState(null, null, window.location.href);
 }
 
 
