@@ -1,5 +1,4 @@
-// Add this at the top of your app.js
-let shouldConfirmNavigation = false;
+let isNavigatingAway = false;
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -10,8 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Set up back button confirmation if on protected page
-  if (window.location.pathname.includes('admin.html') || 
-      window.location.pathname.includes('dashboard.html')) {
+ if (shouldConfirmNavigation()) {
     setupBackButtonConfirmation();
   }
 });
@@ -396,46 +394,40 @@ function showPopup(title, message) {
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // 1. Add a hidden iframe to control navigation
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.src = 'about:blank';
-  document.body.appendChild(iframe);
+  // 1. Block all navigation attempts first
+  window.addEventListener('beforeunload', function(e) {
+    if (!isNavigatingAway && shouldConfirmNavigation()) {
+      e.preventDefault();
+      handleBackButton();
+      return e.returnValue = ''; // Required for some browsers
+    }
+  });
 
-  // 2. Replace current history entry
-  history.replaceState({ confirmed: false }, '');
-  history.pushState({ confirmed: true }, '');
-
-  // 3. Handle back button press
-  window.addEventListener('popstate', async (event) => {
-    if (isBackButtonHandled || !event.state || event.state.confirmed) return;
-    
-    isBackButtonHandled = true;
-    event.preventDefault();
-    
+  // 2. Actual handling with custom popup
+  async function handleBackButton() {
     try {
-      // Show your custom popup
       await showPopup('Confirm Logout', 'Are you sure you want to logout?');
       
       // User confirmed - proceed with logout
-      localStorage.removeItem('driverData');
-      iframe.contentWindow.location.replace('index.html');
+      isNavigatingAway = true;
+      logout();
     } catch {
       // User cancelled - stay on page
-      history.pushState({ confirmed: true }, '');
-      isBackButtonHandled = false;
+      isNavigatingAway = false;
     }
-  });
+  }
 }
 
+function shouldConfirmNavigation() {
+  return (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) && 
+         localStorage.getItem('driverData');
+}
 
 
 // Update your logout function
 function logout() {
- shouldConfirmNavigation = false; // Disable confirmation for intentional logout
   localStorage.removeItem('driverData');
-  sessionStorage.setItem('justLoggedOut', 'true');
-  window.location.href = "index.html";
+  window.location.href = 'index.html';
 }
 
 function resetLoginForms() {
