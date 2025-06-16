@@ -421,14 +421,16 @@ function setupBackButtonConfirmation() {
           // User confirmed - proceed with logout
           localStorage.removeItem('driverData');
           iframe.contentWindow.location.replace('index.html');
+          return '';
         })
         .catch(() => {
           // User cancelled - stay on page
           backButtonPressed = false;
           history.pushState({ confirmed: true }, '');
         });
+       backButtonPressed = false;
+       history.pushState({ confirmed: true }, '');
       
-      return '';
     }
   });
 }
