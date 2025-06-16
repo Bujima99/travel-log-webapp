@@ -1,7 +1,5 @@
 // Add this at the top of your app.js
 let shouldConfirmNavigation = true;
-let ignoreNextPopState = false;
-
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
   // Check if we just logged out
@@ -413,13 +411,12 @@ function setupBackButtonConfirmation() {
   });
 
   // 3. Fallback for other navigation types
-  window.addEventListener('beforeunload', (e) => {
-    if (shouldConfirmNavigation && !ignoreNextPopState) {
-      e.preventDefault();
-      // This may show browser's default confirmation
-      return e.returnValue = 'Are you sure you want to leave?';
-    }
-  });
+  window.addEventListener('beforeunload', function (e) {
+  if (!shouldConfirmNavigation) return;
+
+  e.preventDefault();  // Not strictly required for modern browsers
+  e.returnValue = '';  // Must set returnValue to trigger the native confirm
+});
 }
 
 
