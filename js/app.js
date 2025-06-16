@@ -391,6 +391,11 @@ function showPopup(title, message) {
   });
 }
 
+function shouldConfirmNavigation() {
+  return (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'));
+}
+
+
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
@@ -418,9 +423,6 @@ function setupBackButtonConfirmation() {
   }
 }
 
-function shouldConfirmNavigation() {
-  return (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'));
-}
 
 
 // Update your logout function
