@@ -1,5 +1,6 @@
 // Add this at the top of your app.js
-let shouldConfirmNavigation = true;
+let shouldConfirmNavigation = false;
+
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
   // Check if we just logged out
@@ -351,72 +352,81 @@ window.onload = function() {
 function showPopup(title, message) {
   return new Promise((resolve, reject) => {
     const popup = document.getElementById('customPopup');
-    popup.style.display = 'flex';
-    document.getElementById('popupTitle').textContent = title;
-    document.getElementById('popupMessage').textContent = message;
-
-    const okBtn = document.getElementById('popupOk');
-    const closeBtn = document.getElementById('popupClose');
-
-    const cleanUp = () => {
-      okBtn.removeEventListener('click', onConfirm);
-      closeBtn.removeEventListener('click', onCancel);
-      popup.style.display = 'none';
+    const popupTitle = document.getElementById('popupTitle');
+    const popupMessage = document.getElementById('popupMessage');
+    
+    popupTitle.textContent = title;
+    popupMessage.textContent = message;
+    hideLoader();
+    popup.classList.add('active');
+    
+     // Create a function to handle closing
+    const closePopup = (confirmed) => {
+      popup.classList.remove('active');
+      if (confirmed) {
+          resolve('ok');
+      } else {
+        reject('cancel');
+      }
+      
+      // Remove event listeners
+      document.getElementById('popupOk').removeEventListener('click', confirmHandler);
+      document.getElementById('popupClose').removeEventListener('click', cancelHandler);
+      popup.removeEventListener('click', outsideClick);
     };
 
-    const onConfirm = () => {
-      cleanUp();
-      resolve();
+    
+    const confirmHandler = () => closePopup(true);
+    const cancelHandler = () => closePopup(false);
+    
+    // Handle outside clicks
+    const outsideClick = (e) => {
+      if (e.target === popup && !e.target.closest('.popup-container')) {
+        cancelHandler();
+      }
     };
-
-    const onCancel = () => {
-      cleanUp();
-      reject();
-    };
-
-    okBtn.addEventListener('click', onConfirm);
-    closeBtn.addEventListener('click', onCancel);
+    
+    // Add event listeners
+    document.getElementById('popupOk').addEventListener('click', confirmHandler);
+    document.getElementById('popupClose').addEventListener('click', cancelHandler);
+    popup.addEventListener('click', outsideClick);
   });
-
 }
 
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // 1. Initialize history state
-  history.pushState({ confirmed: true }, '');
-
-  // 2. Handle back/forward button
-  window.addEventListener('popstate', (event) => {
-    if (!shouldConfirmNavigation || ignoreNextPopState) {
-      ignoreNextPopState = false;
-      return;
+  window.onbeforeunload = function(e) {
+    const driverData = JSON.parse(localStorage.getItem('driverData'));
+    if (driverData && (window.location.pathname.includes('admin.html') || 
+        window.location.pathname.includes('dashboard.html'))) {
+      e.preventDefault();
+       // This is the only part that works with onbeforeunload
+      e.preventDefault();
+      // The return message is mostly ignored by modern browsers but required
+      return 'Are you sure you want to leave? You may have unsaved changes.';
     }
+  };
 
-    // Immediately push the state back
-    history.pushState({ confirmed: false }, '');
-    
-    // Show custom confirmation
-    showPopup('Confirm Navigation', 'Are you sure you want to leave?')
-      .then(() => {
-        shouldConfirmNavigation = false;
-        ignoreNextPopState = true;
-        window.history.back(); // Now actually go back
-      })
-      .catch(() => {
-        // User cancelled - stay on page
-        ignoreNextPopState = true;
-        history.pushState({ confirmed: true }, '');
-      });
+ // Handle actual navigation programmatically
+  window.addEventListener('beforeunload', async (e) => {
+    const driverData = JSON.parse(localStorage.getItem('driverData'));
+    if (driverData && (window.location.pathname.includes('admin.html') || 
+        window.location.pathname.includes('dashboard.html'))) {
+      e.preventDefault();
+      try {
+        console.log("beforeunload fired");
+      e.preventDefault();
+      e.returnValue = '';
+      } catch {
+        // User cancelled
+        history.pushState(null, null, window.location.href);
+      }
+    }
   });
 
-  // 3. Fallback for other navigation types
-  window.addEventListener('beforeunload', function (e) {
-  if (!shouldConfirmNavigation) return;
-
-  e.preventDefault();  // Not strictly required for modern browsers
-  e.returnValue = '';  // Must set returnValue to trigger the native confirm
-});
+  // Initialize the history state
+  history.pushState(null, null, window.location.href);
 }
 
 
@@ -440,8 +450,3 @@ function resetLoginForms() {
   });
   document.getElementById('tab-1').checked = true;
 }
-
-// Reset when page loads
-window.addEventListener('load', () => {
-   ignoreNextPopState = false;
-});
