@@ -613,10 +613,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize back button handling for protected pages
   const driverData = JSON.parse(localStorage.getItem('driverData'));
-  if (driverData && (window.location.pathname.includes('admin.html') || 
-      window.location.pathname.includes('dashboard.html'))) {
-    shouldConfirmNavigation = true;
-    setupBackButtonConfirmation();
+   if (shouldConfirmNavigation()) {
+    setupBackButtonProtection();
+    
+    // Reset timer on any user activity
+    window.addEventListener('click', resetSessionTimer);
+    window.addEventListener('keypress', resetSessionTimer);
+    window.addEventListener('mousemove', resetSessionTimer);
   }
 
   // Handle post-logout cleanup
