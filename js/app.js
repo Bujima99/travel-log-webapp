@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Check if we're on the login page
-  if (window.location.pathname.endsWith('index.html') {
+  if (window.location.pathname.endsWith('index.html')) {
     // If user tries to go back to login page, check session
     checkSessionOnNavigation();
   } else {
