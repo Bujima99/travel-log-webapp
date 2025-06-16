@@ -419,8 +419,7 @@ function setupBackButtonConfirmation() {
 }
 
 function shouldConfirmNavigation() {
-  return (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) && 
-         localStorage.getItem('driverData');
+  return (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'));
 }
 
 
