@@ -1,5 +1,5 @@
 // Session Management System
-
+<script src="./js/general.js"></script>
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
   // Check if we just logged out
