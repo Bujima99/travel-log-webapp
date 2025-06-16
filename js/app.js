@@ -402,7 +402,7 @@ function shouldConfirmNavigation() {
 function setupBackButtonConfirmation() {
   // 1. First show browser's default confirmation
   window.addEventListener('beforeunload', function(e) {
-    if ((!isNavigatingAway) && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) {
+    if ((!isNavigatingAway) && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'))) {
       e.preventDefault();
       // This will show browser's default dialog
       return e.returnValue = 'Are you sure you want to leave?';
@@ -411,7 +411,7 @@ function setupBackButtonConfirmation() {
 
   // 2. Then show our custom popup after they confirm the browser's dialog
   window.addEventListener('unload', function() {
-    if (!popupConfirmed && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) {
+    if (!popupConfirmed && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'))) {
       // This will run as the page is unloading
       showPopup('Final Confirmation', 'Please confirm logout').then(() => {
         // Too late - page is already unloading
@@ -424,7 +424,7 @@ function setupBackButtonConfirmation() {
   // 3. Better approach - override the back button behavior completely
   history.pushState(null, null, window.location.href);
   window.onpopstate = function(event) {
-    if ((window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) {
+    if ((window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'))) {
       showPopup('Confirm Logout', 'Are you sure you want to logout?')
         .then(() => {
           popupConfirmed = true;
