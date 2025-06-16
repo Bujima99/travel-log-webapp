@@ -1,4 +1,4 @@
-let backButtonPressed = false;
+let isBackButtonHandled = false
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -399,38 +399,36 @@ function shouldConfirmNavigation() {
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // 1. Add hidden iframe for controlled navigation
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.src = 'about:blank';
-  document.body.appendChild(iframe);
-
-  // 2. Replace current history entry
-  history.replaceState({ confirmed: false }, '');
-  history.pushState({ confirmed: true }, '');
-
-  // 3. Handle back button via beforeunload
-  window.addEventListener('beforeunload', function(e) {
-    if ((window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) && !backButtonPressed) {
-      backButtonPressed = true;
-      e.preventDefault();
+ // 1. Create a unique hash for the page
+  const sessionHash = `#${Date.now()}`;
+  window.location.hash = sessionHash;
+  
+  // 2. Store the current URL with hash
+  const currentUrl = window.location.href;
+  
+  // 3. Set up our back button detection
+  window.addEventListener('hashchange', function(e) {
+    if (window.location.href === currentUrl.replace(sessionHash, '') && 
+        (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) && 
+        !isBackButtonHandled) {
       
-      // Show custom popup
+      e.preventDefault();
+      isBackButtonHandled = true;
+      
+      // Restore the hash immediately
+      window.location.hash = sessionHash;
+      
+      // Show your custom popup
       showPopup('Confirm Logout', 'Are you sure you want to logout?')
         .then(() => {
           // User confirmed - proceed with logout
           localStorage.removeItem('driverData');
-          iframe.contentWindow.location.replace('index.html');
-          return '';
+          window.location.href = 'index.html';
         })
         .catch(() => {
           // User cancelled - stay on page
-          backButtonPressed = false;
-          history.pushState({ confirmed: true }, '');
+          isBackButtonHandled = false;
         });
-       backButtonPressed = false;
-       history.pushState({ confirmed: true }, '');
-      
     }
   });
 }
