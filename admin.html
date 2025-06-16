@@ -1614,14 +1614,7 @@ document.addEventListener('DOMContentLoaded', function() {
     resetLoginForms();
   }
 
-    if (shouldConfirmNavigation()) {
-    setupBackButtonProtection();
-    
-    // Reset timer on any user activity
-    window.addEventListener('click', resetSessionTimer);
-    window.addEventListener('keypress', resetSessionTimer);
-    window.addEventListener('mousemove', resetSessionTimer);
-  }
+
     
   if (driverData) {
     // Display admin name
