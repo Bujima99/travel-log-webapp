@@ -354,57 +354,69 @@ function showPopup(title, message) {
   return new Promise((resolve, reject) => {
     const popup = document.getElementById('customPopup');
     popup.style.display = 'flex';
-    
     document.getElementById('popupTitle').textContent = title;
     document.getElementById('popupMessage').textContent = message;
-    
-    const handleResponse = (confirmed) => {
+
+    const okBtn = document.getElementById('popupOk');
+    const closeBtn = document.getElementById('popupClose');
+
+    const cleanUp = () => {
+      okBtn.removeEventListener('click', onConfirm);
+      closeBtn.removeEventListener('click', onCancel);
       popup.style.display = 'none';
-      confirmed ? resolve() : reject();
-      cleanup();
     };
 
-    const cleanup = () => {
-      document.getElementById('popupOk').removeEventListener('click', () => handleResponse(true));
-      document.getElementById('popupClose').removeEventListener('click', () => handleResponse(false));
+    const onConfirm = () => {
+      cleanUp();
+      resolve();
     };
 
-    document.getElementById('popupOk').addEventListener('click', () => handleResponse(true));
-    document.getElementById('popupClose').addEventListener('click', () => handleResponse(false));
+    const onCancel = () => {
+      cleanUp();
+      reject();
+    };
+
+    okBtn.addEventListener('click', onConfirm);
+    closeBtn.addEventListener('click', onCancel);
   });
+
 }
 
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // First approach: Use popstate for back/forward buttons
-  window.addEventListener('popstate', async (event) => {
+  // 1. First detect back button click using history state
+  window.addEventListener('popstate', function(event) {
     if (shouldConfirmNavigation) {
       backButtonPressed = true;
-      event.preventDefault();
+      // Immediately push the state back
+      history.pushState(null, null, window.location.href);
       
-      try {
-        await showPopup('Confirm Navigation', 'Are you sure you want to leave?');
-        shouldConfirmNavigation = false;
-        window.history.back(); // Navigate after confirmation
-      } catch {
-        history.pushState(null, '', window.location.href);
-      }
+      // Show our custom confirmation
+      showPopup('Confirm Navigation', 'Are you sure you want to leave?')
+        .then(() => {
+          shouldConfirmNavigation = false;
+          // Now actually go back
+          window.history.back();
+        })
+        .catch(() => {
+          // User cancelled - stay on page
+          backButtonPressed = false;
+        });
     }
   });
 
-  // Second approach: Use beforeunload as fallback
-  window.addEventListener('beforeunload', (e) => {
+  // 2. Initialize history state
+  history.pushState(null, null, window.location.href);
+
+  // 3. Handle beforeunload as fallback for other navigation types
+  window.addEventListener('beforeunload', function(e) {
     if (shouldConfirmNavigation && !backButtonPressed) {
       e.preventDefault();
       // This will show browser's default confirmation
-      e.returnValue = 'Are you sure you want to leave?';
-      return e.returnValue;
+      return e.returnValue = 'Are you sure you want to leave?';
     }
   });
-
-  // Initialize history state
-  history.pushState(null, '', window.location.href);
 }
 
 
