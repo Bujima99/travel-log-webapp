@@ -402,7 +402,7 @@ function shouldConfirmNavigation() {
 function setupBackButtonConfirmation() {
   // 1. First show browser's default confirmation
   window.addEventListener('beforeunload', function(e) {
-    if (!isNavigatingAway && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) {
+    if ((!isNavigatingAway) && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) {
       e.preventDefault();
       // This will show browser's default dialog
       return e.returnValue = 'Are you sure you want to leave?';
