@@ -1,5 +1,5 @@
 // Add this at the top of your app.js
-let shouldConfirmNavigation = false;
+let shouldConfirmNavigation = true;
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -396,32 +396,35 @@ function showPopup(title, message) {
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  window.onbeforeunload = function(e) {
+  // Handle browser back/forward button
+  window.addEventListener('beforeunload', async function(e) {
     const driverData = JSON.parse(localStorage.getItem('driverData'));
-    if (driverData && (window.location.pathname.includes('admin.html') || 
-        window.location.pathname.includes('dashboard.html'))) {
+    if (driverData && shouldConfirmNavigation && 
+        (window.location.pathname.includes('admin.html') || 
+         window.location.pathname.includes('dashboard.html'))) {
+      
+      // Prevent immediate navigation
       e.preventDefault();
-       // This is the only part that works with onbeforeunload
-      e.preventDefault();
-      // The return message is mostly ignored by modern browsers but required
-      return 'Are you sure you want to leave? You may have unsaved changes.';
-    }
-  };
-
- // Handle actual navigation programmatically
-  window.addEventListener('beforeunload', async (e) => {
-    const driverData = JSON.parse(localStorage.getItem('driverData'));
-    if (driverData && (window.location.pathname.includes('admin.html') || 
-        window.location.pathname.includes('dashboard.html'))) {
-      e.preventDefault();
+      
       try {
-        await showPopup('Confirm Logout', 'Are you sure you want to logout?');
-        localStorage.removeItem('driverData');
-        window.location.href = "index.html";
+        // Show our custom popup and wait for user response
+        await showPopup('Confirm Navigation', 'Are you sure you want to leave? Any unsaved changes may be lost.');
+        
+        // User confirmed - allow navigation
+        shouldConfirmNavigation = false;
+        
+        // For back button, we need to manually navigate after the promise resolves
+        setTimeout(() => {
+          window.history.back();
+        }, 0);
       } catch {
-        // User cancelled
+        // User cancelled - stay on page
+        // Modern browsers won't let us prevent navigation here, so we use history.pushState
         history.pushState(null, null, window.location.href);
       }
+      
+      // This return is required for Chrome and other browsers that still support it
+      return '';
     }
   });
 
