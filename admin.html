@@ -1612,6 +1612,11 @@ document.addEventListener('DOMContentLoaded', function() {
     sessionStorage.removeItem('justLoggedOut');
     resetLoginForms();
   }
+
+   if (driverData && (window.location.pathname.includes('admin.html') || window.location.pathname.includes('dashboard.html'))) {
+    shouldConfirmNavigation = true;
+    setupBackButtonConfirmation();
+  }
     
   if (driverData) {
     // Display admin name
