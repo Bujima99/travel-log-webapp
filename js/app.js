@@ -1,5 +1,6 @@
 // Add this at the top of your app.js
 let shouldConfirmNavigation = true;
+let backButtonPressed = false;
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -352,84 +353,58 @@ window.onload = function() {
 function showPopup(title, message) {
   return new Promise((resolve, reject) => {
     const popup = document.getElementById('customPopup');
-    const popupTitle = document.getElementById('popupTitle');
-    const popupMessage = document.getElementById('popupMessage');
+    popup.style.display = 'flex';
     
-    popupTitle.textContent = title;
-    popupMessage.textContent = message;
-    hideLoader();
-    popup.classList.add('active');
+    document.getElementById('popupTitle').textContent = title;
+    document.getElementById('popupMessage').textContent = message;
     
-     // Create a function to handle closing
-    const closePopup = (confirmed) => {
-      popup.classList.remove('active');
-      if (confirmed) {
-          resolve('ok');
-      } else {
-        reject('cancel');
-      }
-      
-      // Remove event listeners
-      document.getElementById('popupOk').removeEventListener('click', confirmHandler);
-      document.getElementById('popupClose').removeEventListener('click', cancelHandler);
-      popup.removeEventListener('click', outsideClick);
+    const handleResponse = (confirmed) => {
+      popup.style.display = 'none';
+      confirmed ? resolve() : reject();
+      cleanup();
     };
 
-    
-    const confirmHandler = () => closePopup(true);
-    const cancelHandler = () => closePopup(false);
-    
-    // Handle outside clicks
-    const outsideClick = (e) => {
-      if (e.target === popup && !e.target.closest('.popup-container')) {
-        cancelHandler();
-      }
+    const cleanup = () => {
+      document.getElementById('popupOk').removeEventListener('click', () => handleResponse(true));
+      document.getElementById('popupClose').removeEventListener('click', () => handleResponse(false));
     };
-    
-    // Add event listeners
-    document.getElementById('popupOk').addEventListener('click', confirmHandler);
-    document.getElementById('popupClose').addEventListener('click', cancelHandler);
-    popup.addEventListener('click', outsideClick);
+
+    document.getElementById('popupOk').addEventListener('click', () => handleResponse(true));
+    document.getElementById('popupClose').addEventListener('click', () => handleResponse(false));
   });
 }
 
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // Handle browser back/forward button
-  window.addEventListener('beforeunload', async function(e) {
-    const driverData = JSON.parse(localStorage.getItem('driverData'));
-    if (driverData && shouldConfirmNavigation && 
-        (window.location.pathname.includes('admin.html') || 
-         window.location.pathname.includes('dashboard.html'))) {
-      
-      // Prevent immediate navigation
-      e.preventDefault();
+  // First approach: Use popstate for back/forward buttons
+  window.addEventListener('popstate', async (event) => {
+    if (shouldConfirmNavigation) {
+      backButtonPressed = true;
+      event.preventDefault();
       
       try {
-        // Show our custom popup and wait for user response
-        await showPopup('Confirm Navigation', 'Are you sure you want to leave? Any unsaved changes may be lost.');
-        
-        // User confirmed - allow navigation
+        await showPopup('Confirm Navigation', 'Are you sure you want to leave?');
         shouldConfirmNavigation = false;
-        
-        // For back button, we need to manually navigate after the promise resolves
-        setTimeout(() => {
-          window.history.back();
-        }, 0);
+        window.history.back(); // Navigate after confirmation
       } catch {
-        // User cancelled - stay on page
-        // Modern browsers won't let us prevent navigation here, so we use history.pushState
-        history.pushState(null, null, window.location.href);
+        history.pushState(null, '', window.location.href);
       }
-      
-      // This return is required for Chrome and other browsers that still support it
-      return '';
     }
   });
 
-  // Initialize the history state
-  history.pushState(null, null, window.location.href);
+  // Second approach: Use beforeunload as fallback
+  window.addEventListener('beforeunload', (e) => {
+    if (shouldConfirmNavigation && !backButtonPressed) {
+      e.preventDefault();
+      // This will show browser's default confirmation
+      e.returnValue = 'Are you sure you want to leave?';
+      return e.returnValue;
+    }
+  });
+
+  // Initialize history state
+  history.pushState(null, '', window.location.href);
 }
 
 
@@ -453,3 +428,8 @@ function resetLoginForms() {
   });
   document.getElementById('tab-1').checked = true;
 }
+
+// Reset when page loads
+window.addEventListener('load', () => {
+  backButtonPressed = false;
+});
