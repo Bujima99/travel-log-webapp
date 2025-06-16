@@ -1,5 +1,4 @@
-let isNavigatingAway = false;
-let popupConfirmed = false;
+let backButtonPressed = false;
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -400,41 +399,38 @@ function shouldConfirmNavigation() {
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // 1. First show browser's default confirmation
+  // 1. Add hidden iframe for controlled navigation
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = 'about:blank';
+  document.body.appendChild(iframe);
+
+  // 2. Replace current history entry
+  history.replaceState({ confirmed: false }, '');
+  history.pushState({ confirmed: true }, '');
+
+  // 3. Handle back button via beforeunload
   window.addEventListener('beforeunload', function(e) {
-    if ((!isNavigatingAway) && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'))) {
+    if ((window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) && !backButtonPressed) {
+      backButtonPressed = true;
       e.preventDefault();
-      // This will show browser's default dialog
-      return e.returnValue = 'Are you sure you want to leave?';
-    }
-  });
-
-  // 2. Then show our custom popup after they confirm the browser's dialog
-  window.addEventListener('unload', function() {
-    if (!popupConfirmed && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'))) {
-      // This will run as the page is unloading
-      showPopup('Final Confirmation', 'Please confirm logout').then(() => {
-        // Too late - page is already unloading
-      }).catch(() => {
-        // Too late - page is already unloading
-      });
-    }
-  });
-
-  // 3. Better approach - override the back button behavior completely
-  history.pushState(null, null, window.location.href);
-  window.onpopstate = function(event) {
-    if ((window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'))) {
+      
+      // Show custom popup
       showPopup('Confirm Logout', 'Are you sure you want to logout?')
         .then(() => {
-          popupConfirmed = true;
-          logout();
+          // User confirmed - proceed with logout
+          localStorage.removeItem('driverData');
+          iframe.contentWindow.location.replace('index.html');
         })
         .catch(() => {
-          history.pushState(null, null, window.location.href);
+          // User cancelled - stay on page
+          backButtonPressed = false;
+          history.pushState({ confirmed: true }, '');
         });
+      
+      return '';
     }
-  };
+  });
 }
 
 
