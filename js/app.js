@@ -1,4 +1,40 @@
-let isBackButtonHandled = false
+// Session Management System
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+let sessionTimer;
+
+function initSession() {
+  // Store session start time
+  localStorage.setItem('sessionStart', Date.now());
+  resetSessionTimer();
+  
+  // Set up periodic session check
+  setInterval(checkSession, 60000); // Check every minute
+}
+
+function resetSessionTimer() {
+  clearTimeout(sessionTimer);
+  sessionTimer = setTimeout(logoutDueToInactivity, SESSION_TIMEOUT);
+}
+
+function checkSession() {
+  const sessionStart = localStorage.getItem('sessionStart');
+  if (Date.now() - sessionStart > SESSION_TIMEOUT) {
+    logoutDueToInactivity();
+  }
+}
+
+function logoutDueToInactivity() {
+  showPopup('Session Expired', 'Your session has expired due to inactivity')
+    .then(() => {
+      forceLogout();
+    });
+}
+
+function forceLogout() {
+  localStorage.removeItem('driverData');
+  localStorage.removeItem('sessionStart');
+  window.location.href = 'index.html';
+}
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -10,7 +46,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Set up back button confirmation if on protected page
  if (shouldConfirmNavigation()) {
-    setupBackButtonConfirmation();
+    setupBackButtonProtection();
+    
+    // Reset timer on any user activity
+    window.addEventListener('click', resetSessionTimer);
+    window.addEventListener('keypress', resetSessionTimer);
+    window.addEventListener('mousemove', resetSessionTimer);
   }
 });
 
@@ -247,7 +288,7 @@ function handleSuccessfulLogin(driverData) {
         userType: driverData.userType
     }));
 
-  
+  initSession();
    
     // Redirect based on user type
     if (driverData.userType === 'Admin') {
@@ -396,50 +437,21 @@ function shouldConfirmNavigation() {
 }
 
 
-
-// Replace the existing setupBackButtonConfirmation function with this:
-function setupBackButtonConfirmation() {
- // 1. Create a unique hash for the page
-  const sessionHash = `#${Date.now()}`;
-  window.location.hash = sessionHash;
-  
-  // 2. Store the current URL with hash
-  const currentUrl = window.location.href;
-  
-  // 3. Set up our back button detection
-  window.addEventListener('hashchange', function(e) {
-    if (window.location.href === currentUrl.replace(sessionHash, '') && 
-        (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html')) && 
-        !isBackButtonHandled) {
-      
-      e.preventDefault();
-      isBackButtonHandled = true;
-      
-      // Restore the hash immediately
-      window.location.hash = sessionHash;
-      
-      // Show your custom popup
-      showPopup('Confirm Logout', 'Are you sure you want to logout?')
-        .then(() => {
-          // User confirmed - proceed with logout
-          localStorage.removeItem('driverData');
-          window.location.href = 'index.html';
-        })
-        .catch(() => {
-          // User cancelled - stay on page
-          isBackButtonHandled = false;
-        });
-    }
+// Prevent back button logout
+function setupBackButtonProtection() {
+  window.addEventListener('popstate', () => {
+    history.pushState(null, null, window.location.href);
+    resetSessionTimer(); // Reset inactivity timer
   });
-}
 
+  history.pushState(null, null, window.location.href);
+}
 
 
 // Update your logout function
 function logout() {
-   localStorage.removeItem('driverData');
-    isNavigatingAway = true;
-  window.location.href = 'index.html';
+   clearTimeout(sessionTimer);
+  forceLogout();
 }
 
 function resetLoginForms() {
