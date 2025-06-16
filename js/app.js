@@ -1,4 +1,5 @@
 let isNavigatingAway = false;
+let popupConfirmed = false;
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -399,35 +400,49 @@ function shouldConfirmNavigation() {
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // 1. Block all navigation attempts first
+  // 1. First show browser's default confirmation
   window.addEventListener('beforeunload', function(e) {
-    if ((!isNavigatingAway) && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'))) {
+    if (!isNavigatingAway && shouldConfirmNavigation()) {
       e.preventDefault();
-      handleBackButton();
-      return e.returnValue = ''; // Required for some browsers
+      // This will show browser's default dialog
+      return e.returnValue = 'Are you sure you want to leave?';
     }
   });
 
-  // 2. Actual handling with custom popup
-  async function handleBackButton() {
-    try {
-      await showPopup('Confirm Logout', 'Are you sure you want to logout?');
-      
-      // User confirmed - proceed with logout
-      isNavigatingAway = true;
-      logout();
-    } catch {
-      // User cancelled - stay on page
-      isNavigatingAway = false;
+  // 2. Then show our custom popup after they confirm the browser's dialog
+  window.addEventListener('unload', function() {
+    if (!popupConfirmed && shouldConfirmNavigation()) {
+      // This will run as the page is unloading
+      showPopup('Final Confirmation', 'Please confirm logout').then(() => {
+        // Too late - page is already unloading
+      }).catch(() => {
+        // Too late - page is already unloading
+      });
     }
-  }
+  });
+
+  // 3. Better approach - override the back button behavior completely
+  history.pushState(null, null, window.location.href);
+  window.onpopstate = function(event) {
+    if (shouldConfirmNavigation()) {
+      showPopup('Confirm Logout', 'Are you sure you want to logout?')
+        .then(() => {
+          popupConfirmed = true;
+          logout();
+        })
+        .catch(() => {
+          history.pushState(null, null, window.location.href);
+        });
+    }
+  };
 }
 
 
 
 // Update your logout function
 function logout() {
-  localStorage.removeItem('driverData');
+   localStorage.removeItem('driverData');
+    isNavigatingAway = true;
   window.location.href = 'index.html';
 }
 
