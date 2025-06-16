@@ -396,7 +396,7 @@ function showPopup(title, message) {
 function setupBackButtonConfirmation() {
   // 1. Block all navigation attempts first
   window.addEventListener('beforeunload', function(e) {
-    if (!isNavigatingAway && shouldConfirmNavigation()) {
+    if ((!isNavigatingAway) && shouldConfirmNavigation()) {
       e.preventDefault();
       handleBackButton();
       return e.returnValue = ''; // Required for some browsers
