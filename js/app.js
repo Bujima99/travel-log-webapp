@@ -1,6 +1,6 @@
 // Add this at the top of your app.js
 let shouldConfirmNavigation = true;
-let backButtonPressed = false;
+let ignoreNextPopState = false;
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -385,35 +385,38 @@ function showPopup(title, message) {
 
 // Replace the existing setupBackButtonConfirmation function with this:
 function setupBackButtonConfirmation() {
-  // 1. First detect back button click using history state
-  window.addEventListener('popstate', function(event) {
-    if (shouldConfirmNavigation) {
-      backButtonPressed = true;
-      // Immediately push the state back
-      history.pushState(null, null, window.location.href);
-      
-      // Show our custom confirmation
-      showPopup('Confirm Navigation', 'Are you sure you want to leave?')
-        .then(() => {
-          shouldConfirmNavigation = false;
-          // Now actually go back
-          window.history.back();
-        })
-        .catch(() => {
-          // User cancelled - stay on page
-          backButtonPressed = false;
-        });
+  // 1. Initialize history state
+  history.pushState({ confirmed: true }, '');
+
+  // 2. Handle back/forward button
+  window.addEventListener('popstate', (event) => {
+    if (!shouldConfirmNavigation || ignoreNextPopState) {
+      ignoreNextPopState = false;
+      return;
     }
+
+    // Immediately push the state back
+    history.pushState({ confirmed: false }, '');
+    
+    // Show custom confirmation
+    showPopup('Confirm Navigation', 'Are you sure you want to leave?')
+      .then(() => {
+        shouldConfirmNavigation = false;
+        ignoreNextPopState = true;
+        window.history.back(); // Now actually go back
+      })
+      .catch(() => {
+        // User cancelled - stay on page
+        ignoreNextPopState = true;
+        history.pushState({ confirmed: true }, '');
+      });
   });
 
-  // 2. Initialize history state
-  history.pushState(null, null, window.location.href);
-
-  // 3. Handle beforeunload as fallback for other navigation types
-  window.addEventListener('beforeunload', function(e) {
-    if (shouldConfirmNavigation && !backButtonPressed) {
+  // 3. Fallback for other navigation types
+  window.addEventListener('beforeunload', (e) => {
+    if (shouldConfirmNavigation && !ignoreNextPopState) {
       e.preventDefault();
-      // This will show browser's default confirmation
+      // This may show browser's default confirmation
       return e.returnValue = 'Are you sure you want to leave?';
     }
   });
@@ -443,5 +446,5 @@ function resetLoginForms() {
 
 // Reset when page loads
 window.addEventListener('load', () => {
-  backButtonPressed = false;
+   ignoreNextPopState = false;
 });
