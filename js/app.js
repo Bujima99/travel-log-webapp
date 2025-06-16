@@ -1,38 +1,63 @@
 // Session Management System
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
-let sessionTimer;
+let lastActivityTime = Date.now();
 
 function initSession() {
-  // Store session start time
+  // Set initial session data
+  localStorage.setItem('sessionActive', 'true');
   localStorage.setItem('sessionStart', Date.now());
-  resetSessionTimer();
   
-  // Set up periodic session check
-  setInterval(checkSession, 60000); // Check every minute
+  // Start heartbeat monitoring
+  startHeartbeat();
+  setupActivityListeners();
+  
+  // Initialize URL tracking
+  setupURLTracking();
 }
 
-function resetSessionTimer() {
-  clearTimeout(sessionTimer);
-  sessionTimer = setTimeout(logoutDueToInactivity, SESSION_TIMEOUT);
+function setupURLTracking() {
+  // Add unique hash to URL
+  const sessionHash = `#session-${Date.now()}`;
+  window.location.hash = sessionHash;
+  
+  // Check for URL changes every second
+  setInterval(() => {
+    if (!window.location.hash.includes('session-')) {
+      // URL changed without logout - redirect back
+      window.location.hash = sessionHash;
+      lastActivityTime = Date.now(); // Reset activity timer
+    }
+  }, 1000);
 }
 
-function checkSession() {
-  const sessionStart = localStorage.getItem('sessionStart');
-  if (Date.now() - sessionStart > SESSION_TIMEOUT) {
-    logoutDueToInactivity();
-  }
+function startHeartbeat() {
+  setInterval(() => {
+    const sessionStart = parseInt(localStorage.getItem('sessionStart'));
+    if (Date.now() - sessionStart > SESSION_TIMEOUT) {
+      logoutDueToInactivity();
+    }
+  }, 60000); // Check every minute
+}
+
+function setupActivityListeners() {
+  // Reset timer on any user activity
+  const activities = ['click', 'mousemove', 'keypress', 'scroll'];
+  activities.forEach(event => {
+    window.addEventListener(event, () => {
+      lastActivityTime = Date.now();
+    });
+  });
 }
 
 function logoutDueToInactivity() {
-  showPopup('Session Expired', 'Your session has expired due to inactivity')
-    .then(() => {
-      forceLogout();
-    });
+  showPopup('Session Expired', 'You will be logged out due to inactivity')
+    .then(forceLogout);
 }
 
 function forceLogout() {
-  localStorage.removeItem('driverData');
+  localStorage.removeItem('sessionActive');
   localStorage.removeItem('sessionStart');
+  localStorage.removeItem('driverData');
   window.location.href = 'index.html';
 }
 
@@ -44,14 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
     resetLoginForms();
   }
 
-  // Set up back button confirmation if on protected page
- if (shouldConfirmNavigation()) {
-    setupBackButtonProtection();
-    
-    // Reset timer on any user activity
-    window.addEventListener('click', resetSessionTimer);
-    window.addEventListener('keypress', resetSessionTimer);
-    window.addEventListener('mousemove', resetSessionTimer);
+  if (shouldConfirmNavigation()) {
+    if (!localStorage.getItem('sessionActive')) {
+      forceLogout();
+    } else {
+      initSession();
+    }
   }
 });
 
@@ -450,7 +473,7 @@ function setupBackButtonProtection() {
 
 // Update your logout function
 function logout() {
-   clearTimeout(sessionTimer);
+  localStorage.removeItem('sessionActive');
   forceLogout();
 }
 
