@@ -417,9 +417,7 @@ function setupBackButtonConfirmation() {
       try {
         console.log("beforeunload fired");
       e.preventDefault();
-      e.returnValue = '';
-        alert("Are you sure you want to leave?");
-        return 'Are you sure you want to leave? You may have unsaved changes.';
+      e.returnValue = 'Are you sure you want to leave? You may have unsaved changes.';
       } catch {
         // User cancelled
         history.pushState(null, null, window.location.href);
