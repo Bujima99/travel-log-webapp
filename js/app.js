@@ -401,7 +401,7 @@ function shouldConfirmNavigation() {
 function setupBackButtonConfirmation() {
   // 1. Block all navigation attempts first
   window.addEventListener('beforeunload', function(e) {
-    if ((!isNavigatingAway) && shouldConfirmNavigation()) {
+    if ((!isNavigatingAway) && (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'))) {
       e.preventDefault();
       handleBackButton();
       return e.returnValue = ''; // Required for some browsers
