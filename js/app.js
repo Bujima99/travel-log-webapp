@@ -1,65 +1,4 @@
 // Session Management System
-const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
-let lastActivityTime = Date.now();
-
-function initSession() {
-  // Set initial session data
-  localStorage.setItem('sessionActive', 'true');
-  localStorage.setItem('sessionStart', Date.now());
-  
-  // Start heartbeat monitoring
-  startHeartbeat();
-  setupActivityListeners();
-  
-  // Initialize URL tracking
-  setupURLTracking();
-}
-
-function setupURLTracking() {
-  // Add unique hash to URL
-  const sessionHash = `#session-${Date.now()}`;
-  window.location.hash = sessionHash;
-  
-  // Check for URL changes every second
-  setInterval(() => {
-    if (!window.location.hash.includes('session-')) {
-      // URL changed without logout - redirect back
-      window.location.hash = sessionHash;
-      lastActivityTime = Date.now(); // Reset activity timer
-    }
-  }, 1000);
-}
-
-function startHeartbeat() {
-  setInterval(() => {
-    const sessionStart = parseInt(localStorage.getItem('sessionStart'));
-    if (Date.now() - sessionStart > SESSION_TIMEOUT) {
-      logoutDueToInactivity();
-    }
-  }, 60000); // Check every minute
-}
-
-function setupActivityListeners() {
-  // Reset timer on any user activity
-  const activities = ['click', 'mousemove', 'keypress', 'scroll'];
-  activities.forEach(event => {
-    window.addEventListener(event, () => {
-      lastActivityTime = Date.now();
-    });
-  });
-}
-
-function logoutDueToInactivity() {
-  showPopup('Session Expired', 'You will be logged out due to inactivity')
-    .then(forceLogout);
-}
-
-function forceLogout() {
-  localStorage.removeItem('sessionActive');
-  localStorage.removeItem('sessionStart');
-  localStorage.removeItem('driverData');
-  window.location.href = 'index.html';
-}
 
 // Modify your DOMContentLoaded event listener to this:
 document.addEventListener('DOMContentLoaded', function() {
@@ -69,13 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     resetLoginForms();
   }
 
-  if (shouldConfirmNavigation()) {
-    if (!localStorage.getItem('sessionActive')) {
-      forceLogout();
-    } else {
-      initSession();
-    }
-  }
+
 });
 
 
@@ -311,7 +244,8 @@ function handleSuccessfulLogin(driverData) {
         userType: driverData.userType
     }));
 
-  initSession();
+    // Initialize session
+          initSession();
    
     // Redirect based on user type
     if (driverData.userType === 'Admin') {
@@ -455,26 +389,17 @@ function showPopup(title, message) {
   });
 }
 
-function shouldConfirmNavigation() {
-  return (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('admin.html'));
-}
-
-
-// Prevent back button logout
-function setupBackButtonProtection() {
-  window.addEventListener('popstate', () => {
-    history.pushState(null, null, window.location.href);
-    resetSessionTimer(); // Reset inactivity timer
-  });
-
-  history.pushState(null, null, window.location.href);
-}
 
 
 // Update your logout function
 function logout() {
-  localStorage.removeItem('sessionActive');
-  forceLogout();
+  showPopup('Confirm Logout', 'Are you sure you want to logout?')
+    .then(() => {
+      forceLogout();
+    })
+    .catch(() => {
+      // User cancelled logout
+    });
 }
 
 function resetLoginForms() {
