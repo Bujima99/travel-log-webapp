@@ -604,6 +604,18 @@ function showSuccess(fieldId) {
   errorElement.style.display = 'none';
 }
 
+	  function resetLoginForms() {
+  document.getElementById('loginForm').reset();
+  document.getElementById('signupForm').reset();
+  document.querySelectorAll('.validation-message').forEach(el => {
+    el.textContent = '';
+  });
+  document.querySelectorAll('.input').forEach(input => {
+    input.classList.remove('invalid', 'valid');
+  });
+  document.getElementById('tab-1').checked = true;
+}
+
 
 	
   </script>
