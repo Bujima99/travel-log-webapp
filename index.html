@@ -389,6 +389,19 @@ width: 100%;
 
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
+
+	 // Check if we're on the login page
+  if (window.location.pathname.endsWith('index.html')) {
+    // If user tries to go back to login page, check session
+    checkSessionOnNavigation();
+  } else {
+    // For other pages, initialize session if not already done
+    if (!localStorage.getItem('sessionActive')) {
+      forceLogout();
+    } else {
+      initSession();
+    }
+  }
     
 const toggles = document.querySelectorAll('.password-toggle');
   
