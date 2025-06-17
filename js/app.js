@@ -91,7 +91,9 @@ function checkSessionOnNavigation() {
 // Prevent back button issues
 window.addEventListener('popstate', function(event) {
   if (window.location.pathname.endsWith('index.html')) {
+     window.location.reload();
     checkSessionOnNavigation();
+   
   } else {
     history.pushState(null, null, window.location.href);
     resetSessionTimer();
