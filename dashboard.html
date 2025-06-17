@@ -1297,7 +1297,7 @@ async function submitServiceEntry() {
 }
 
 // Add this function to generate service ID
-function generateServiceId() {
+async function generateServiceId() {
   try {
     const response = await fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-counter&type=Service`);
     const data = await response.json();
@@ -2009,7 +2009,7 @@ async function submitFuelEntry() {
 }
 
   
-function generateFuelId() {
+async function generateFuelId() {
   try {
     const response = await fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-counter&type=Fuel`);
     const data = await response.json();
