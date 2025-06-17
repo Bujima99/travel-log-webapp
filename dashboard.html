@@ -443,7 +443,10 @@
     <input type="text" id="serviceWorkshop" placeholder="Workshop Name" required>
      <div id="serviceWorkshopError" class="validation-message"></div>
     
+    <div style="position: relative;">
     <input type="text" id="serviceWorkshopLocation" placeholder="Workshop Location" required>
+      <div id="serviceWorkshopLocationSuggestions" class="suggestions"></div>
+       </div>
      <div id="serviceWorkshopLocationError" class="validation-message"></div>
     
     <textarea rows="4" id="serviceRemarks" placeholder="Remarks (if any)" required></textarea>
@@ -660,7 +663,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Set up for both start and end inputs
 setupAutocomplete("startPoint", "startSuggestions");
 setupAutocomplete("completeEndPoint", "endSuggestions");
-
+setupAutocomplete("serviceWorkshopLocation", "serviceWorkshopLocationSuggestions");
   
     
     if (driverData) {
