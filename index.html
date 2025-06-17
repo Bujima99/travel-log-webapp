@@ -388,11 +388,16 @@ width: 100%;
   <script>
 
 // Add this to your existing JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-
+document.addEventListener('DOMContentLoaded', function() {	
 	 // Check if we're on the login page
   if (window.location.pathname.endsWith('index.html')) {
     // If user tries to go back to login page, check session
+	 if (sessionStorage.getItem('justLoggedOut')) {
+    		sessionStorage.removeItem('justLoggedOut');
+    		resetLoginForms();
+    		return;
+  }
+	  
     checkSessionOnNavigation();
   } else {
     // For other pages, initialize session if not already done
