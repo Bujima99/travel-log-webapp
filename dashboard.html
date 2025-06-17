@@ -641,6 +641,10 @@ document.addEventListener('DOMContentLoaded', function() {
     resetLoginForms();
   }
 
+  // Set up for both start and end inputs
+setupAutocomplete("startPoint", "startSuggestions");
+setupAutocomplete("completeEndPoint", "endSuggestions");
+
   
     
     if (driverData) {
@@ -2328,9 +2332,6 @@ function setupAutocomplete(inputId, suggestionsId) {
   });
 }
 
-// Set up for both start and end inputs
-setupAutocomplete("startPoint", "startSuggestions");
-setupAutocomplete("completeEndPoint", "endSuggestions");
 
 // Usage:
 // const timer = new CountdownTimer(activeTimestamp);
