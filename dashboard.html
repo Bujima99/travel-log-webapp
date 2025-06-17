@@ -2344,7 +2344,7 @@ function setupAutocomplete(inputId, suggestionsId) {
       return;
     }
 
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`)
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5&countrycodes=IN`)
       .then(response => response.json())
       .then(data => {
         suggestions.innerHTML = "";
