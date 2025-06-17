@@ -86,28 +86,7 @@ function checkSessionOnNavigation() {
   forceLogout();
 }
 
-// Modify your DOMContentLoaded event listener
-document.addEventListener('DOMContentLoaded', function() {
-  // Check if we just logged out
-  if (sessionStorage.getItem('justLoggedOut')) {
-    sessionStorage.removeItem('justLoggedOut');
-    resetLoginForms();
-    return;
-  }
 
-  // Check if we're on the login page
-  if (window.location.pathname.endsWith('index.html')) {
-    // If user tries to go back to login page, check session
-    checkSessionOnNavigation();
-  } else {
-    // For other pages, initialize session if not already done
-    if (!localStorage.getItem('sessionActive')) {
-      forceLogout();
-    } else {
-      initSession();
-    }
-  }
-});
 
 // Prevent back button issues
 window.addEventListener('popstate', function(event) {
@@ -121,17 +100,6 @@ window.addEventListener('popstate', function(event) {
 
 // Initialize history state
 history.pushState(null, null, window.location.href);
-
-// Modify your DOMContentLoaded event listener to this:
-document.addEventListener('DOMContentLoaded', function() {
-  // Check if we just logged out
-  if (sessionStorage.getItem('justLoggedOut')) {
-    sessionStorage.removeItem('justLoggedOut');
-    resetLoginForms();
-  }
-
-
-});
 
 
 let loaderMinimumTime = 500; // 500ms minimum show time
@@ -524,14 +492,4 @@ function logout() {
     });
 }
 
-function resetLoginForms() {
-  document.getElementById('loginForm').reset();
-  document.getElementById('signupForm').reset();
-  document.querySelectorAll('.validation-message').forEach(el => {
-    el.textContent = '';
-  });
-  document.querySelectorAll('.input').forEach(input => {
-    input.classList.remove('invalid', 'valid');
-  });
-  document.getElementById('tab-1').checked = true;
-}
+
