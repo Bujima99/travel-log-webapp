@@ -338,7 +338,6 @@ function handleSuccessfulLogin(driverData) {
 
     // Initialize session
           initSession();
-   closePopup(true);
     // Redirect based on user type
     if (driverData.userType === 'Admin') {
         window.location.href = "./admin.html";
