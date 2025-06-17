@@ -791,7 +791,7 @@ setupAutocomplete("serviceWorkshopLocation", "serviceWorkshopLocationSuggestions
   
   // Start point validation (alphabets only)
   document.getElementById('completeStartPoint').addEventListener('input', function() {
-    validateName(this.value, 'completeStartPoint');
+    validateRequired(this.value, 'completeStartPoint');
   });
   
   // Start KM validation (positive number)
@@ -874,7 +874,7 @@ document.getElementById('serviceWorkshop').addEventListener('input', function() 
 });
 
 document.getElementById('serviceWorkshopLocation').addEventListener('input', function() {
-  validateName(this.value, 'serviceWorkshopLocation');
+  validateRequired(this.value, 'serviceWorkshopLocation');
 });
 
 document.getElementById('serviceRemarks').addEventListener('input', function() {
