@@ -1203,7 +1203,8 @@ async function submitServiceEntry() {
   }
 
   // Get form values
-  const serviceId = generateServiceId();
+  const serviceId = await generateServiceId();
+      console.log("Generated Service ID:", serviceId); 
   const vehicleNumber = document.getElementById('serviceVehicleNumber').value;
   const vehicleName = document.getElementById('serviceVehicleName').value;
   const date = document.getElementById('serviceDate').value;
@@ -1920,7 +1921,8 @@ async function submitFuelEntry() {
   }
 
   // Get form values
-  const fuelId = generateFuelId();
+  const fuelId = await  generateFuelId();
+   console.log("Generated Fuel ID:", fuelId); 
   const vehicleNumber = document.getElementById('fuelVehicleNumber').value;
   const vehicleName = document.getElementById('fuelVehicleName').value;
   const date = document.getElementById('fuelDate').value;
