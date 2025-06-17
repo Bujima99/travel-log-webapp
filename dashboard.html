@@ -14,6 +14,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 <script src="./js/app.js"></script>
 <script src="./js/general.js"></script>
 </head>
@@ -565,6 +566,8 @@
   <script src="js/app.js"></script>
   
 <script>
+  window.onload = initAutocomplete;
+
   // Add data labels for mobile view
 function addMobileLabels() {
     if (window.innerWidth <= 767) {
@@ -2267,6 +2270,33 @@ class CountdownTimer {
     }, 100);
   }
 }
+
+
+  function initAutocomplete() {
+  const startInput = document.getElementById('startPoint');
+  const endInput = document.getElementById('completeEndPoint');
+
+  const startAutocomplete = new google.maps.places.Autocomplete(startInput, {
+    types: ['geocode'],  // or ['establishment'] for business names, etc.
+    componentRestrictions: { country: 'in' } // optional: restrict to India
+  });
+
+  const endAutocomplete = new google.maps.places.Autocomplete(endInput, {
+    types: ['geocode'],
+    componentRestrictions: { country: 'in' }
+  });
+
+  startAutocomplete.addListener('place_changed', () => {
+    const place = startAutocomplete.getPlace();
+    console.log('Selected Start:', place.formatted_address);
+  });
+
+  endAutocomplete.addListener('place_changed', () => {
+    const place = endAutocomplete.getPlace();
+    console.log('Selected End:', place.formatted_address);
+  });
+}
+
 
 // Usage:
 // const timer = new CountdownTimer(activeTimestamp);
