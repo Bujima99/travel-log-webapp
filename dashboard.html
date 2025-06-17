@@ -1042,6 +1042,7 @@ function toggleNextServiceDate() {
 function hideAddServiceForm() {
   document.getElementById('addServiceForm').style.display = 'none';
   document.getElementById('serviceForm').reset();
+  document.getElementById('serviceWorkshopLocation').reset();
    showSection('home');
 }
 
@@ -1277,6 +1278,7 @@ async function submitServiceEntry() {
     console.log("Save as Service result:", result);
     showPopup('Success', 'Service record saved successfully!');
     document.getElementById('serviceForm').reset();
+    document.getElementById('serviceWorkshopLocation').reset();
     showSection('service');
   })
   .catch(error => {
@@ -1713,6 +1715,7 @@ async function saveAsPending() {
     console.log("Save as Pending result:", result);
     showPopup('Success', 'The journey has started!.');
     document.getElementById('journeyForm').reset();
+        document.getElementById('startPoint').reset();
     showSection('home');
    // location.reload();
   })
@@ -1975,6 +1978,8 @@ async function submitFuelEntry() {
     console.log("Save as Fuel result:", result);
     showPopup('Success', 'Fuel saved successfully!');
     document.getElementById('journeyForm').reset();
+    document.getElementById('startPoint').reset();
+    document.getElementById('completeEndPoint').reset();
     showSection('home');
     //location.reload();
   })
