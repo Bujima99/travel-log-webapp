@@ -756,7 +756,7 @@ setupAutocomplete("serviceWorkshopLocation", "serviceWorkshopLocationSuggestions
   });
   
   document.getElementById('startPoint').addEventListener('input', function() {
-    validateName(this.value, 'startPoint');
+    validateRequired(this.value, 'startPoint');
   });
   
   document.getElementById('startKm').addEventListener('input', function() {
@@ -826,7 +826,7 @@ setupAutocomplete("serviceWorkshopLocation", "serviceWorkshopLocationSuggestions
   
   // End point validation (alphabets only)
   document.getElementById('completeEndPoint').addEventListener('input', function() {
-    validateName(this.value, 'completeEndPoint');
+    validateRequired(this.value, 'completeEndPoint');
   });
   
   // End KM validation (positive number)
@@ -1190,7 +1190,7 @@ async function submitServiceEntry() {
   isValid &= validateNumber(document.getElementById('serviceAmount').value, 'serviceAmount');
   isValid &= validateNumber(document.getElementById('serviceCurrentKm').value, 'serviceCurrentKm');
   isValid &= validateName(document.getElementById('serviceWorkshop').value, 'serviceWorkshop');
-  isValid &= validateName(document.getElementById('serviceWorkshopLocation').value, 'serviceWorkshopLocation');
+  isValid &= validateRequired(document.getElementById('serviceWorkshopLocation').value, 'serviceWorkshopLocation');
   isValid &= validateRequired(document.getElementById('serviceRemarks').value, 'serviceRemarks');
   
   if (document.getElementById('serviceType').value === 'Service') {
@@ -1534,14 +1534,14 @@ function validateCompleteJourneyForm() {
   // Validate all fields
   isValid &= validateRequired(document.getElementById('completeVehicleName').value, 'completeVehicleName');
   isValid &= validateRequired(document.getElementById('completeVehicleNumber').value, 'completeVehicleNumber');
-  isValid &= validateName(document.getElementById('completeStartPoint').value, 'completeStartPoint');
+  isValid &= validateRequired(document.getElementById('completeStartPoint').value, 'completeStartPoint');
   isValid &= validateNumber(document.getElementById('completeStartKm').value, 'completeStartKm');
   isValid &= validateRequired(document.getElementById('completeStartTime').value, 'completeStartTime');
   isValid &= validateNumber(document.getElementById('completePassengerCount').value, 'completePassengerCount');
   isValid &= validateName(document.getElementById('completePassengerName').value, 'completePassengerName');
   isValid &= validatePhone(document.getElementById('completePassengerPhone').value, 'completePassengerPhone');
   isValid &= validateRequired(document.getElementById('completePurpose').value, 'completePurpose');
-  isValid &= validateName(document.getElementById('completeEndPoint').value, 'completeEndPoint');
+  isValid &= validateRequired(document.getElementById('completeEndPoint').value, 'completeEndPoint');
   isValid &= validateNumber(document.getElementById('completeEndKm').value, 'completeEndKm');
   isValid &= validateRequired(document.getElementById('completeEndTime').value, 'completeEndTime');
   isValid &= validateRequired(document.getElementById('completeFuelFilled').value, 'completeFuelFilled');
@@ -1648,7 +1648,7 @@ function validateJourneyForm() {
   // Validate all fields
   isValid &= validateRequired(document.getElementById('vehicleName').value, 'vehicleName');
   isValid &= validateRequired(document.getElementById('vehicleNumber').value, 'vehicleNumber');
-  isValid &= validateName(document.getElementById('startPoint').value, 'startPoint');
+  isValid &= validateRequired(document.getElementById('startPoint').value, 'startPoint');
   isValid &= validateNumber(document.getElementById('startKm').value, 'startKm');
   isValid &= validateRequired(document.getElementById('startTime').value, 'startTime');
   isValid &= validateNumber(document.getElementById('passengerCount').value, 'passengerCount');
