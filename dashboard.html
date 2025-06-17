@@ -2012,7 +2012,7 @@ async function generateFuelId() {
     const response = await fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-counter&type=Fuel`);
     const data = await response.json();
     if (data.error) throw new Error(data.error);
-    return `FUEL-${String(data.counter)}`;
+    return `FUEL-${data.counter}`;
   } catch (error) {
     console.error("Error generating fuel ID:", error);
     // Fallback to timestamp if counter fails
