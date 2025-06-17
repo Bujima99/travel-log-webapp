@@ -14,10 +14,27 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 <script src="./js/app.js"></script>
 <script src="./js/general.js"></script>
 </head>
+  <style>
+     .suggestions {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    background: white;
+    width: 250px;
+    z-index: 10;
+  }
+  .suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+  .suggestion-item:hover {
+    background: #f0f0f0;
+  }
+  </style>
 <body>
   
 <div class="loader-container" id="loader">
@@ -169,6 +186,7 @@
       <div id="vehicleNumberError" class="validation-message"></div>
       
       <input type="text" id="startPoint" placeholder="Starting Point" required>
+      <div id="startSuggestions" class="suggestions"></div>
       <div id="startPointError" class="validation-message"></div>
       
       <input type="number" id="startKm" placeholder="Starting KM" required>
@@ -532,6 +550,7 @@
     <div class="form-group">
       <label>End Point:</label>
       <input type="text" id="completeEndPoint" required>
+      <div id="endSuggestions" class="suggestions"></div>
       <div id="completeEndPointError" class="validation-message"></div>
     </div>
     
@@ -566,7 +585,6 @@
   <script src="js/app.js"></script>
   
 <script>
-  window.onload = initAutocomplete;
 
   // Add data labels for mobile view
 function addMobileLabels() {
@@ -2271,32 +2289,48 @@ class CountdownTimer {
   }
 }
 
+function setupAutocomplete(inputId, suggestionsId) {
+  const input = document.getElementById(inputId);
+  const suggestions = document.getElementById(suggestionsId);
 
-  function initAutocomplete() {
-  const startInput = document.getElementById('startPoint');
-  const endInput = document.getElementById('completeEndPoint');
+  input.addEventListener("input", () => {
+    const query = input.value.trim();
+    if (query.length < 3) {
+      suggestions.innerHTML = "";
+      return;
+    }
 
-  const startAutocomplete = new google.maps.places.Autocomplete(startInput, {
-    types: ['geocode'],  // or ['establishment'] for business names, etc.
-    componentRestrictions: { country: 'in' } // optional: restrict to India
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`)
+      .then(response => response.json())
+      .then(data => {
+        suggestions.innerHTML = "";
+
+        data.forEach(place => {
+          const div = document.createElement("div");
+          div.classList.add("suggestion-item");
+          div.textContent = place.display_name;
+          div.addEventListener("click", () => {
+            input.value = place.display_name;
+            suggestions.innerHTML = "";
+            console.log(`${inputId} selected:`, place);
+            // You can also use place.lat and place.lon if needed
+          });
+          suggestions.appendChild(div);
+        });
+      });
   });
 
-  const endAutocomplete = new google.maps.places.Autocomplete(endInput, {
-    types: ['geocode'],
-    componentRestrictions: { country: 'in' }
-  });
-
-  startAutocomplete.addListener('place_changed', () => {
-    const place = startAutocomplete.getPlace();
-    console.log('Selected Start:', place.formatted_address);
-  });
-
-  endAutocomplete.addListener('place_changed', () => {
-    const place = endAutocomplete.getPlace();
-    console.log('Selected End:', place.formatted_address);
+    // Hide suggestions when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+      suggestions.innerHTML = "";
+    }
   });
 }
 
+// Set up for both start and end inputs
+setupAutocomplete("startPoint", "startSuggestions");
+setupAutocomplete("endPoint", "endSuggestions");
 
 // Usage:
 // const timer = new CountdownTimer(activeTimestamp);
