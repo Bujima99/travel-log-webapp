@@ -127,7 +127,7 @@ let loaderShownTime;
     };
 
 // Sign Up User
-function signupUser() {
+async  function signupUser() {
   const firstName = document.getElementById("signupFirstName").value.trim();
   const lastName = document.getElementById("signupLastName").value.trim();
   const phone = document.getElementById("signupPhone").value.trim();
