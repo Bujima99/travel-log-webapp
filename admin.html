@@ -1747,7 +1747,7 @@ function showSection(sectionId) {
   function loadAllDrivers() {
   showLoader();
   
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-dashboard-drivers")
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-dashboard-drivers")
     .then(response => response.json())
     .then(data => {
       const tableBody = document.querySelector('#allDriversTable tbody');
@@ -1783,7 +1783,7 @@ function showSection(sectionId) {
 function viewDriverDetails(driverId) {
   showLoader();
   
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-driver-details&driverId=${encodeURIComponent(driverId)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-driver-details&driverId=${encodeURIComponent(driverId)}`)
     .then(response => response.json())
     .then(data => {
       if (data) {
@@ -1851,7 +1851,7 @@ function submitDriverUpdate() {
   
   showLoader();
   
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec", {
     method: 'POST',
     body: JSON.stringify(updateData),
     mode: 'no-cors',
@@ -1883,11 +1883,11 @@ function loadDashboardStats() {
   
   // Fetch all data counts
   Promise.all([
-    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-journey-count").then(res => res.json()),
-    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-fuel-count").then(res => res.json()),
-    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-service-count").then(res => res.json()),
-    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-pending-request-count").then(res => res.json()),
-    fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-pending-driver-count").then(res => res.json())
+    fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-journey-count").then(res => res.json()),
+    fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-fuel-count").then(res => res.json()),
+    fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-service-count").then(res => res.json()),
+    fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-pending-request-count").then(res => res.json()),
+    fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-pending-driver-count").then(res => res.json())
   ])
   .then(([journeys, fuel, services, requests, drivers]) => {
     document.getElementById('totalJourneys').textContent = journeys.count || 0;
@@ -1923,7 +1923,7 @@ function loadDashboardStats() {
 function loadAllJourneys() {
   showLoader();
   
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-journeys")
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-all-journeys")
     .then(response => response.json())
     .then(data => {
       const tableBody = document.querySelector('#allJourneysTable tbody');
@@ -1961,7 +1961,7 @@ function loadAllJourneys() {
 function loadAllFuelEntries() {
   showLoader();
   
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-fuel-entries")
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-all-fuel-entries")
     .then(response => response.json())
     .then(data => {
       const tableBody = document.querySelector('#allFuelTable tbody');
@@ -2004,7 +2004,7 @@ function loadAllFuelEntries() {
 function loadAllServiceEntries() {
   showLoader();
   
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-service-entries")
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-all-service-entries")
     .then(response => response.json())
     .then(data => {
       const tableBody = document.querySelector('#allServiceTable tbody');
@@ -2048,7 +2048,7 @@ function loadAllServiceEntries() {
 function loadAllRequests() {
   showLoader();
   
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-requests")
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-all-requests")
     .then(response => response.json())
     .then(data => {
       const tableBody = document.querySelector('#allRequestsTable tbody');
@@ -2095,7 +2095,7 @@ function loadAllRequests() {
 
 // Load drivers for assignment dropdown
 function loadDriversForAssignment() {
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-all-drivers")
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-all-drivers")
     .then(response => response.json())
     .then(data => {
       const driverDropdown = document.getElementById('assignedDriver');
@@ -2119,7 +2119,7 @@ function loadDriversForAssignment() {
 function viewRequestDetails(requestId) {
   showLoader();
   
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-request-details&requestId=${encodeURIComponent(requestId)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-request-details&requestId=${encodeURIComponent(requestId)}`)
     .then(response => response.json())
     .then(data => {
       if (data) {
@@ -2215,7 +2215,7 @@ function submitRequestApproval() {
     // Fetch driver details before submitting
     showLoader();
     
-    fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-driver-details&driverId=${encodeURIComponent(driverId)}`)
+    fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-driver-details&driverId=${encodeURIComponent(driverId)}`)
       .then(response => response.json())
       .then(driverDetails => {
         const approvalData = {
@@ -2276,7 +2276,7 @@ function submitRequestApproval() {
 
   // Helper function to send approval data
 function sendApprovalData(approvalData) {
-  return fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  return fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec", {
     method: 'POST',
     body: JSON.stringify(approvalData),
     mode: 'no-cors',
@@ -2291,7 +2291,7 @@ function sendApprovalData(approvalData) {
 function viewJourneyDetails(journeyId) {
   showLoader();
   
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-journey-details&journeyId=${encodeURIComponent(journeyId)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-journey-details&journeyId=${encodeURIComponent(journeyId)}`)
     .then(response => response.json())
     .then(data => {
       if (data) {
