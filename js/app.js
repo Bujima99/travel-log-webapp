@@ -126,21 +126,6 @@ let loaderShownTime;
     }
     };
 
-async function generateDriverId() {
-  try {
-    const response = await fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-counter&type=Driver`);
-    const data = await response.json();
-    if (data.error) throw new Error(data.error);
-    return `DRV-${data.counter}`;
-  } catch (error) {
-    console.error("Error generating Driver ID:", error);
-    // Fallback to timestamp if counter fails
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substr(2, 5);
-    return `DRV-${timestamp}-${random}`.toUpperCase();
-  }
-}
-
 // Sign Up User
 function signupUser() {
   const firstName = document.getElementById("signupFirstName").value.trim();
@@ -506,6 +491,21 @@ function logout() {
     .catch(() => {
       // User cancelled logout
     });
+}
+
+async function generateDriverId() {
+  try {
+    const response = await fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-counter&type=Driver`);
+    const data = await response.json();
+    if (data.error) throw new Error(data.error);
+    return `DRV-${data.counter}`;
+  } catch (error) {
+    console.error("Error generating Driver ID:", error);
+    // Fallback to timestamp if counter fails
+    const timestamp = Date.now().toString(36);
+    const random = Math.random().toString(36).substr(2, 5);
+    return `DRV-${timestamp}-${random}`.toUpperCase();
+  }
 }
 
 
