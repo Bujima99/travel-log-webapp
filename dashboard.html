@@ -1086,7 +1086,7 @@ document.getElementById('serviceRemarks').addEventListener('input', function() {
     showLoader();
    // window.addEventListener('load', hideLoader);
   const driverId= driverData.id;
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=pending-journeys&driverId=${encodeURIComponent(driverId)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=pending-journeys&driverId=${encodeURIComponent(driverId)}`)
     .then(response => response.json())
     .then(data => {
       console.log("Pending journeys data:", data);
@@ -1170,7 +1170,7 @@ function loadServiceEntries() {
   }
   
   showLoader();
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-service-entries&driverId=${encodeURIComponent(driverData.id)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-service-entries&driverId=${encodeURIComponent(driverData.id)}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -1381,7 +1381,7 @@ async function submitServiceEntry() {
   };
 
   showLoader();
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec", {
     method: 'POST',
     body: JSON.stringify(formData),
     mode: 'no-cors',
@@ -1414,7 +1414,7 @@ async function submitServiceEntry() {
 // Add this function to generate service ID
 async function generateServiceId() {
   try {
-    const response = await fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-counter&type=Service`);
+    const response = await fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-counter&type=Service`);
     const data = await response.json();
     if (data.error) throw new Error(data.error);
     return `SVC-${String(data.counter)}`;
@@ -1464,7 +1464,7 @@ function loadFuelEntries() {
     return;
   }
   showLoader();
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-fuel-entries&driverId=${encodeURIComponent(driverData.id)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-fuel-entries&driverId=${encodeURIComponent(driverData.id)}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -1575,7 +1575,7 @@ async function completeJourney(travelId) {
   const driverId= driverData.id;
   showLoader();
   populateVehicleDropdowns();
-   fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=complete-journey&travelId=${encodeURIComponent(travelId)}&driverId=${encodeURIComponent(driverId)}`)
+   fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=complete-journey&travelId=${encodeURIComponent(travelId)}&driverId=${encodeURIComponent(driverId)}`)
      .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -1739,7 +1739,7 @@ async function submitCompletedJourney() {
   submitBtn.textContent = 'Submitting...';
 
  showLoader();
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -1837,7 +1837,7 @@ async function saveAsPending() {
   };
 
   showLoader();
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec", {
     method: 'POST',
     body: JSON.stringify(journeyData),
     mode: 'no-cors',
@@ -1871,7 +1871,7 @@ function loadCompletedJourneys() {
     return;
   }
   showLoader();
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=history-journey&driverId=${encodeURIComponent(driverData.id)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=history-journey&driverId=${encodeURIComponent(driverData.id)}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -2107,7 +2107,7 @@ async function submitFuelEntry() {
   };
 
   showLoader();
-   fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+   fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec", {
     method: 'POST',
     body: JSON.stringify(formData),
     mode: 'no-cors',
@@ -2142,7 +2142,7 @@ async function submitFuelEntry() {
   
 async function generateFuelId() {
   try {
-    const response = await fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-counter&type=Fuel`);
+    const response = await fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-counter&type=Fuel`);
     const data = await response.json();
     if (data.error) throw new Error(data.error);
     return `FUEL-${data.counter}`;
@@ -2164,7 +2164,7 @@ function loadProfileData() {
   showLoader();
   
   // Fetch driver details from Google Sheets
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-driver-profile&driverId=${encodeURIComponent(driverData.id)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-driver-profile&driverId=${encodeURIComponent(driverData.id)}`)
     .then(response => response.json())
     .then(data => {
       if (data) {
@@ -2244,7 +2244,7 @@ function saveProfileChanges() {
     phone: newPhone
   };
 
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec", {
     method: 'POST',
     body: JSON.stringify(profileData),
     mode: 'no-cors',
@@ -2372,7 +2372,7 @@ function checkGuestTimer() {
   }
 
   showLoader();
-  fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-guest-timer&driverId=${encodeURIComponent(driverData.id)}`)
+  fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-guest-timer&driverId=${encodeURIComponent(driverData.id)}`)
     .then(response => response.json())
     .then(data => {
       if (data.activeTimestamp) {
