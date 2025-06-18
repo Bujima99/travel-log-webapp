@@ -164,7 +164,7 @@ async  function signupUser() {
   showLoader();
   
   // First check if user already exists
-  fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers")
+  fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=drivers")
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -195,7 +195,7 @@ async  function signupUser() {
         status: "Pending"
       };
 
-      return fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec", {
+      return fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec", {
         method: "POST",
         body: JSON.stringify(data),
         mode: 'no-cors',
@@ -245,7 +245,7 @@ function checkClassicLogin() {
 
 showLoader();
   // Fetch driver data from Google Sheets web app endpoint
-fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=drivers")
+fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=drivers")
   .then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -266,7 +266,7 @@ fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUf
           
           if (now - activeTimestamp >= twentyFourHours) {
             // Update user status to "Hold" in the backend
-            return fetch("https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=updateStatus&driverId=" + user.DriverID + "&status=Hold")
+            return fetch("https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=updateStatus&driverId=" + user.DriverID + "&status=Hold")
               .then(() => {
                 showPopup('Access Expired', 'Sorry, your Guest access has expired. Please contact admin to get the access.');
                 hideLoader();
@@ -495,7 +495,7 @@ function logout() {
 
 async function generateDriverId() {
   try {
-    const response = await fetch(`https://script.google.com/macros/s/AKfycby6qC6DKPeZfVgNobLn-Qo68YMLI02uUfCO5dMbwOsNDcxBJ8CaIBSORuscUfNsnLsV7w/exec?action=get-counter&type=Driver`);
+    const response = await fetch(`https://script.google.com/macros/s/AKfycbwqufDfC8tXXM8PodAEk9RKJ32aY0qh9-BmPy6Cv74hM24AzjdNxeAVlR0Rt4IZqggu/exec?action=get-counter&type=Driver`);
     const data = await response.json();
     if (data.error) throw new Error(data.error);
     return `DRV-${data.counter}`;
