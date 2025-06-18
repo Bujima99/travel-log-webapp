@@ -31,25 +31,25 @@ body {
 }
 
 
-#completeJourneyForm .form-group, #addFuelForm .form-group, #addJourney .form-group, #addServiceForm .form-group {
+#completeJourneyForm .form-group {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-#completeJourneyForm label , #addFuelForm label, #addJourney label, #addServiceForm label  {
+#completeJourneyForm label {
   font-weight: 500;
   color: #333;
 }
 
-#completeJourneyForm input , #addFuelForm input, #addJourney input, #addServiceForm input {
+#completeJourneyForm input {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
 }
 
-#completeJourneyForm button, #addFuelForm button, #addJourney button, #addServiceForm button {
+#completeJourneyForm button {
   padding: 12px;
   background-color: #4CAF50;
   color: white;
@@ -60,16 +60,16 @@ body {
   margin-top: 10px;
 }
 
-#completeJourneyForm button:hover ,  #addFuelForm button:hover, #addJourney button:hover, #addServiceForm button:hover {
+#completeJourneyForm button:hover  {
   background-color: #45a049;
 }
 
-#completeJourneyForm .cancel-btn ,  #addFuelForm .cancel-btn, #addJourney .cancel-btn, #addServiceForm .cancel-btn {
+#completeJourneyForm .cancel-btn {
   background-color: #f44336;
   margin-left: 10px;
 }
 
-#completeJourneyForm .cancel-btn:hover ,  #addFuelForm .cancel-btn:hover, #addJourney .cancel-btn:hover, #addServiceForm .cancel-btn:hover  {
+#completeJourneyForm .cancel-btn:hover {
   background-color: #d32f2f;
 }
 
