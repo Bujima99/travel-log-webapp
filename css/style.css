@@ -19,6 +19,37 @@ body {
 }
 
 
+  /* Update the Log New Journey form */
+  #addJourney form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Update the New Fuel Record form */
+  #addFuelForm form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Update the New Service Record form */
+  #addServiceForm form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+
 #completeJourneyForm {
   display: flex;
   flex-direction: column;
@@ -29,6 +60,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
+
 
 #completeJourneyForm .form-group {
   display: flex;
