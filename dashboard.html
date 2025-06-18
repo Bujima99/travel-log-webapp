@@ -198,6 +198,10 @@
       <input type="text" id="vehicleNumber" placeholder="Vehicle Number" readonly required>
       <div id="vehicleNumberError" class="validation-message"></div>
       <div style="position: relative;">
+
+        <input type="date" id="startDate" required>
+      <div id="startDateError" class="validation-message"></div>
+        
       <input type="text" id="startPoint" placeholder="Starting Point" required>
       <div id="startSuggestions" class="suggestions"></div>
       </div>
@@ -322,6 +326,8 @@
         <th>Date</th>
         <th>Vehicle Number</th>
         <th>Vehicle Name</th>
+         <th>Start Date</th>
+        <th>End Date</th> 
         <th>Start Point</th>
         <th>End Point</th>
         <th>Start KM</th>
@@ -521,6 +527,12 @@
       <input type="text" id="completeVehicleNumber" placeholder="Vehicle Number" readonly required>
       <div id="completeVehicleNumberError" class="validation-message"></div>
     </div>
+
+     <div class="form-group">
+      <label>Start Date:</label>
+      <input type="text" id="completeStartDate" required>
+      <div id="completeStartDateError" class="validation-message"></div>
+    </div>
     
     <div class="form-group">
       <label>Start Point:</label>
@@ -562,6 +574,12 @@
       <label>Purpose:</label>
       <textarea rows="4" id="completePurpose" required></textarea>
       <div id="completePurposeError" class="validation-message"></div>
+    </div>
+
+    <div class="form-group">
+      <label>End Date:</label>
+      <input type="date" id="completeEndDate" required>
+      <div id="completeEndDateError" class="validation-message"></div>
     </div>
     
     <!-- Additional fields for completion -->
@@ -1486,6 +1504,7 @@ async function completeJourney(travelId) {
       }
       //document.getElementById('completeVehicleNumber').value = journey.VehicleNumber || '';
       //document.getElementById('completeVehicleName').value = journey.VehicleName || '';
+    document.getElementById('completeStartDate').value = journey.StartDate || '';
       document.getElementById('completeStartPoint').value = journey.StartPoint || '';
       document.getElementById('completeStartKm').value = journey.StartKM || '';
       
@@ -1500,6 +1519,7 @@ async function completeJourney(travelId) {
        document.getElementById('completePurpose').value = journey.Purpose || '';
 
       // Clear the completion fields
+     document.getElementById('completeEndDate').value = '';
       document.getElementById('completeEndPoint').value = '';
       document.getElementById('completeEndKm').value = '';
       document.getElementById('completeEndTime').value = '';
@@ -1533,6 +1553,7 @@ function validateCompleteJourneyForm() {
   // Validate all fields
   isValid &= validateRequired(document.getElementById('completeVehicleName').value, 'completeVehicleName');
   isValid &= validateRequired(document.getElementById('completeVehicleNumber').value, 'completeVehicleNumber');
+    isValid &= validateRequired(document.getElementById('completeStartDate').value, 'completeStartDate');
   isValid &= validateRequired(document.getElementById('completeStartPoint').value, 'completeStartPoint');
   isValid &= validateNumber(document.getElementById('completeStartKm').value, 'completeStartKm');
   isValid &= validateRequired(document.getElementById('completeStartTime').value, 'completeStartTime');
@@ -1540,6 +1561,7 @@ function validateCompleteJourneyForm() {
   isValid &= validateName(document.getElementById('completePassengerName').value, 'completePassengerName');
   isValid &= validatePhone(document.getElementById('completePassengerPhone').value, 'completePassengerPhone');
   isValid &= validateRequired(document.getElementById('completePurpose').value, 'completePurpose');
+   isValid &= validateRequired(document.getElementById('completeEndDate').value, 'completeEndDate');
   isValid &= validateRequired(document.getElementById('completeEndPoint').value, 'completeEndPoint');
   isValid &= validateNumber(document.getElementById('completeEndKm').value, 'completeEndKm');
   isValid &= validateRequired(document.getElementById('completeEndTime').value, 'completeEndTime');
@@ -1569,6 +1591,7 @@ async function submitCompletedJourney() {
   const travelId = document.getElementById('travelId').value;
   const vehicleNumber = document.getElementById('completeVehicleNumber').value;
   const vehicleName = document.getElementById('completeVehicleName').value;
+  const startDate = document.getElementById('completeStartDate').value;
   const startPoint = document.getElementById('completeStartPoint').value;
   const startKm = document.getElementById('completeStartKm').value;
   const startTime = document.getElementById('completeStartTime').value;
@@ -1576,6 +1599,7 @@ async function submitCompletedJourney() {
   const passengerName = document.getElementById('completePassengerName').value;
   const passengerPhone = document.getElementById('completePassengerPhone').value;
   const purpose = document.getElementById('completePurpose').value;
+  const endDate = document.getElementById('completeEndDate').value;
   const endPoint = document.getElementById('completeEndPoint').value;
   const endKm = document.getElementById('completeEndKm').value;
   const endTime = document.getElementById('completeEndTime').value;
@@ -1583,7 +1607,7 @@ async function submitCompletedJourney() {
   const totalKM=endKm-startKm;
 
   // Validate required fields
-  if (!endPoint || !endKm || !endTime || !fuelFilled) {
+  if (!endDate || !endPoint || !endKm || !endTime || !fuelFilled) {
     showPopup('Validation Error', 'Please fill in all completion details');
     return;
   }
@@ -1595,6 +1619,7 @@ async function submitCompletedJourney() {
     driverId: driverId,
     vehicleNumber: vehicleNumber,
     vehicleName: vehicleName,
+    startDate:startDate,
     startPoint: startPoint,
     startKm: startKm,
     startTime: startTime,
@@ -1602,6 +1627,7 @@ async function submitCompletedJourney() {
     passengerName: passengerName,
     passengerPhone: passengerPhone,
     purpose:purpose,
+    endDate: endDate,
     endPoint: endPoint,
     endKm: endKm,
     endTime: endTime,
@@ -1647,6 +1673,7 @@ function validateJourneyForm() {
   // Validate all fields
   isValid &= validateRequired(document.getElementById('vehicleName').value, 'vehicleName');
   isValid &= validateRequired(document.getElementById('vehicleNumber').value, 'vehicleNumber');
+   isValid &= validateRequired(document.getElementById('startDate').value, 'startDate');
   isValid &= validateRequired(document.getElementById('startPoint').value, 'startPoint');
   isValid &= validateNumber(document.getElementById('startKm').value, 'startKm');
   isValid &= validateRequired(document.getElementById('startTime').value, 'startTime');
@@ -1672,6 +1699,7 @@ async function saveAsPending() {
   const driverPhone = driverData.phoneNumber;
   const vehicleNumber = document.getElementById('vehicleNumber').value;
   const vehicleName = document.getElementById('vehicleName').value;
+  const startDate = document.getElementById('startDate').value;
   const startPoint = document.getElementById('startPoint').value;
   const startKm = document.getElementById('startKm').value;
   const startTime = document.getElementById('startTime').value;
@@ -1681,7 +1709,7 @@ async function saveAsPending() {
   const purpose = document.getElementById('purpose').value;
 
   // Validate required fields
-  if (!vehicleNumber || !startPoint || !startKm || !startTime || !purpose) {
+  if (!vehicleNumber || !startDate || !startPoint || !startKm || !startTime || !purpose) {
    showPopup('Validation Error', 'Please fill in all required fields');
     return;
   }
@@ -1701,6 +1729,7 @@ async function saveAsPending() {
     driverId:driverId,
     vehicleNumber: vehicleNumber,
     vehicleName: vehicleName,
+     startDate: startDate,
     startPoint: startPoint,
     startKm: startKm,
     startTime: startTime,
@@ -1770,6 +1799,8 @@ function loadCompletedJourneys() {
           <td>${journey.Date || ''}</td>
           <td>${journey.VehicleNumber || ''}</td>
           <td>${journey.VehicleName || ''}</td>
+          <td>${journey.StartDate || ''}</td> 
+           <td>${journey.EndDate || ''}</td>
           <td>${journey.StartPoint || ''}</td>
           <td>${journey.EndPoint || ''}</td>
           <td>${journey.StartKM || ''}</td>
