@@ -250,64 +250,43 @@ width: 100%;
 }
 
 .request-btn{
-margin: 0;
+
+  margin: 0;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0a0a0a;
+  background: #1a1a1a;
   font-family: "Inter", sans-serif;
-  perspective: 1000px;
-  overflow-x: hidden;
 }
 
-	.request-btn.btn {
+.request-btn.btn {
   position: relative;
-  padding: 1.5rem 3rem;
-  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: #fff;
+  color: white;
   background: none;
-  border: none;
+  border: 2px solid #646cff;
+  border-radius: 8px;
   cursor: pointer;
   overflow: hidden;
-  transition: all 0.4s ease;
-  min-width: 200px;
-  z-index: 1;
+  transition: all 0.3s ease;
 }
 
-.neon-pulse {
-  background: #000;
-  border: 2px solid #0ff;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-  overflow: visible;
+.liquid {
+  background: linear-gradient(#646cff 0 0) no-repeat calc(200% - var(--p, 0%))
+    100% / 200% var(--p, 0.2em);
+  transition: 0.3s var(--t, 0s),
+    background-position 0.3s calc(0.3s - var(--t, 0s));
 }
 
-.neon-pulse::before,
-.neon-pulse::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border: 2px solid #0ff;
-  border-radius: inherit;
-  animation: pulseOut 2s ease-out infinite;
-  opacity: 0;
+.liquid:hover {
+  --p: 100%;
+  --t: 0.3s;
+  color: #fff;
 }
 
-.neon-pulse::after {
-  animation-delay: 1s;
-}
-
-@keyframes pulseOut {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-}
 
 	
   </style>
@@ -439,7 +418,7 @@ margin: 0;
 </div>
 
 <div class="request-btn">	
-<button class="btn neon-pulse" onclick="window.open('https://forms.gle/otydz62V8N3evMnt6')">
+<button class="btn liquid" onclick="window.open('https://forms.gle/otydz62V8N3evMnt6')">
   <span>Travel Request</span>
 </button>
 </div>
