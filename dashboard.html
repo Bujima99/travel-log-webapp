@@ -187,47 +187,80 @@
     
   </div>
   
-  <div id="addJourney" class="section">
-    <h2>Log New Journey</h2>
-    <form id="journeyForm">
+ <div id="addJourney" class="section">
+  <h2>Log New Journey</h2>
+  <form id="journeyForm">
+    <div class="form-group">
+      <label>Vehicle:</label>
       <select id="vehicleName" required onchange="updateVehicleNumber()">
         <option value="">Select Vehicle</option>
       </select>
       <div id="vehicleNameError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Vehicle Number:</label>
       <input type="text" id="vehicleNumber" placeholder="Vehicle Number" readonly required>
       <div id="vehicleNumberError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Start Date:</label>
       <input type="date" id="startDate" required>
       <div id="startDateError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Starting Point:</label>
       <div style="position: relative;">
-      <input type="text" id="startPoint" placeholder="Starting Point" required>
-      <div id="startSuggestions" class="suggestions"></div>
+        <input type="text" id="startPoint" placeholder="Starting Point" required>
+        <div id="startSuggestions" class="suggestions"></div>
       </div>
       <div id="startPointError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Starting KM:</label>
       <input type="number" id="startKm" placeholder="Starting KM" required>
       <div id="startKmError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Start Time:</label>
       <input type="time" id="startTime" required>
       <div id="startTimeError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>No. of Passengers:</label>
       <input type="number" id="passengerCount" placeholder="No. of Passengers" required>
       <div id="passengerCountError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Passenger Name:</label>
       <input type="text" id="passengerName" placeholder="One Passenger Name" required>
       <div id="passengerNameError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Passenger Phone:</label>
       <input type="tel" id="passengerPhone" placeholder="Passenger Phone (10-digits)" required>
       <div id="passengerPhoneError" class="validation-message"></div>
+    </div>
 
+    <div class="form-group">
+      <label>Purpose of the journey:</label>
       <textarea rows="4" id="purpose" placeholder="Purpose of the journey" required></textarea>
       <div id="purposeError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-buttons">
       <button type="button" onclick="validateJourneyForm()">Start Trip</button>
-    </form>
-  </div>
+      <button type="button" class="cancel-btn" onclick="showSection('home')">Cancel</button>
+    </div>
+  </form>
+</div>
 
  <div id="fuel" class="section">
   <h2>Fuel Tracker</h2>
@@ -272,21 +305,37 @@
   </div>
 
   
-  <div id="addFuelForm" class="section">
-    <h2>New Fuel Record</h2>
-    <form id="fuelForm" enctype="multipart/form-data">
+ <div id="addFuelForm" class="section">
+  <h2>New Fuel Record</h2>
+  <form id="fuelForm" enctype="multipart/form-data">
+    <div class="form-group">
+      <label>Vehicle:</label>
       <select id="fuelVehicleName" required onchange="updateVehicleNumber()">
         <option value="">Select Vehicle</option>
       </select>
       <div id="fuelVehicleNameError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Vehicle Number:</label>
       <input type="text" id="fuelVehicleNumber" placeholder="Vehicle Number" readonly required>
       <div id="fuelVehicleNumberError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Date:</label>
       <input type="date" id="fuelDate" required>
       <div id="fuelDateError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Invoice Number:</label>
       <input type="text" id="fuelInvoiceNumber" placeholder="Invoice Number" required>
+      <div id="fuelInvoiceNumberError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Fuel Type:</label>
       <select id="fuelType" required>
         <option value="">Select Fuel Type</option>
         <option value="Petrol">Petrol</option>
@@ -294,26 +343,39 @@
         <option value="CNG">CNG</option>
         <option value="Electric">Electric</option>
       </select>
-       <div id="fuelTypeError" class="validation-message"></div>
-      
+      <div id="fuelTypeError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Amount:</label>
       <input type="number" id="fuelAmount" placeholder="Amount" step="0.01" required>
       <div id="fuelAmountError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Liters:</label>
       <input type="number" id="fuelQuantity" placeholder="Liters" step="0.01" required>
       <div id="fuelQuantityError" class="validation-message"></div>
-      
+    </div>
+    
+    <div class="form-group">
+      <label>Current KM:</label>
       <input type="number" id="fuelCurrentKm" placeholder="Current KM" required>
-       <div id="fuelCurrentKmError" class="validation-message"></div>
-      
+      <div id="fuelCurrentKmError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Bill Image:</label>
       <input type="file" id="fuelBillImage" accept="image/*" required>
-       <div id="fuelBillImageError" class="validation-message"></div>
-      
-      <div class="form-buttons">
-        <button type="button" onclick="submitFuelEntry()">Submit</button>
-        <button type="button" class="cancel-btn" onclick="hideAddFuelForm()">Cancel</button>
-      </div>
-    </form>
-  </div>
+      <div id="fuelBillImageError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-buttons">
+      <button type="button" onclick="submitFuelEntry()">Submit</button>
+      <button type="button" class="cancel-btn" onclick="hideAddFuelForm()">Cancel</button>
+    </div>
+  </form>
+</div>
 
 
  <div id="history" class="section">
@@ -416,51 +478,86 @@
 <div id="addServiceForm" class="section">
   <h2>New Service Record</h2>
   <form id="serviceForm" enctype="multipart/form-data">
-    <select id="serviceVehicleName" required onchange="updateVehicleNumber()">
-      <option value="">Select Vehicle</option>
-    </select>
-    <div id="serviceVehicleNameError" class="validation-message"></div>
-    <input type="text" id="serviceVehicleNumber" placeholder="Vehicle Number" readonly required>
-     <div id="serviceVehicleNumberError" class="validation-message"></div>
-    
-    <input type="date" id="serviceDate" required>
-     <div id="serviceDateError" class="validation-message"></div>
-    
-    <input type="text" id="serviceInvoiceNumber" placeholder="Invoice Number" required>
-    <div id="serviceInvoiceNumberError" class="validation-message"></div>
-    
-    <select id="serviceType" required onchange="toggleNextServiceDate()">
-      <option value="">Select Service Type</option>
-      <option value="Service">Service</option>
-      <option value="Maintainance">Maintainance</option>
-    </select>
-    <div id="serviceTypeError" class="validation-message"></div>
-    
-    <input type="number" id="serviceAmount" placeholder="Amount" step="0.01" required>
-    <div id="serviceAmountError" class="validation-message"></div>
-    
-    <input type="number" id="serviceCurrentKm" placeholder="Current KM" required>
-     <div id="serviceCurrentKmError" class="validation-message"></div>
-    
-    <div id="nextServiceDateContainer" style="display:none;">
-      <input type="text" id="nextServiceDate" placeholder="Next Service KM">
+    <div class="form-group">
+      <label>Vehicle:</label>
+      <select id="serviceVehicleName" required onchange="updateVehicleNumber()">
+        <option value="">Select Vehicle</option>
+      </select>
+      <div id="serviceVehicleNameError" class="validation-message"></div>
     </div>
-    <div id="nextServiceDateError" class="validation-message"></div>
     
-    <input type="text" id="serviceWorkshop" placeholder="Workshop Name" required>
-     <div id="serviceWorkshopError" class="validation-message"></div>
+    <div class="form-group">
+      <label>Vehicle Number:</label>
+      <input type="text" id="serviceVehicleNumber" placeholder="Vehicle Number" readonly required>
+      <div id="serviceVehicleNumberError" class="validation-message"></div>
+    </div>
     
-    <div style="position: relative;">
-    <input type="text" id="serviceWorkshopLocation" placeholder="Workshop Location" required>
-      <div id="serviceWorkshopLocationSuggestions" class="suggestions"></div>
-       </div>
-     <div id="serviceWorkshopLocationError" class="validation-message"></div>
+    <div class="form-group">
+      <label>Date:</label>
+      <input type="date" id="serviceDate" required>
+      <div id="serviceDateError" class="validation-message"></div>
+    </div>
     
-    <textarea rows="4" id="serviceRemarks" placeholder="Remarks (if any)" required></textarea>
-    <div id="serviceRemarksError" class="validation-message"></div>
+    <div class="form-group">
+      <label>Invoice Number:</label>
+      <input type="text" id="serviceInvoiceNumber" placeholder="Invoice Number" required>
+      <div id="serviceInvoiceNumberError" class="validation-message"></div>
+    </div>
     
-    <input type="file" id="serviceBillImage" accept="image/*" required>
-     <div id="serviceBillImageError" class="validation-message"></div>
+    <div class="form-group">
+      <label>Service Type:</label>
+      <select id="serviceType" required onchange="toggleNextServiceDate()">
+        <option value="">Select Service Type</option>
+        <option value="Service">Service</option>
+        <option value="Maintainance">Maintainance</option>
+      </select>
+      <div id="serviceTypeError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Amount:</label>
+      <input type="number" id="serviceAmount" placeholder="Amount" step="0.01" required>
+      <div id="serviceAmountError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Current KM:</label>
+      <input type="number" id="serviceCurrentKm" placeholder="Current KM" required>
+      <div id="serviceCurrentKmError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group" id="nextServiceDateContainer" style="display:none;">
+      <label>Next Service KM:</label>
+      <input type="text" id="nextServiceDate" placeholder="Next Service KM">
+      <div id="nextServiceDateError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Workshop Name:</label>
+      <input type="text" id="serviceWorkshop" placeholder="Workshop Name" required>
+      <div id="serviceWorkshopError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Workshop Location:</label>
+      <div style="position: relative;">
+        <input type="text" id="serviceWorkshopLocation" placeholder="Workshop Location" required>
+        <div id="serviceWorkshopLocationSuggestions" class="suggestions"></div>
+      </div>
+      <div id="serviceWorkshopLocationError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Remarks:</label>
+      <textarea rows="4" id="serviceRemarks" placeholder="Remarks (if any)" required></textarea>
+      <div id="serviceRemarksError" class="validation-message"></div>
+    </div>
+    
+    <div class="form-group">
+      <label>Bill Image:</label>
+      <input type="file" id="serviceBillImage" accept="image/*" required>
+      <div id="serviceBillImageError" class="validation-message"></div>
+    </div>
     
     <div class="form-buttons">
       <button type="button" onclick="submitServiceEntry()">Submit</button>
@@ -1871,6 +1968,11 @@ function formatTime(timeString) {
   
   if (!document.getElementById('fuelDate').value) {
     document.getElementById('fuelDateError').textContent = 'Please select a date';
+    isValid = false;
+  }
+
+    if (!document.getElementById('fuelInvoiceNumber').value) {
+    document.getElementById('fuelInvoiceNumberError').textContent = 'Invoice number is required';
     isValid = false;
   }
   
