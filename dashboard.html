@@ -1504,7 +1504,7 @@ async function completeJourney(travelId) {
       }
       //document.getElementById('completeVehicleNumber').value = journey.VehicleNumber || '';
       //document.getElementById('completeVehicleName').value = journey.VehicleName || '';
-    document.getElementById('completeStartDate').value = journey.StartDate || '';
+    document.getElementById('completeStartDate').value = (journey.StartDate || '').slice(0, 10);
       document.getElementById('completeStartPoint').value = journey.StartPoint || '';
       document.getElementById('completeStartKm').value = journey.StartKM || '';
       
@@ -1799,8 +1799,8 @@ function loadCompletedJourneys() {
           <td>${journey.Date || ''}</td>
           <td>${journey.VehicleNumber || ''}</td>
           <td>${journey.VehicleName || ''}</td>
-          <td>${journey.StartDate || ''}</td> 
-           <td>${journey.EndDate || ''}</td>
+          <td>${(journey.StartDate || '').slice(0, 10)}</td> 
+           <td>${(journey.EndDate || '').slice(0, 10)}</td>
           <td>${journey.StartPoint || ''}</td>
           <td>${journey.EndPoint || ''}</td>
           <td>${journey.StartKM || ''}</td>
