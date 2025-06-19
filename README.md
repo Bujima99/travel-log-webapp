@@ -76,14 +76,6 @@
 - **Offline-ready** UI states
 - **Performance-optimized** for mobile networks
 
-## 🔧 Development Setup
-
-```bash
-# Clone repository
-git clone https://github.com/your-repo/travel-log-app.git
-
-# No build step required - pure HTML/CSS/JS
-# Just open index.html to start
 
 👨‍💻 Author
 R Sukrudha Ram
